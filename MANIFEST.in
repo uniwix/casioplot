@@ -1,0 +1,2 @@
+include src/images/*.png
+include src/chars/*
