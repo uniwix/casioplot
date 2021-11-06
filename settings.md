@@ -4,8 +4,7 @@
 ```python
 from casioplot import *
 
-casioplot_settings.<setting name>=<setting value>
-clear_screen()  # Don't forget to refresh the screen to update the setting
+casioplot_settings.set(<setting_name> = <setting_value>)
 ```
 
 ## Available settings
@@ -15,20 +14,26 @@ For each setting, the default value is shown
 ### Height and Width
 
 ```python
-casioplot_settings.height = 192
-casioplot_settings.width = 384
+from casioplot import *
+
+casioplot_settings.set(height = 192)
+casioplot_settings.set(width = 384)
 ```
 
 ### Output filename
 
 ```python
-casioplot_settings.filename = "casioplot.png"
+from casioplot import *
+
+casioplot_settings.set(filename = "casioplot.png")
 ```
 
 ### Output image format
 
 ```python
-casioplot_settings.image_format = "png"
+from casioplot import *
+
+casioplot_settings.set(image_format = "png")
 ```
 
 ## Shortcuts methods
@@ -38,6 +43,8 @@ casioplot_settings.image_format = "png"
 Restore the default configuration.
 
 ```python
+from casioplot import *
+
 casioplot_settings.default()
 ```
 
@@ -48,11 +55,11 @@ and will add the head of the screen (where power states
 are displayed on the calculator).
 
 ```python
+from casioplot import *
+
 casioplot_settings.casio_graph_90_plus_e()
 ```
 
-### Automatically refresh method
+The blank screen will look like:
 
-```python
-casioplot_settings.set(<setting name>, <setting value>)
-```
+![Casio Graph 90+e empty](CASIO_Graph_90+e_empty.png)
