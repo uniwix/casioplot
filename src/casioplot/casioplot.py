@@ -2,7 +2,6 @@ from typing import Literal
 
 from PIL import Image, ImageDraw
 
-
 _WHITE: tuple[int, int, int] = (255, 255, 255)  # RGBA white
 
 # Create virtual screen
@@ -29,11 +28,11 @@ class _Settings:
     
     # Output settings
     open_image: bool = False  # Open the screen
-    save_image: bool = True   # Save the screen as an image
+    save_image: bool = True  # Save the screen as an image
     # Saving settings
     filename: str = "casioplot.png"
     image_format: str = "png"
-
+    
     def _clear_screen(self):
         """
         Clear the screen. It creates a new image and assigns it to global _image.
@@ -46,7 +45,7 @@ class _Settings:
         ), _WHITE)  # Create a new white image
         
         _draw = ImageDraw.Draw(_image)
-
+    
     def default(self):
         """
         Restore default parameters from the class to the instance.
@@ -54,7 +53,7 @@ class _Settings:
         for k, v in _Settings.__dict__.items():
             self.__setattr__(k, v)
         self._clear_screen()
-
+    
     def casio_graph_90_plus_e(self):
         """
         Set the screen in the casio Graph 90+e format.
@@ -66,13 +65,13 @@ class _Settings:
         self.right_margin = 0
         self.top_margin = 24
         self.bottom_margin = 0
-
-        _image: Image.Image = Image.open('CASIO_Graph_90+e_empty.png').convert("RGB")
+        
+        _image: Image.Image = Image.open('../images/CASIO_Graph_90+e_empty.png').convert("RGB")
         for x in range(self.width):
             for y in range(self.height):
                 _image.putpixel((x + self.left_margin, y + self.top_margin), _WHITE)
         _draw = ImageDraw.Draw(_image)
-
+    
     def set(self, **settings):
         """
         Set an attribute for each given setting with the corresponding value.
