@@ -66,7 +66,7 @@ class _Settings:
         self.top_margin = 24
         self.bottom_margin = 0
         
-        _image: Image.Image = Image.open('../images/CASIO_Graph_90+e_empty.png').convert("RGB")
+        _image = Image.open('../images/CASIO_Graph_90+e_empty.png').convert("RGB")
         for x in range(self.width):
             for y in range(self.height):
                 _image.putpixel((x + self.left_margin, y + self.top_margin), _WHITE)
