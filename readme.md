@@ -105,4 +105,4 @@ Some behaviors aren't respected:
 - Only one calculator implemented: **casio graph 90+e**
 
 ---------------------------
-v 1.0.0 - Jean-Benoît GRIMALDI
+v 1.0.0 - Uniwix
