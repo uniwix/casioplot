@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='casioplot',
-    version='1.0.1',
+    version='1.0.5',
     author='uniwix',
     author_email='odevlo.me@gmail.com',
     description='This module allows to use casioplot module on a computer.',

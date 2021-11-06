@@ -1,1 +1,1 @@
-from __init__ import *
+from .casioplot import *
