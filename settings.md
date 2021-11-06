@@ -1,7 +1,7 @@
 # Settings
 ## How to set a setting
 
-```pycon
+```python
 from casioplot import *
 
 casioplot_settings.<setting name>=<setting value>
@@ -14,20 +14,20 @@ For each setting, the default value is shown
 
 ### Height and Width
 
-```pycon
+```python
 casioplot_settings.height = 192
 casioplot_settings.width = 384
 ```
 
 ### Output filename
 
-```pycon
+```python
 casioplot_settings.filename = "casioplot.png"
 ```
 
 ### Output image format
 
-```pycon
+```python
 casioplot_settings.image_format = "png"
 ```
 
@@ -37,7 +37,7 @@ casioplot_settings.image_format = "png"
 
 Restore the default configuration.
 
-```pycon
+```python
 casioplot_settings.default()
 ```
 
@@ -47,13 +47,12 @@ This will set the width and height of the calculator screen
 and will add the head of the screen (where power states
 are displayed on the calculator).
 
-```pycon
+```python
 casioplot_settings.casio_graph_90_plus_e()
 ```
 
 ### Automatically refresh method
 
-```pycon
+```python
 casioplot_settings.set(<setting name>, <setting value>)
 ```
-
