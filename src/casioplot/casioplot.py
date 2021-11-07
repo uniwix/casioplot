@@ -136,9 +136,28 @@ def set_pixel(x: int, y: int, color: tuple[int, int, int] = (0, 0, 0)):
     :param y: y coordinate (from the top)
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
     """
-    if not 0 <= x <= casioplot_settings.width or not 0 <= y <= casioplot_settings.height:
+    if not 0 <= x < casioplot_settings.width or not 0 <= y < casioplot_settings.height:
         return
     _image.putpixel((x + casioplot_settings.left_margin, y + casioplot_settings.top_margin), color)
+
+
+def _get_filename(character, size: Literal["small", "medium", "large"] = "medium"):
+    special_chars = {
+        ' ': 'space'
+    }
+    filename = special_chars.get(character, character) + '_' + size + '.txt'
+    import os
+
+    file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                             'chars',
+                             filename)
+
+    if not os.path.isfile(file_path):
+        print(f'WARNING: Unknown character "{character}".')
+        file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                 'chars',
+                                 'space_' + size + '.txt')
+    return file_path
 
 
 def draw_string(x: int,
@@ -147,7 +166,7 @@ def draw_string(x: int,
                 color: tuple[int, int, int] = (0, 0, 0),
                 size: Literal["small", "medium", "large"] = "medium"):
     """
-    Draw a string on the virtual screen with the given color RGB.
+    Draw a string on the virtual screen with the given RGB color and size.
     TODO: implement the font and the size
 
     :param x: x coordinate (from the left)
@@ -155,11 +174,24 @@ def draw_string(x: int,
     :param text: text that will be shown
     :param color: The text color. A tuple that contain 3 integers from 0 to 255.
     :param size: Size of the text. String from the following values: "small", "medium" or "large".
-                 This parameter isn't implemented yet.
+    :raise ValueError: Raise a ValueError if the size isn't correct.
     """
-    # The size and the font used by casio are unknown, so they aren't implemented.
-    print('Warning: Size and font are not implemented yet.')
-    print('         Default font and size will be used.')
-    print('         The given size "{}" will be ignored.'.format(size))
-    # Write the text on the virtual screen.
-    _draw.text((x + casioplot_settings.left_margin, y + casioplot_settings.top_margin), text, fill=color)
+    sizes = {
+        'small': (0, 0),
+        'medium': (11, 14),
+        'large': (0, 0)
+    }
+    
+    if size not in sizes.keys():
+        raise ValueError(f'Unknown size "{size}". Size must be one of the following: "small", "medium" or "large"')
+    
+    for character in text:
+        filename = _get_filename(character, size)
+        
+        with open(filename, 'r') as c:
+            pxs = c.read().replace('\n', '').replace('\r', '')
+            for i in range(sizes[size][1]):
+                for j in range(sizes[size][0]):
+                    if pxs[i*sizes[size][0] + j] in ["$"]:
+                        set_pixel(x+j, y+i, color)
+        x += sizes[size][0]
