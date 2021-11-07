@@ -62,4 +62,4 @@ casioplot_settings.casio_graph_90_plus_e()
 
 The blank screen will look like:
 
-![Casio Graph 90+e empty](images/CASIO_Graph_90+e_empty.png)
+![Casio Graph 90+e empty](https://raw.githubusercontent.com/uniwix/casioplot/master/images/CASIO_Graph_90+e_empty.png)

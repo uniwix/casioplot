@@ -66,10 +66,13 @@ class _Settings:
         self.top_margin = 24
         self.bottom_margin = 0
         
-        _image = Image.open('../images/CASIO_Graph_90+e_empty.png').convert("RGB")
-        for x in range(self.width):
-            for y in range(self.height):
-                _image.putpixel((x + self.left_margin, y + self.top_margin), _WHITE)
+        # Get the path of the template image
+        import os
+
+        file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                                 'images',
+                                 'CASIO_Graph_90+e_empty.png')
+        _image = Image.open(file_path).convert("RGB")
         _draw = ImageDraw.Draw(_image)
     
     def set(self, **settings):

@@ -34,7 +34,7 @@ show_screen()  # Don't forget to show the screen to see the result.
 
 #### Result:
 
-![pixel](images/pixel.png)
+![pixel](https://raw.githubusercontent.com/uniwix/casioplot/master/images/pixel.png)
 
 ### Draw a rectangle
 
@@ -57,7 +57,7 @@ show_screen()  # Don't forget to show the screen to see the result.
 
 #### Result:
 
-![rectangle](images/rectangle.png)
+![rectangle](https://raw.githubusercontent.com/uniwix/casioplot/master/images/rectangle.png)
 
 ### Get a pixel value
 

@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='casioplot',
-    version='1.0.6',
+    version='1.0.9',
     author='uniwix',
     author_email='odevlo.me@gmail.com',
     description='This module allows to use casioplot module on a computer.',
@@ -23,8 +23,9 @@ setup(
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     package_data={
-        "": ["*.png"],
+        "": ["images/*.png"],
     },
+    include_package_data=True,
     python_requires=">=3.10",
 
 )
