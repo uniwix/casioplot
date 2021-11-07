@@ -4,6 +4,12 @@ Module *casioplot* from Casio calculator for Computer.
 
 This can help to develop python programs in your computer and run it before put it in your calculator.
 
+## Installation
+
+```cmd
+pip install casioplot
+```
+
 ## Requirements
 
 This module use python 3.10.0.
@@ -12,8 +18,8 @@ Need the module *Pillow* to work.
 
 ### Install *Pillow*:
 
-```bash
-$ pip install pillow
+```cmd
+pip install pillow
 ```
 
 ## Settings
