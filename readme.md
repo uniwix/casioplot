@@ -4,6 +4,12 @@ Module *casioplot* from Casio calculator for Computer.
 
 This can help to develop python programs in your computer and run it before put it in your calculator.
 
+## Installation
+
+```cmd
+pip install casioplot
+```
+
 ## Requirements
 
 This module use python 3.10.0.
@@ -12,15 +18,15 @@ Need the module *Pillow* to work.
 
 ### Install *Pillow*:
 
-```bash
-$ pip install pillow
+```cmd
+pip install pillow
 ```
 
 ## Settings
 
 See [settings options](settings.md) for more information.
 
-## Exemples
+## Examples
 
 ### Draw a pixel
 
@@ -34,7 +40,7 @@ show_screen()  # Don't forget to show the screen to see the result.
 
 #### Result:
 
-![pixel](images/pixel.png)
+![pixel](https://raw.githubusercontent.com/uniwix/casioplot/master/images/pixel.png)
 
 ### Draw a rectangle
 
@@ -57,7 +63,7 @@ show_screen()  # Don't forget to show the screen to see the result.
 
 #### Result:
 
-![rectangle](images/rectangle.png)
+![rectangle](https://raw.githubusercontent.com/uniwix/casioplot/master/images/rectangle.png)
 
 ### Get a pixel value
 
@@ -105,4 +111,4 @@ Some behaviors aren't respected:
 - Only one calculator implemented: **casio graph 90+e**
 
 ---------------------------
-v 1.0.0 - Jean-Benoît GRIMALDI
+v 1.0.0 - Uniwix

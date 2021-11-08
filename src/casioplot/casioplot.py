@@ -1,3 +1,9 @@
+"""
+Contains all the functions from casioplot calculator module.
+"""
+
+import os
+
 from typing import Literal
 
 from PIL import Image, ImageDraw
@@ -22,7 +28,6 @@ class _Settings:
     
     left_margin: int = 0
     right_margin: int = 0
-    
     top_margin: int = 0
     bottom_margin: int = 0
     
@@ -119,7 +124,7 @@ def get_pixel(x: int, y: int) -> tuple[int, int, int] | None:
     :param y: y coordinate (from the top)
     :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the screen.
     """
-    if not 0 <= x <= casioplot_settings.width or not 0 <= y <= casioplot_settings.height:
+    if not 0 <= x <= casioplot_settings.width - 1 or not 0 <= y <= casioplot_settings.height - 1:
         return None
     r: int
     g: int
@@ -136,18 +141,23 @@ def set_pixel(x: int, y: int, color: tuple[int, int, int] = (0, 0, 0)):
     :param y: y coordinate (from the top)
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
     """
-    if not 0 <= x < casioplot_settings.width or not 0 <= y < casioplot_settings.height:
+    if not 0 <= x < casioplot_settings.width - 1 or not 0 <= y < casioplot_settings.height - 1:
         return
     _image.putpixel((x + casioplot_settings.left_margin, y + casioplot_settings.top_margin), color)
 
 
 def _get_filename(character, size: Literal["small", "medium", "large"] = "medium"):
+    """
+    Get the file where a character is saved and return the file of space if the character doesn't exist.
+    
+    :param character: The character to find
+    :param size: The size of the character
+    :return: The character filename. A string: "{`./chars` folder absolute path}/{character}_{size}.png"
+    """
     special_chars = {
         ' ': 'space'
     }
     filename = special_chars.get(character, character) + '_' + size + '.txt'
-    import os
-
     file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                              'chars',
                              filename)
