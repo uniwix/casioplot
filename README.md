@@ -26,7 +26,7 @@ pip install pillow
 
 See [settings options](settings.md) for more information.
 
-## Exemples
+## Examples
 
 ### Draw a pixel
 
