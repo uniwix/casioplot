@@ -157,16 +157,18 @@ def _get_filename(character, size: Literal["small", "medium", "large"] = "medium
     special_chars = {
         ' ': 'space'
     }
-    filename = special_chars.get(character, character) + '_' + size + '.txt'
+    filename = special_chars.get(character, character) + '.txt'
     file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                              'chars',
+                             size,
                              filename)
 
     if not os.path.isfile(file_path):
-        print(f'WARNING: Unknown character "{character}".')
+        print(f'WARNING: No character "{character}" found for size "{size}".')
         file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                  'chars',
-                                 'space_' + size + '.txt')
+                                 size,
+                                 'space.txt')
     return file_path
 
 
@@ -177,8 +179,7 @@ def draw_string(x: int,
                 size: Literal["small", "medium", "large"] = "medium"):
     """
     Draw a string on the virtual screen with the given RGB color and size.
-    TODO: implement the font and the size
-
+    
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
     :param text: text that will be shown
@@ -187,9 +188,9 @@ def draw_string(x: int,
     :raise ValueError: Raise a ValueError if the size isn't correct.
     """
     sizes = {
-        'small': (0, 0),
-        'medium': (11, 14),
-        'large': (0, 0)
+        'small': (10, 10),
+        'medium': (13, 17),
+        'large': (18, 23)
     }
     
     if size not in sizes.keys():
@@ -197,11 +198,13 @@ def draw_string(x: int,
     
     for character in text:
         filename = _get_filename(character, size)
-        
+        n = 0
         with open(filename, 'r') as c:
-            pxs = c.read().replace('\n', '').replace('\r', '')
-            for i in range(sizes[size][1]):
-                for j in range(sizes[size][0]):
-                    if pxs[i*sizes[size][0] + j] in ["$"]:
-                        set_pixel(x+j, y+i, color)
-        x += sizes[size][0]
+            count = 0
+            for line in c:
+                for j, k in enumerate(line):
+                    if k in ["$"]:
+                        set_pixel(x+j, y+count, color)
+                    n = j
+                count += 1
+        x += n
