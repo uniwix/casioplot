@@ -1,6 +1,6 @@
 # Casioplot for computer
 
-Module *casioplot* from Casio calculator for Computer.
+Module `casioplot` from Casio calculator for Computer.
 
 This can help to develop python programs in your computer and run it before put it in your calculator.
 
@@ -14,9 +14,9 @@ pip install casioplot
 
 This module use python 3.10.0.
 
-Need the module *Pillow* to work.
+Need the module `Pillow` to work.
 
-### Install *Pillow*:
+### Install `Pillow`:
 
 ```cmd
 pip install pillow
@@ -106,9 +106,9 @@ Note that you don't need to show the screen to get the color of a pixel.
 
 Some behaviors aren't respected:
 
-- The output isn't show in the screen but saved on a picture.
-- The function **draw_string** ignore the *size* parameter and doesn't use the same font as casio.
-- Only one calculator implemented: **casio graph 90+e**
+  - The output isn't show in the screen but saved on a picture.
+  - The function `draw_string` can't print all the characters and doesn't support the sizes `"small"` and `"large"`.
+  - Only one calculator implemented: **casio graph 90+e**.
 
 ---------------------------
 v 1.0.0 - Uniwix
