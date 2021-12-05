@@ -85,5 +85,5 @@ are displayed on the calculator).
 The blank screen will look like:
 
 .. image::
-    https://github.com/uniwix/casioplot/blob/master/src/casioplot/images/CASIO_Graph_90+e_empty.png?raw=true
+    https://github.com/uniwix/casioplot/blob/master/casioplot/images/CASIO_Graph_90+e_empty.png?raw=true
     :alt: Casio Graph 90+e empty
