@@ -1,2 +1,4 @@
-include src/images/*.png
-include src/chars/*
+include casioplot/images/*.png
+include casioplot/chars/large/*.txt
+include casioplot/chars/medium/*.txt
+include casioplot/chars/small/*.txt

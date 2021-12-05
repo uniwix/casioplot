@@ -1,31 +1,32 @@
-from setuptools import setup, find_packages
+import pathlib
+from setuptools import setup
 
-with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
+# The directory containing this file
+HERE = pathlib.Path(__file__).parent
 
+# The text of the README file
+README = (HERE / "README.rst").read_text()
+
+# This call to setup() does all the work
 setup(
     name='casioplot',
-    version='1.2.0',
+    version='1.3.0',
     author='uniwix',
     author_email='odevlo.me@gmail.com',
     description='This module allows to use casioplot module on a computer.',
-    long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description=README,
+    long_description_content_type="text/x-rst",
     url='https://github.com/uniwix/casioplot',
+    license="MIT",
+    classifiers=[
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.10",
+    ],
     project_urls={
         "Bug Tracker": "https://github.com/uniwix/casioplot/issues",
     },
-    classifiers=[
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
-    package_dir={"": "src"},
-    packages=find_packages(where="src"),
-    package_data={
-        "": ["images/*.png", "chars/*.txt"],
-    },
+    packages=["casioplot"],
     include_package_data=True,
-    python_requires=">=3.10",
-
+    install_requires=["Pillow"],
 )
