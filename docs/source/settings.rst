@@ -1,7 +1,7 @@
 Settings
 ========
 
-The :py:class:`casioplot_settings` allows you to manage settings like the
+The :py:class:`casioplot.casioplot_settings` allows you to manage settings like the
 size of the screen, the output mode, and provide shortcuts methods.
 
 How to set a setting
