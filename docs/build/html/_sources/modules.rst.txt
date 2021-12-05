@@ -1,7 +1,0 @@
-casioplot
-=========
-
-.. toctree::
-   :maxdepth: 4
-
-   casioplot
