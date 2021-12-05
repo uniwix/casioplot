@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentation &mdash; casioplot 1.3.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> casioplot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">casioplot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/casioplot.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-casioplot">
+<span id="documentation"></span><h1>Documentation<a class="headerlink" href="#module-casioplot" title="Permalink to this headline"></a></h1>
+<p>Contains all the functions from <code class="docutils literal notranslate"><span class="pre">casioplot</span></code> calculator module.</p>
+<dl class="simple">
+<dt>Available functions:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#casioplot.set_pixel" title="casioplot.set_pixel"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_pixel()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#casioplot.get_pixel" title="casioplot.get_pixel"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_pixel()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#casioplot.draw_string" title="casioplot.draw_string"><code class="xref py py-func docutils literal notranslate"><span class="pre">draw_string()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#casioplot.clear_screen" title="casioplot.clear_screen"><code class="xref py py-func docutils literal notranslate"><span class="pre">clear_screen()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#casioplot.show_screen" title="casioplot.show_screen"><code class="xref py py-func docutils literal notranslate"><span class="pre">show_screen()</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<p>You can also use <a class="reference internal" href="#casioplot.casioplot_settings" title="casioplot.casioplot_settings"><code class="xref py py-data docutils literal notranslate"><span class="pre">casioplot_settings</span></code></a> to change some behavior.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">casioplot.</span></span><span class="sig-name descname"><span class="pre">casioplot_settings</span></span><a class="headerlink" href="#casioplot.casioplot_settings" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manage settings for the casioplot module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Settings</span></span><a class="headerlink" href="#casioplot.casioplot_settings.Settings" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Store default settings</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings.bottom_margin">
+<span class="sig-name descname"><span class="pre">bottom_margin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#casioplot.casioplot_settings.Settings.bottom_margin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'casioplot.png'</span></em><a class="headerlink" href="#casioplot.casioplot_settings.Settings.filename" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings.height">
+<span class="sig-name descname"><span class="pre">height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">192</span></em><a class="headerlink" href="#casioplot.casioplot_settings.Settings.height" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings.image_format">
+<span class="sig-name descname"><span class="pre">image_format</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'png'</span></em><a class="headerlink" href="#casioplot.casioplot_settings.Settings.image_format" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings.left_margin">
+<span class="sig-name descname"><span class="pre">left_margin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#casioplot.casioplot_settings.Settings.left_margin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings.open_image">
+<span class="sig-name descname"><span class="pre">open_image</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#casioplot.casioplot_settings.Settings.open_image" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings.right_margin">
+<span class="sig-name descname"><span class="pre">right_margin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#casioplot.casioplot_settings.Settings.right_margin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings.save_image">
+<span class="sig-name descname"><span class="pre">save_image</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#casioplot.casioplot_settings.Settings.save_image" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings.top_margin">
+<span class="sig-name descname"><span class="pre">top_margin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#casioplot.casioplot_settings.Settings.top_margin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.Settings.width">
+<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">384</span></em><a class="headerlink" href="#casioplot.casioplot_settings.Settings.width" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.casio_graph_90_plus_e">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">casio_graph_90_plus_e</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#casioplot.casioplot_settings.casio_graph_90_plus_e" title="Permalink to this definition"></a></dt>
+<dd><p>Set the screen in the casio Graph 90+e format.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.default">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#casioplot.casioplot_settings.default" title="Permalink to this definition"></a></dt>
+<dd><p>Restore default parameters from the class to the instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="casioplot.casioplot_settings.set">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">settings</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#casioplot.casioplot_settings.set" title="Permalink to this definition"></a></dt>
+<dd><p>Set an attribute for each given setting with the corresponding value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="casioplot.clear_screen">
+<span class="sig-prename descclassname"><span class="pre">casioplot.</span></span><span class="sig-name descname"><span class="pre">clear_screen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#casioplot.clear_screen" title="Permalink to this definition"></a></dt>
+<dd><p>Clear the virtual screen.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="casioplot.draw_string">
+<span class="sig-prename descclassname"><span class="pre">casioplot.</span></span><span class="sig-name descname"><span class="pre">draw_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'small'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'medium'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'large'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'medium'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#casioplot.draw_string" title="Permalink to this definition"></a></dt>
+<dd><p>Draw a string on the virtual screen with the given RGB color and size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – x coordinate (from the left)</p></li>
+<li><p><strong>y</strong> – y coordinate (from the top)</p></li>
+<li><p><strong>text</strong> – text that will be shown</p></li>
+<li><p><strong>color</strong> – The text color. A tuple that contain 3 integers from 0 to 255.</p></li>
+<li><p><strong>size</strong> – Size of the text. String from the following values: “small”, “medium” or “large”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Raise a ValueError if the size isn’t correct.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="casioplot.get_pixel">
+<span class="sig-prename descclassname"><span class="pre">casioplot.</span></span><span class="sig-name descname"><span class="pre">get_pixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#casioplot.get_pixel" title="Permalink to this definition"></a></dt>
+<dd><p>Get the RGB color of the pixel at the given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – x coordinate (from the left)</p></li>
+<li><p><strong>y</strong> – y coordinate (from the top)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the screen.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="casioplot.set_pixel">
+<span class="sig-prename descclassname"><span class="pre">casioplot.</span></span><span class="sig-name descname"><span class="pre">set_pixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#casioplot.set_pixel" title="Permalink to this definition"></a></dt>
+<dd><p>Set the RGB color of the pixel at the given position (from top left)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – x coordinate (from the left)</p></li>
+<li><p><strong>y</strong> – y coordinate (from the top)</p></li>
+<li><p><strong>color</strong> – The pixel color. A tuple that contain 3 integers from 0 to 255.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="casioplot.show_screen">
+<span class="sig-prename descclassname"><span class="pre">casioplot.</span></span><span class="sig-name descname"><span class="pre">show_screen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#casioplot.show_screen" title="Permalink to this definition"></a></dt>
+<dd><p>Show the virtual screen</p>
+<dl class="simple">
+<dt>This function implement two modes that can be enabled or disabled using the <a class="reference internal" href="#casioplot.casioplot_settings" title="casioplot.casioplot_settings"><code class="xref py py-class docutils literal notranslate"><span class="pre">casioplot_settings</span></code></a>:</dt><dd><ul class="simple">
+<li><p>Open the screen as an image (enabled using <cite>casioplot_settings.open_image</cite>).</p></li>
+<li><p>Save the screen to the disk (enabled using <cite>casioplot_settings.save_image</cite>).
+The image is saved with the filename found in <cite>casioplot_settings.filename</cite></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, uniwix.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

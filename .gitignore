@@ -1,9 +1,9 @@
 dist
-examples
 .idea
 casioplot.egg-info
 *.pyc
 __pycache__
 casioplot.png
 _test.py
-image_3d_test.py
+make.bat
+MakeFile
