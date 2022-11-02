@@ -52,6 +52,8 @@ Nothing needed.
 Release History
 ---------------
 
+* 1.3.1
+    * Minor fix
 * 1.3.0
     * Update settings and usage
     * Adding documentation
