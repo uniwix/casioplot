@@ -96,4 +96,4 @@ Some behaviors aren't respected:
 - Only one calculator implemented: **casio graph 90+e**.
 
 
-v 1.3.0 - Uniwix
+v 1.3.2 - Uniwix

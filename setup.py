@@ -10,7 +10,7 @@ README = (HERE / "README.rst").read_text()
 # This call to setup() does all the work
 setup(
     name='casioplot',
-    version='1.3.1',
+    version='1.3.2',
     author='uniwix',
     author_email='odevlo.me@gmail.com',
     description='This module allows to use casioplot module on a computer.',
@@ -24,7 +24,10 @@ setup(
         "Programming Language :: Python :: 3.10",
     ],
     project_urls={
+        "Documentation": "https://casioplot.readthedocs.io/en/latest/",
         "Bug Tracker": "https://github.com/uniwix/casioplot/issues",
+        "Source": "https://github.com/uniwix/casioplot/",
+    
     },
     packages=["casioplot"],
     include_package_data=True,
