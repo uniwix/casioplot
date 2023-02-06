@@ -52,6 +52,8 @@ Nothing needed.
 Release History
 ---------------
 
+* 1.3.2
+    * Minor fix
 * 1.3.1
     * Minor fix
 * 1.3.0
@@ -71,7 +73,7 @@ Release History
 Meta
 ----
 
-Uniwix - odevlo.me@gmail.com
+Uniwix - `uniwixu@gmail.com <uniwixu@gmail.com>`_
 
 Distributed under the MIT license. See `LICENSE <https://github.com/uniwix/casioplot/blob/master/LICENSE>`_ for more information.
 
