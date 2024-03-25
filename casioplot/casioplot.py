@@ -19,6 +19,8 @@ from configs import get_config
 COLOR = tuple[int, int, int]
 _WHITE: COLOR = (255, 255, 255)  # RGBA white
 _BLACK: COLOR = (0, 0, 0)  # RGBA black
+# a list of all settings that if change should trigger the _redraw_screen function
+redraw_settings = ('width', 'height', 'left_margin', 'right_margin', 'top_margin', 'bottom_margin')
 
 # Create virtual screen
 _image: Image.Image = Image.new("RGB", (384, 192), _WHITE)
@@ -43,7 +45,7 @@ class Casioplot_casioplot_settings:
         self.open_image: bool = False  # Open the screen
         self.save_image: bool = True  # Save the screen as an image
         # Saving casioplot_settings
-        self.filename: str = "casioplot.png"
+        self.filename: str = "casioplot"
         self.image_format: str = "png"
 
     def config_to(self, config: str = "default") -> None:
@@ -52,11 +54,19 @@ class Casioplot_casioplot_settings:
             setattr(self, setting, value)
         _image = self.background_image
 
-    def set(self, **casioplot_settings) -> None:
+    def set(self, **settings) -> None:
         """Set an attribute for each given setting with the corresponding value."""
-        for setting, value in casioplot_settings.items():
+        should_redraw_screen: bool = False
+
+        for setting, value in settings.items():
+            if setting == 'background_image':
+                raise ValueError("you can't set background_image")
+            elif setting in redraw_settings:
+                should_redraw_screen = True
             setattr(self, setting, value)
-        _redraw_screen()
+
+        if should_redraw_screen:
+            _redraw_screen()
 
     def get(self, setting: str):
         """Returns an attribute"""
@@ -78,8 +88,10 @@ def _redraw_screen() -> None:
     _image = Image.new(
         "RGB",
         (
-            casioplot_settings.left_margin + casioplot_settings.width + casioplot_settings.right_margin,
-            casioplot_settings.top_margin + casioplot_settings.height + casioplot_settings.bottom_margin,
+            casioplot_settings.get('left_margin') + casioplot_settings.get('width') +
+            casioplot_settings.get('right_margin'),
+            casioplot_settings.get('top_margin') + casioplot_settings.get('height') +
+            casioplot_settings.get('bottom_margin'),
         ),
         _WHITE,
     )
@@ -101,7 +113,7 @@ def show_screen() -> None:
     if casioplot_settings.get("save_image") is True:
         # Save the screen to the disk as an image with the given filename
         _image.save(
-            casioplot_settings.get("filename"),
+            casioplot_settings.get("filename") + '.' + casioplot_settings.get("image_format"),
             format=casioplot_settings.get("image_format"),
         )
 
