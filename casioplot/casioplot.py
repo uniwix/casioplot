@@ -7,7 +7,7 @@ Available functions:
   - :py:func:`clear_screen`
   - :py:func:`show_screen`
 
-You can also use :py:data:`settings` to change some behavior.
+You can also use :py:data:`casioplot_settings` to change some behavior.
 """
 
 from os import path
@@ -24,12 +24,12 @@ _BLACK: COLOR = (0, 0, 0)  # RGBA black
 _image: Image.Image = Image.new("RGB", (384, 192), _WHITE)
 
 
-class casioplot_settings:
-    """Manage settings for the casioplot module."""
+class Casioplot_casioplot_settings:
+    """Manage casioplot_settings for the casioplot module."""
 
     def __init__(self) -> None:
-        # all settings are the default ones
-        # Size settings
+        # all casioplot_settings are the default ones
+        # Size casioplot_settings
         self.width: int = 384  # Screen width in pixels
         self.height: int = 192  # Screen height in pixels
         # margins
@@ -39,10 +39,10 @@ class casioplot_settings:
         self.bottom_margin: int = 0
         # background Image
         self.background_image: Image.Image = Image.new("RGB", (384, 192), _WHITE)
-        # Output settings
+        # Output casioplot_settings
         self.open_image: bool = False  # Open the screen
         self.save_image: bool = True  # Save the screen as an image
-        # Saving settings
+        # Saving casioplot_settings
         self.filename: str = "casioplot.png"
         self.image_format: str = "png"
 
@@ -52,9 +52,9 @@ class casioplot_settings:
             setattr(self, setting, value)
         _image = self.background_image
 
-    def set(self, **settings) -> None:
+    def set(self, **casioplot_settings) -> None:
         """Set an attribute for each given setting with the corresponding value."""
-        for setting, value in settings.items():
+        for setting, value in casioplot_settings.items():
             setattr(self, setting, value)
         _redraw_screen()
 
@@ -63,13 +63,13 @@ class casioplot_settings:
         return getattr(self, setting)
 
 
-settings = casioplot_settings()
+casioplot_settings = Casioplot_casioplot_settings()
 
 
 def _redraw_screen() -> None:
     """Redraws _image.
 
-    Only called when settings.set() is called,
+    Only called when casioplot_settings.set() is called,
     used to redraw _image with custom margins, width and height.
     """
     global _image
@@ -78,38 +78,39 @@ def _redraw_screen() -> None:
     _image = Image.new(
         "RGB",
         (
-            settings.left_margin + settings.width + settings.right_margin,
-            settings.top_margin + settings.height + settings.bottom_margin,
+            casioplot_settings.left_margin + casioplot_settings.width + casioplot_settings.right_margin,
+            casioplot_settings.top_margin + casioplot_settings.height + casioplot_settings.bottom_margin,
         ),
         _WHITE,
     )
 
-    settings.background_image = _image
+    casioplot_settings.background_image = _image
 
 
 def show_screen() -> None:
     """Show or saves the virtual screen
 
-    This function implement two modes that can be enabled or disabled using the :py:class:`settings`:
-      - Open the screen as an image (enabled using `settings.get('open_image')`).
-      - Save the screen to the disk (enabled using `settings.get('save_image')`).
-        The image is saved with the filename found in `settings.get('filename')`
+    This function implement two modes that can be enabled or disabled using the :py:class:`casioplot_settings`:
+      - Open the screen as an image (enabled using `casioplot_settings.get('open_image')`).
+      - Save the screen to the disk (enabled using `casioplot_settings.get('save_image')`).
+        The image is saved with the filename found in `casioplot_settings.get('filename')`
     """
-    if settings.get("open_image") is True:
+    if casioplot_settings.get("open_image") is True:
         # open the picture
         _image.show()
-    if settings.get("save_image") is True:
+    if casioplot_settings.get("save_image") is True:
         # Save the screen to the disk as an image with the given filename
         _image.save(
-            settings.get("filename"),
-            format=settings.get("image_format"),
+            casioplot_settings.get("filename"),
+            format=casioplot_settings.get("image_format"),
         )
 
 
 def clear_screen() -> None:
     """Clear the virtual screen."""
-    show_screen()
-    settings.config_to("default")
+    for x in range(casioplot_settings.get('width')):
+        for y in range(casioplot_settings.get('height')):
+            set_pixel(x, y, _WHITE)
 
 
 def get_pixel(x: int, y: int) -> COLOR | None:
@@ -119,15 +120,15 @@ def get_pixel(x: int, y: int) -> COLOR | None:
     :param y: y coordinate (from the top)
     :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the screen.
     """
-    if not 0 <= x < settings.get("width") or not 0 <= y < settings.get("height"):
+    if not 0 <= x < casioplot_settings.get("width") or not 0 <= y < casioplot_settings.get("height"):
         return None
     r: int
     g: int
     b: int
     r, g, b = _image.getpixel(
         (
-            x + settings.get("left_margin"),
-            y + settings.get("top_margin"),
+            x + casioplot_settings.get("left_margin"),
+            y + casioplot_settings.get("top_margin"),
         )
     )
     return r, g, b
@@ -140,12 +141,12 @@ def set_pixel(x: int, y: int, color: COLOR = _BLACK) -> None:
     :param y: y coordinate (from the top)
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
     """
-    if not 0 <= x < settings.get("width") or not 0 <= y < settings.get("height"):
+    if not 0 <= x < casioplot_settings.get("width") or not 0 <= y < casioplot_settings.get("height"):
         return
     _image.putpixel(
         (
-            x + settings.get("left_margin"),
-            y + settings.get("top_margin"),
+            x + casioplot_settings.get("left_margin"),
+            y + casioplot_settings.get("top_margin"),
         ),
         color,
     )
