@@ -12,17 +12,16 @@ You can also use :py:data:`settings` to change some behavior.
 
 from os import path
 from typing import Literal
-from PIL import Image, ImageDraw
+from PIL import Image
 from configs import get_config
 
 
-_WHITE: tuple[int, int, int] = (255, 255, 255)  # RGBA white
-_BLACK: tuple[int, int, int] = (0, 0, 0)  # RGBA black
+COLOR = tuple[int, int, int]
+_WHITE: COLOR = (255, 255, 255)  # RGBA white
+_BLACK: COLOR = (0, 0, 0)  # RGBA black
 
 # Create virtual screen
 _image: Image.Image = Image.new("RGB", (384, 192), _WHITE)
-# Create drawing object (used by the function draw_string
-_draw: ImageDraw.ImageDraw = ImageDraw.Draw(_image)
 
 
 class casioplot_settings:
@@ -44,9 +43,8 @@ class casioplot_settings:
         self.open_image: bool = False  # Open the screen
         self.save_image: bool = True  # Save the screen as an image
         # Saving settings
-        self.filename: str = 'casioplot.png'
-        self.image_format: str = 'png'
-
+        self.filename: str = "casioplot.png"
+        self.image_format: str = "png"
 
     def config_to(self, config: str = "default") -> None:
         global _image
@@ -54,13 +52,11 @@ class casioplot_settings:
             setattr(self, setting, value)
         _image = self.background_image
 
-
     def set(self, **settings) -> None:
         """Set an attribute for each given setting with the corresponding value."""
         for setting, value in settings.items():
             setattr(self, setting, value)
         _redraw_screen()
-
 
     def get(self, setting: str):
         """Returns an attribute"""
@@ -76,21 +72,19 @@ def _redraw_screen() -> None:
     Only called when settings.set() is called,
     used to redraw _image with custom margins, width and height.
     """
-    global _image, _draw
+    global _image
 
     # Create a new white image
     _image = Image.new(
         "RGB",
         (
             settings.left_margin + settings.width + settings.right_margin,
-            settings.top_margin + settings.height + settings.bottom_margin
+            settings.top_margin + settings.height + settings.bottom_margin,
         ),
-        _WHITE
+        _WHITE,
     )
 
     settings.background_image = _image
-
-    _draw = ImageDraw.Draw(_image)
 
 
 def show_screen() -> None:
@@ -115,20 +109,17 @@ def show_screen() -> None:
 def clear_screen() -> None:
     """Clear the virtual screen."""
     show_screen()
-    settings.config_to('default')
+    settings.config_to("default")
 
 
-def get_pixel(x: int, y: int) -> tuple[int, int, int] | None:
+def get_pixel(x: int, y: int) -> COLOR | None:
     """Get the RGB color of the pixel at the given position.
 
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
     :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the screen.
     """
-    if (
-        not 0 <= x < settings.get("width")
-        or not 0 <= y < settings.get("height")
-    ):
+    if not 0 <= x < settings.get("width") or not 0 <= y < settings.get("height"):
         return None
     r: int
     g: int
@@ -142,17 +133,14 @@ def get_pixel(x: int, y: int) -> tuple[int, int, int] | None:
     return r, g, b
 
 
-def set_pixel(x: int, y: int, color: tuple[int, int, int] = (0, 0, 0)) -> None:
+def set_pixel(x: int, y: int, color: COLOR = _BLACK) -> None:
     """Set the RGB color of the pixel at the given position (from top left)
 
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
     """
-    if (
-        not 0 <= x < settings.get("width")
-        or not 0 <= y < settings.get("height")
-    ):
+    if not 0 <= x < settings.get("width") or not 0 <= y < settings.get("height"):
         return
     _image.putpixel(
         (
@@ -172,9 +160,7 @@ def _get_filename(character, size: Literal["small", "medium", "large"] = "medium
     """
     special_chars = {" ": "space"}
     filename = special_chars.get(character, character) + ".txt"
-    file_path = path.join(
-        path.abspath(path.dirname(__file__)), "chars", size, filename
-    )
+    file_path = path.join(path.abspath(path.dirname(__file__)), "chars", size, filename)
 
     if not path.isfile(file_path):
         print(f'WARNING: No character "{character}" found for size "{size}".')
@@ -188,8 +174,9 @@ def draw_string(
     x: int,
     y: int,
     text: str,
-    color: tuple[int, int, int] = (0, 0, 0),
-    size: Literal["small", "medium", "large"] = "medium") -> None:
+    color: COLOR = _BLACK,
+    size: Literal["small", "medium", "large"] = "medium",
+) -> None:
     """Draw a string on the virtual screen with the given RGB color and size.
 
     :param x: x coordinate (from the left)
