@@ -16,9 +16,9 @@ configs = {
         'top_margin': 0,
         'bottom_margin': 0,
         'background_image': Image.new('RGB', (384, 192), _WHITE),
-        'open_image': False,
-        'save_image': True,
-        'filename': 'casioplot.png',
+        'show_screen': True,
+        'save_screen': False,
+        'filename': 'casioplot',
         'image_format': 'png'
     },
     'casio_graph_90_plus_e': {
@@ -31,9 +31,9 @@ configs = {
         'background_image': Image.open(
             path.join(_images_directory, "CASIO_Graph_90+e_empty.png")
         ).convert('RGB'),
-        'open_image': False,
-        'save_image': True,
-        'filename': 'casioplot.png',
+        'show_screen': True,
+        'save_screen': False,
+        'filename': 'casioplot',
         'image_format': 'png'
     }
 }
