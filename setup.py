@@ -10,7 +10,7 @@ README = (HERE / "README.rst").read_text()
 # This call to setup() does all the work
 setup(
     name='casioplot',
-    version='1.3.2',
+    version='2.0.0',
     author='uniwix',
     author_email='odevlo.me@gmail.com',
     description='This module allows to use casioplot module on a computer.',

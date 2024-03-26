@@ -11,7 +11,7 @@ This can help to develop python programs in your computer and run it before put 
 Installation
 ------------
 
-.. code-block:: sh
+.. code-block:: shell
 
     pip install casioplot
 
@@ -31,7 +31,7 @@ Usage example
 Draw a single pixel
 ~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: python
+.. code-block:: python3
 
     from casioplot import *
 
@@ -52,6 +52,11 @@ Nothing needed.
 Release History
 ---------------
 
+* 2.0.0
+    * Add tkinter support
+    * Change the way to show the screen
+    * Change settings implementation
+    * Thanks to `@miguelTorrinhaPereira <https://github.com/miguelTorrinhaPereira>`_ for the help
 * 1.3.1
     * Minor fix
 * 1.3.0
@@ -91,9 +96,9 @@ Compatibility Notes
 
 Some behaviors aren't respected:
 
-- The output isn't show in the screen but saved on a picture.
 - The function ``draw_string`` can't print all the characters and doesn't support the sizes ``small`` and ``large``.
+  Will be implemented soon.
 - Only one calculator implemented: **casio graph 90+e**.
 
 
-v 1.3.2 - Uniwix
+v 2.0.0 - Uniwix
