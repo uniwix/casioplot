@@ -52,6 +52,8 @@ Nothing needed.
 Release History
 ---------------
 
+* 2.1.0
+    * Add all the characters in the function ``draw_string``
 * 2.0.0
     * Add tkinter support
     * Change the way to show the screen
@@ -98,9 +100,7 @@ Compatibility Notes
 
 Some behaviors aren't respected:
 
-- The function ``draw_string`` can't print all the characters and doesn't support the sizes ``small`` and ``large``.
-  Will be implemented soon.
 - Only one calculator implemented: **casio graph 90+e**.
 
 
-v 2.0.0 - Uniwix
+v 2.1.0 - Uniwix
