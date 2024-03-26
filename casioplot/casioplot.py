@@ -20,10 +20,10 @@ COLOR = tuple[int, int, int]
 _WHITE: COLOR = (255, 255, 255)  # RGBA white
 _BLACK: COLOR = (0, 0, 0)  # RGBA black
 # a list of all settings that if change should trigger the _redraw_screen function
-redraw_settings = ('width', 'height', 'left_margin', 'right_margin', 'top_margin', 'bottom_margin')
+redraw_settings: tuple = ('width', 'height', 'left_margin', 'right_margin', 'top_margin', 'bottom_margin')
 
 # Create virtual screen
-_image: Image.Image = Image.new("RGB", (384, 192), _WHITE)
+_screen: Image.Image = Image.new("RGB", (384, 192), _WHITE)
 
 
 class Casioplot_casioplot_settings:
@@ -49,10 +49,10 @@ class Casioplot_casioplot_settings:
         self.image_format: str = "png"
 
     def config_to(self, config: str = "default") -> None:
-        global _image
+        global _screen
         for setting, value in get_config(config).items():
             setattr(self, setting, value)
-        _image = self.background_image
+        _screen = self.background_image
 
     def set(self, **settings) -> None:
         """Set an attribute for each given setting with the corresponding value."""
@@ -82,10 +82,10 @@ def _redraw_screen() -> None:
     Only called when casioplot_settings.set() is called,
     used to redraw _image with custom margins, width and height.
     """
-    global _image
+    global _screen
 
     # Create a new white image
-    _image = Image.new(
+    _screen = Image.new(
         "RGB",
         (
             casioplot_settings.get('left_margin') + casioplot_settings.get('width') +
@@ -96,7 +96,7 @@ def _redraw_screen() -> None:
         _WHITE,
     )
 
-    casioplot_settings.background_image = _image
+    casioplot_settings.background_image = _screen
 
 
 def show_screen() -> None:
@@ -109,10 +109,10 @@ def show_screen() -> None:
     """
     if casioplot_settings.get("open_image") is True:
         # open the picture
-        _image.show()
+        _screen.show()
     if casioplot_settings.get("save_image") is True:
         # Save the screen to the disk as an image with the given filename
-        _image.save(
+        _screen.save(
             casioplot_settings.get("filename") + '.' + casioplot_settings.get("image_format"),
             format=casioplot_settings.get("image_format"),
         )
@@ -125,25 +125,37 @@ def clear_screen() -> None:
             set_pixel(x, y, _WHITE)
 
 
+def coordenates_in_bounds(x: int, y: int) -> bool:
+    """Checks if the given coordenates are in bounds of the canvas
+
+    :param x: x coordinate (from the left)
+    :param y: y coordinate (from the top)
+    :return: a bool that says if the given coordenates are in bounds of the canvas
+    """
+    return 0 <= x < casioplot_settings.get("width") and 0 <= y < casioplot_settings.get("height")
+
+
+def canvas_to_screen(x: int, y: int) -> tuple[int, int]:
+    """Translates coordenates of the canvas to coordenates in the virtual screen
+
+    :param x: x coordinate (from the left)
+    :param y: y coordinate (from the top)
+    :return: The coresponding coordenates in the virtual screen
+    """
+    return x + casioplot_settings.get("left_margin"), y + casioplot_settings.get("top_margin")
+
+
 def get_pixel(x: int, y: int) -> COLOR | None:
     """Get the RGB color of the pixel at the given position.
 
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
-    :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the screen.
+    :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the canvas.
     """
-    if not 0 <= x < casioplot_settings.get("width") or not 0 <= y < casioplot_settings.get("height"):
+    if coordenates_in_bounds(x, y):
+        return _screen.getpixel(canvas_to_screen(x, y))
+    else:
         return None
-    r: int
-    g: int
-    b: int
-    r, g, b = _image.getpixel(
-        (
-            x + casioplot_settings.get("left_margin"),
-            y + casioplot_settings.get("top_margin"),
-        )
-    )
-    return r, g, b
 
 
 def set_pixel(x: int, y: int, color: COLOR = _BLACK) -> None:
@@ -155,7 +167,7 @@ def set_pixel(x: int, y: int, color: COLOR = _BLACK) -> None:
     """
     if not 0 <= x < casioplot_settings.get("width") or not 0 <= y < casioplot_settings.get("height"):
         return
-    _image.putpixel(
+    _screen.putpixel(
         (
             x + casioplot_settings.get("left_margin"),
             y + casioplot_settings.get("top_margin"),
