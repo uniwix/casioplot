@@ -10,16 +10,16 @@ Available functions:
 You can also use :py:data:`casioplot_settings` to change some behavior.
 """
 
-from os import path
 from typing import Literal
 from PIL import Image, ImageTk
 import tkinter as tk
-from configs import get_config
+from configs import _get_config
+from characters import _get_char
 
 # color type
 COLOR = tuple[int, int, int]
 # some frequently used colors
-_WHITE: COLOR = (255, 255, 255)  # RGBA white
+_WHITE: COLOR = (255, 255, 255)  # RGB white
 _BLACK: COLOR = (0, 0, 0)  # RGBA black
 # a list of all settings that if change should trigger the _redraw_screen function
 redraw_settings: tuple = ('width', 'height', 'left_margin', 'right_margin', 'top_margin', 'bottom_margin')
@@ -71,8 +71,8 @@ class Casioplot_settings:
 
 
     def config_to(self, config: str = "default") -> None:
-        global _screen
-        for setting, value in get_config(config).items():
+        global _screen, _window
+        for setting, value in _get_config(config).items():
             setattr(self, setting, value)
 
         # a configuration may have a background image
@@ -102,6 +102,7 @@ class Casioplot_settings:
                 should_redraw_screen = True
 
             elif setting == "show_screen":
+                global _window
                 if value is True:
                     _window.deiconify()
                 else:
@@ -127,7 +128,7 @@ def _redraw_screen() -> None:
     Only called when casioplot_settings.set() is called,
     used to redraw _image with custom margins, width and height.
     """
-    global _screen
+    global _screen, _window
     screen_width, screen_height = casioplot_settings._screen_dimensions()
 
     # Create a new white image
@@ -167,6 +168,7 @@ def show_screen() -> None:
         The image is saved with the filename found in `casioplot_settings.get('filename')`
     """
     if casioplot_settings.get("show_screen") is True:
+        global _photo_image, _screen_display, _window
         # show the screen
         _photo_image = ImageTk.PhotoImage(_screen)
         _screen_display["image"] = _photo_image
@@ -206,27 +208,9 @@ def set_pixel(x: int, y: int, color: COLOR = _BLACK) -> None:
     :param y: y coordinate (from the top)
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
     """
+    global _screen
     if _coordenates_in_bounds(x, y):
         _screen.putpixel(_canvas_to_screen(x, y), color)
-
-
-def _get_filename(character, size: Literal["small", "medium", "large"] = "medium"):
-    """Get the file where a character is saved and return the ``space`` file if the character doesn't exist.
-
-    :param character: The character to find
-    :param size: The size of the character
-    :return: The character filename. A string: "{``./chars`` folder absolute path}/{character}_{size}.png"
-    """
-    special_chars = {" ": "space"}
-    filename = special_chars.get(character, character) + ".txt"
-    file_path = path.join(path.abspath(path.dirname(__file__)), "chars", size, filename)
-
-    if not path.isfile(file_path):
-        print(f'WARNING: No character "{character}" found for size "{size}".')
-        file_path = path.join(
-            path.abspath(path.dirname(__file__)), "chars", size, "space.txt"
-        )
-    return file_path
 
 
 def draw_string(
@@ -234,33 +218,35 @@ def draw_string(
     y: int,
     text: str,
     color: COLOR = _BLACK,
-    size: Literal["small", "medium", "large"] = "medium",
+    size: Literal["small", "medium", "large"] = "medium"
 ) -> None:
     """Draw a string on the virtual screen with the given RGB color and size.
 
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
-    :param text: text that will be shown
-    :param color: The text color. A tuple that contain 3 integers from 0 to 255.
+    :param text: text that will be drawn
+    :param color: The color of the text. A tuple that contain 3 integers from 0 to 255.
     :param size: Size of the text. String from the following values: "small", "medium" or "large".
     :raise ValueError: Raise a ValueError if the size isn't correct.
     """
-    sizes = {"small": (10, 10), "medium": (13, 17), "large": (18, 23)}
+    def draw_char(x: int, y: int, char_map: tuple, color: COLOR) -> None:
+        """Draws a single character
 
-    if size not in sizes.keys():
-        raise ValueError(
-            f'Unknown size "{size}". Size must be one of the following: "small", "medium" or "large"'
-        )
+        :param x: x coordinate (from the left)
+        :param y: y coordinate (from the top)
+        :param char_mpa: a tuple of strings, where every string represents a row
+        of the character that is going to be drawn
+        :param color: The color of the character
+        """
+        for y2, row in enumerate(char_map):
+            for x2, pixel in enumerate(row):
+                if pixel == 'X':
+                    set_pixel(x+x2, y+y2, color)
 
-    for character in text:
-        filename = _get_filename(character, size)
-        n = 0
-        with open(filename, "r") as c:
-            count = 0
-            for line in c:
-                for j, k in enumerate(line):
-                    if k in ["$"]:
-                        set_pixel(x + j, y + count, color)
-                    n = j
-                count += 1
-        x += n
+    for char in text:
+        if not _coordenates_in_bounds(x, y):
+            return
+
+        char_map = _get_char(char, size)
+        draw_char(x, y, char_map, color)
+        x += len(char_map[0])
