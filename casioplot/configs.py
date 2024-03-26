@@ -1,3 +1,12 @@
+"""Contains the configurations
+
+All configurations are sotre in the dictionary configs.
+
+:py:func:`_get_config` Serves as an interface
+for casioplot.py to get the characters it needs.
+"""
+
+
 from PIL import Image
 from os import path
 
