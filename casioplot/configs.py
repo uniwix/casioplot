@@ -1,7 +1,20 @@
+"""Contains the configurations
+
+All configurations are sotre in the dictionary configs.
+
+:py:func:`_get_config` Serves as an interface
+for casioplot.py to get the characters it needs.
+"""
+
+
 from PIL import Image
 from os import path
 
-_WHITE: tuple[int, int, int] = (255, 255, 255)  # RGBA white
+# color type
+COLOR = tuple[int, int, int]
+# RGB white
+_WHITE: COLOR = (255, 255, 255)
+# the path for the directory that contains the background images of the configs
 _images_directory = path.join(
     path.abspath(path.dirname(__file__)),
     "images"
@@ -39,7 +52,12 @@ configs = {
 }
 
 
-def get_config(config: str) -> dict:
+def _get_config(config: str) -> dict:
+    """Gets the settings of a certain config
+
+    :param config: the name of a config, it should be a key of the dictionary configs
+    :return: a dictionary where the keys are settings, and the values the values of thouse settings
+    """
     if config not in configs.keys():
         raise ValueError(f"No config called {config}")
     return configs[config]
