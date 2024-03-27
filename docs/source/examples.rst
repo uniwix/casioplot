@@ -15,7 +15,7 @@ Draw a pixel
 Result:
 ~~~~~~~
 
-.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/images/pixel.png
+.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/pixel.png
     :alt: A single pixel on the screen
 
 Draw a rectangle
@@ -41,7 +41,7 @@ Draw a rectangle
 Result:
 ~~~~~~~
 
-.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/images/rectangle.png
+.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/rectangle.png
     :alt: A red rectangle
 
 Get a pixel value

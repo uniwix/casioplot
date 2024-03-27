@@ -1,9 +1,3 @@
 dist
-.idea
-casioplot.egg-info
 *.pyc
 __pycache__
-casioplot.png
-_test.py
-make.bat
-MakeFile

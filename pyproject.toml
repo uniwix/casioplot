@@ -5,3 +5,31 @@ requires = [
     "Pillow"
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "casioplot"
+version = "2.1.0"
+description = "Use casioplot module on a computer"
+readme = "README.rst"
+authors = [
+    { name = "Uniwix", email = "uniwixu@gmail.com" },
+    { name = "Miguel Torrinha Pereira" }
+]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["casioplot"]
+dependencies = [
+    "Pillow",
+]
+requires-python = ">=3.9"
+
+[project.urls]
+Homepage = "https://github.com/uniwix/casioplot"
+Documentation = "https://casioplot.readthedocs.io/en/latest/"
+Issues = "https://github.com/uniwix/casioplot/issues"
+Repository = "https://github.com/uniwix/casioplot.git"
+Changelog = "https://github.com/uniwix/casioplot/releases/latest"
