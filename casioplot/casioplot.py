@@ -13,8 +13,8 @@ You can also use :py:data:`casioplot_settings` to change some behavior.
 from typing import Literal
 from PIL import Image, ImageTk
 import tkinter as tk
-from configs import _get_config
-from characters import _get_char
+from casioplot.configs import _get_config
+from casioplot.characters import _get_char
 
 # color type
 COLOR = tuple[int, int, int]
