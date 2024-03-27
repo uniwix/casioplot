@@ -8,11 +8,6 @@ for casioplot.py to get the characters it needs.
 
 from PIL import Image
 
-# color type
-COLOR = tuple[int, int, int]
-# RGB white
-_WHITE: COLOR = (255, 255, 255)
-
 
 configs = {
     "default": {
@@ -22,7 +17,8 @@ configs = {
         "right_margin": 0,
         "top_margin": 0,
         "bottom_margin": 0,
-        "background_image": Image.new("RGB", (384, 192), _WHITE),
+        "bg_image_is_set": False,
+        "background_image": Image.new("RGB", (1, 1)),
         "show_screen": True,
         "save_screen": False,
         "filename": "casioplot",
@@ -35,6 +31,7 @@ configs = {
         "right_margin": 8,
         "top_margin": 26,
         "bottom_margin": 10,
+        "bg_image_is_set": True,
         "background_image": Image.open("calculator.png"),
         "show_screen": True,
         "save_screen": False,

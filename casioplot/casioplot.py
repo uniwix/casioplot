@@ -50,6 +50,7 @@ class CasioplotSettings:
         self.top_margin: int
         self.bottom_margin: int
         # background Image
+        self.bg_image_is_set: bool  # is used when changing settings
         self.background_image: Image.Image  # some configs like casio_graph_90_plus_e
         # have a special background image
         # Output settings
@@ -68,6 +69,33 @@ class CasioplotSettings:
             self.top_margin + self.height + self.bottom_margin
         )
 
+    def _setup_screen(self):
+        """Calculates some screen attributes
+
+        Checks if the margin and size attributes are correctly configured,
+        and calculates some attributes.
+        """
+        if self.bg_image_is_set is True:
+            bg_width, bg_height = self.background_image.size
+            if self.left_margin + self.right_margin >= bg_width:
+                raise ValueError("Invalid settings, the combained values of \
+                    left_margin and right_margin must be smaller than the \
+                    width of the background image")
+            if self.top_margin + self.bottom_margin >= bg_height:
+                raise ValueError("Invalid settings, the combained values of \
+                    top_margin and bottom_margin must be smaller than the \
+                    height of the background image")
+
+            self.width = bg_width - (self.left_margin + self.right_margin)
+            self.height = bg_height - (self.top_margin + self.bottom_margin)
+        else:
+            if self.width <= 0:
+                raise ValueError("the setting width must be larger than 0")
+            if self.height <= 0:
+                raise ValueError("the setting height must be larger than 0")
+
+            _redraw_screen()
+
     def _set_settings(self, settings: dict) -> None:
         """Sets all settings based on a dictionary
 
@@ -82,8 +110,7 @@ class CasioplotSettings:
                 continue
             setattr(self, setting, value)
 
-        # a configuration may have a background image
-        _screen = self.background_image
+        self._setup_screen()
         # in case self.show_screen is altered
         if self.show_screen is True:
             _window.deiconify()
@@ -139,12 +166,10 @@ def _redraw_screen() -> None:
     used to redraw _image with custom margins, width and height.
     """
     global _screen, _window
-    screen_width, screen_height = casioplot_settings._screen_dimensions()
 
+    screen_width, screen_height = casioplot_settings._screen_dimensions()
     # Create a new white image
     _screen = Image.new("RGB", (screen_width, screen_height), _WHITE)
-    # update the background_image
-    casioplot_settings.background_image = _screen
     # updates the window dimensions
     _window.geometry(f"{screen_width}x{screen_height}")
 
