@@ -52,6 +52,10 @@ Nothing needed.
 Release History
 ---------------
 
+* 2.1.1
+    * Fix imports
+    * Add new presets
+    * Change example ``image_3d_test.py``
 * 2.1.0
     * Add all the characters in the function ``draw_string``
 * 2.0.0
@@ -103,4 +107,4 @@ Some behaviors aren't respected:
 - Only one calculator implemented: **casio graph 90+e**.
 
 
-v 2.1.0 - Uniwix
+v 2.1.1 - Uniwix
