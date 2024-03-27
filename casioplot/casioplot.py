@@ -68,9 +68,18 @@ class CasioplotSettings:
             self.top_margin + self.height + self.bottom_margin
         )
 
-    def config_to(self, config: str = "default") -> None:
+    def _set_settings(self, settings: dict) -> None:
+        """Sets all settings based on a dictionary
+
+        :param settings: A dictionary where every key/value pare represents
+        a settings and the corresponding value. The value can be None, in that case
+        the corresponding settings isn't changed.
+        """
+
         global _screen, _window
-        for setting, value in _get_config(config).items():
+        for setting, value in settings.items():
+            if value is None:
+                continue
             setattr(self, setting, value)
 
         # a configuration may have a background image
@@ -83,6 +92,11 @@ class CasioplotSettings:
         # in case the screen dimensions are altered
         screen_width, screen_height = self._screen_dimensions()
         _window.geometry(f"{screen_width}x{screen_height}")
+
+    def config_to(self, config: str = "default") -> None:
+        """Configs to a configuration stored in configs.py"""
+        settings: dict = _get_config(config)
+        self._set_settings(settings)
 
     def set(self, **settings) -> None:
         """Set an attribute for each given setting with the corresponding value."""
