@@ -88,7 +88,10 @@ def draw_line(p1, p2, color):
     if x2 < x1:
         x1, x2, y1, y2 = x2, x1, y2, y1
 
-    grad = dy / dx
+    try:
+        grad = dy / dx
+    except ZeroDivisionError:
+        grad = 0
     inter_y = y1 + _reverse_f_part(x1) * grad
 
     def draw_endpoint(pt):

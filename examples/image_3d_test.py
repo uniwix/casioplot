@@ -1,3 +1,6 @@
+from time import sleep
+import casioplot.casioplot as csp
+from casioplot.casioplot import print_test, test
 from drawing_functions import *
 from casioplot import *
 
@@ -26,33 +29,42 @@ def rotate_3d(x, y, z, a):
     return x, sin(a) * y + z * cos(a)
 
 
-def d2_to_d3(x, y, z):
+def d2_to_d3(x, y, z, r2d, r3d):
     """Apply the two rotations to get a 2D image of a 3D point."""
-    x, y = rotate_2d(x, y, R_2D)
-    x, y = rotate_3d(x, y, z, R_3D)
+    x, y = rotate_2d(x, y, r2d)
+    x, y = rotate_3d(x, y, z, r3d)
     return x + 192, y + 192/2
 
 
-# Draw each edges of a cube
+def draw_cube(r2d, r3d):
+    # Draw each edges of a cube
+    # from the lowest corner
+    draw_line(d2_to_d3(-50, -50, -50, r2d, r3d), d2_to_d3(50, -50, -50, r2d, r3d), (255, 0, 0, 255))
+    draw_line(d2_to_d3(-50, -50, -50, r2d, r3d), d2_to_d3(-50, 50, -50, r2d, r3d), (0, 255, 0, 255))
+    draw_line(d2_to_d3(-50, -50, -50, r2d, r3d), d2_to_d3(-50, -50, 50, r2d, r3d), (0, 0, 255, 255))
 
-# from the lowest corner
-draw_line(d2_to_d3(-50, -50, -50), d2_to_d3(50, -50, -50), (255, 0, 0, 255))
-draw_line(d2_to_d3(-50, -50, -50), d2_to_d3(-50, 50, -50), (0, 255, 0, 255))
-draw_line(d2_to_d3(-50, -50, -50), d2_to_d3(-50, -50, 50), (0, 0, 255, 255))
+    # from the highest corner
+    draw_line(d2_to_d3(50, 50, 50, r2d, r3d), d2_to_d3(-50, 50, 50, r2d, r3d), (255, 0, 0, 255))
+    draw_line(d2_to_d3(50, 50, 50, r2d, r3d), d2_to_d3(50, -50, 50, r2d, r3d), (0, 255, 0, 255))
+    draw_line(d2_to_d3(50, 50, 50, r2d, r3d), d2_to_d3(50, 50, -50, r2d, r3d), (0, 0, 255, 255))
 
-# from the highest corner
-draw_line(d2_to_d3(50, 50, 50), d2_to_d3(-50, 50, 50), (255, 0, 0, 255))
-draw_line(d2_to_d3(50, 50, 50), d2_to_d3(50, -50, 50), (0, 255, 0, 255))
-draw_line(d2_to_d3(50, 50, 50), d2_to_d3(50, 50, -50), (0, 0, 255, 255))
+    # Other edges
+    draw_line(d2_to_d3(-50, -50, 50, r2d, r3d), d2_to_d3(-50, 50, 50, r2d, r3d), (0, 255, 0, 255))
+    draw_line(d2_to_d3(-50, -50, 50, r2d, r3d), d2_to_d3(50, -50, 50, r2d, r3d), (255, 0, 0, 255))
 
-# Other edges
-draw_line(d2_to_d3(-50, -50, 50), d2_to_d3(-50, 50, 50), (0, 255, 0, 255))
-draw_line(d2_to_d3(-50, -50, 50), d2_to_d3(50, -50, 50), (255, 0, 0, 255))
+    draw_line(d2_to_d3(-50, 50, -50, r2d, r3d), d2_to_d3(50, 50, -50, r2d, r3d), (255, 0, 0, 255))
+    draw_line(d2_to_d3(-50, 50, -50, r2d, r3d), d2_to_d3(-50, 50, 50, r2d, r3d), (0, 0, 255, 255))
 
-draw_line(d2_to_d3(-50, 50, -50), d2_to_d3(50, 50, -50), (255, 0, 0, 255))
-draw_line(d2_to_d3(-50, 50, -50), d2_to_d3(-50, 50, 50), (0, 0, 255, 255))
+    draw_line(d2_to_d3(50, -50, -50, r2d, r3d), d2_to_d3(50, 50, -50, r2d, r3d), (0, 255, 0, 255))
+    draw_line(d2_to_d3(50, -50, -50, r2d, r3d), d2_to_d3(50, -50, 50, r2d, r3d), (0, 0, 255, 255))
 
-draw_line(d2_to_d3(50, -50, -50), d2_to_d3(50, 50, -50), (0, 255, 0, 255))
-draw_line(d2_to_d3(50, -50, -50), d2_to_d3(50, -50, 50), (0, 0, 255, 255))
 
-show_screen()
+print_test()
+csp.test += 'test'
+print_test()
+
+for i in range(1000):
+    clear_screen()
+    draw_cube(i/100, R_3D)
+    show_screen()
+    sleep(0.01)

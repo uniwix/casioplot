@@ -37,7 +37,7 @@ _screen_display = tk.Label(_window, image=_photo_image)
 _screen_display.pack()
 
 
-class Casioplot_settings:
+class CasioplotSettings:
     """Manage casioplot_settings for the casioplot module."""
 
     def __init__(self) -> None:
@@ -61,14 +61,12 @@ class Casioplot_settings:
 
         self.config_to('default')  # sets all settings to the default ones
 
-
     def _screen_dimensions(self) -> tuple[int, int]:
         """Calculates the dimensions of the screen"""
         return (
             self.left_margin + self.width + self.right_margin,
             self.top_margin + self.height + self.bottom_margin
         )
-
 
     def config_to(self, config: str = "default") -> None:
         global _screen, _window
@@ -85,7 +83,6 @@ class Casioplot_settings:
         # in case the screen dimensions are altered
         screen_width, screen_height = self._screen_dimensions()
         _window.geometry(f"{screen_width}x{screen_height}")
-
 
     def set(self, **settings) -> None:
         """Set an attribute for each given setting with the corresponding value."""
@@ -113,13 +110,12 @@ class Casioplot_settings:
         if should_redraw_screen:
             _redraw_screen()
 
-
     def get(self, setting: str):
         """Returns an attribute"""
         return getattr(self, setting)
 
 
-casioplot_settings = Casioplot_settings()
+casioplot_settings = CasioplotSettings()
 
 
 def _redraw_screen() -> None:
@@ -214,11 +210,11 @@ def set_pixel(x: int, y: int, color: COLOR = _BLACK) -> None:
 
 
 def draw_string(
-    x: int,
-    y: int,
-    text: str,
-    color: COLOR = _BLACK,
-    size: Literal["small", "medium", "large"] = "medium"
+        x: int,
+        y: int,
+        text: str,
+        color: COLOR = _BLACK,
+        size: Literal["small", "medium", "large"] = "medium"
 ) -> None:
     """Draw a string on the virtual screen with the given RGB color and size.
 
@@ -229,6 +225,7 @@ def draw_string(
     :param size: Size of the text. String from the following values: "small", "medium" or "large".
     :raise ValueError: Raise a ValueError if the size isn't correct.
     """
+
     def draw_char(x: int, y: int, char_map: tuple, color: COLOR) -> None:
         """Draws a single character
 
@@ -241,7 +238,7 @@ def draw_string(
         for y2, row in enumerate(char_map):
             for x2, pixel in enumerate(row):
                 if pixel == 'X':
-                    set_pixel(x+x2, y+y2, color)
+                    set_pixel(x + x2, y + y2, color)
 
     for char in text:
         if not _coordenates_in_bounds(x, y):
