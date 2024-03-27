@@ -4,7 +4,7 @@ from casioplot import *
 R_2D = pi / 3  # 2D rotation angle (radians)
 R_3D = pi / 6  # 3D rotation angle (radians)
 
-casioplot_settings.casio_graph_90_plus_e()  # Use the casio graph 90+e screen template
+casioplot_settings.config_to("casio_graph_90_plus_e")  # Use the casio graph 90+e screen template
 
 
 def dist(x, y):

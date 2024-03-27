@@ -5,7 +5,7 @@ Casioplot for computer
 
 This can help to develop python programs in your computer and run it before put it in your calculator.
 
-.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/images/rectangle.png
+.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/rectangle.png
     :alt: A red rectangle
 
 Installation
@@ -39,7 +39,7 @@ Draw a single pixel
     set_pixel(10, 10, red)
     show_screen()  # Don't forget to show the screen to see the result.
 
-.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/images/pixel.png
+.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/pixel.png
     :alt: A single pixel on the screen
 
 For more examples and usage, please refer to the `Docs <https://casioplot.readthedocs.io/en/latest/>`_.
