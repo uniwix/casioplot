@@ -6,50 +6,45 @@ All configurations are sotre in the dictionary configs.
 for casioplot.py to get the characters it needs.
 """
 
-
 from PIL import Image
-from os import path
 
 # color type
 COLOR = tuple[int, int, int]
 # RGB white
 _WHITE: COLOR = (255, 255, 255)
-# the path for the directory that contains the background images of the configs
-_images_directory = path.join(
-    path.abspath(path.dirname(__file__)),
-    "images"
-)
+
 
 configs = {
-    'default': {
-        'width': 384,
-        'height': 192,
-        'left_margin': 0,
-        'right_margin': 0,
-        'top_margin': 0,
-        'bottom_margin': 0,
-        'background_image': Image.new('RGB', (384, 192), _WHITE),
-        'show_screen': True,
-        'save_screen': False,
-        'filename': 'casioplot',
-        'image_format': 'png'
+    "default": {
+        "width": 384,
+        "height": 192,
+        "left_margin": 0,
+        "right_margin": 0,
+        "top_margin": 0,
+        "bottom_margin": 0,
+        "background_image": Image.new("RGB", (384, 192), _WHITE),
+        "show_screen": True,
+        "save_screen": False,
+        "filename": "casioplot",
+        "image_format": "png",
     },
-    'casio_graph_90_plus_e': {
-        'width': 384,
-        'height': 192,
-        'left_margin': 0,
-        'right_margin': 0,
-        'top_margin': 24,
-        'bottom_margin': 0,
-        'background_image': Image.open(
-            path.join(_images_directory, "CASIO_Graph_90+e_empty.png")
-        ).convert('RGB'),
-        'show_screen': True,
-        'save_screen': False,
-        'filename': 'casioplot',
-        'image_format': 'png'
-    }
+    "fx-CG50": {
+        "width": 384,
+        "height": 192,
+        "left_margin": 8,
+        "right_margin": 8,
+        "top_margin": 26,
+        "bottom_margin": 10,
+        "background_image": Image.open("calculator.png"),
+        "show_screen": True,
+        "save_screen": False,
+        "filename": "casioplot",
+        "image_format": "png",
+    },
 }
+# this options only exist for better user experience
+configs["fx-CG50 AU"] = configs["fx-CG50"]
+configs["graph 90+e"] = configs["fx-CG50"]
 
 
 def _get_config(config: str) -> dict:
