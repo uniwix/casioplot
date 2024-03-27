@@ -5,7 +5,7 @@ from typing import Any
 THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
-def get_config(file_name: str) -> dict[str, Any] | str:
+def _get_config_file(file_name: str) -> tuple[dict[str, Any] | str, str]:
     """Get the configuration file.
 
     This function searches for the configuration file in the following order:
@@ -28,10 +28,11 @@ def get_config(file_name: str) -> dict[str, Any] | str:
     )
     for loc in locations:
         try:
-            with open(os.path.join(loc, file_name), "rb") as source:
-                return tomllib.load(source)
+            path = os.path.join(loc, file_name)
+            with open(path, "rb") as source:
+                return tomllib.load(source), os.path.dirname(path)
         except (IOError, TypeError):
             pass
     print(f"[Error] Config file {file_name} not found. Using default configuration.")
     with open(os.path.join(os.path.dirname(__file__), "default.toml"), "rb") as source:
-        return tomllib.load(source)
+        return tomllib.load(source), os.path.dirname(__file__)
