@@ -81,6 +81,9 @@ Nothing needed.
 Release history
 ---------------
 
+* 2.2.0
+    * Update the settings system to use toml
+    * Clean the code
 * 2.1.1
     * Fix imports
     * Add new presets
@@ -129,4 +132,4 @@ Contributing
 5. Create a new Pull Request
 
 
-v 2.1.1 - Uniwix
+v 2.2.0 - Uniwix

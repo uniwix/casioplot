@@ -22,7 +22,7 @@ copyright = '2021, uniwix'
 author = 'uniwix'
 
 # The full version, including alpha/beta/rc tags
-release = '2.1.1'
+release = '2.2.0'
 
 
 # -- General configuration ---------------------------------------------------
