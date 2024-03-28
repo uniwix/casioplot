@@ -1,9 +1,9 @@
-"""Contains the configurations
+"""Contains some preset configurations
 
-All configurations are sotre in the dictionary configs.
+All preset configurations are stored in the dictionary configs.
 
 :py:func:`_get_config` Serves as an interface
-for casioplot.py to get the characters it needs.
+for casioplot.py to get the preset configurations it needs.
 """
 
 from PIL import Image
@@ -55,8 +55,8 @@ configs["graph 90+e"] = configs["fx-CG50"]
 def _get_config(config: str) -> configuration:
     """Gets the settings of a certain config
 
-    :param config: the name of a config, it should be a key of the dictionary configs
-    :return: a dictionary where the keys are settings, and the values the values of thouse settings
+    :param config: the name of a configuration, it should be a key of the dictionary configs
+    :return: a preset configuration
     """
     if config not in configs.keys():
         raise ValueError(f"No config called {config}")

@@ -1,4 +1,4 @@
-"""Contains all the functions from ``casioplot`` calculator module.
+"""Contains all the functions from `casioplot` calculator module.
 
 Available functions:
   - :py:func:`show_screen`
@@ -43,11 +43,11 @@ def _screen_dimensions() -> tuple[int, int]:
     )
 
 
-def _setup_screen():
+def _setup_screen() -> None:
     """Calculates some screen attributes
 
     Checks if the margin and size attributes are correctly configured,
-    and calculates some attributes.
+    and calculates some settings.
     """
     if settings.bg_image_is_set is True:
         bg_width, bg_height = settings.background_image.size
@@ -71,19 +71,21 @@ def _setup_screen():
         _redraw_screen()
 
 
-def _set_settings(settings: configuration) -> None:
-    """Sets all settings based on a dictionary
+def _set_settings(new_settings: configuration) -> None:
+    """Sets all settings based on a configuration
 
-    :param settings: A dictionary where every key/value pare represents
-    a settings and the corresponding value. The value can be None, in that case
-    the corresponding settings isn't changed.
+    :param new_settings: If the new settings come from `_get_config` it has a value for ValueError
+    for every settings, but if it is from the function `_get_config_file` it can be incomplete.
     """
 
     global _screen, _window
-    for setting, value in settings.items():
-        if value is None:
-            continue
-        setattr(settings, setting, value)
+    for setting, value in new_settings.items():
+        correct_type: type = configuration.__annotations__[settings]
+        if isinstance(value, correct_type):
+            raise ValueError(f"The setting {setting} must be of type {correct_type} \
+                but the value given is of the type {type(value)}")
+
+        settings[setting] = value
 
     _setup_screen()
     # in case settings.show_screen is altered
@@ -97,7 +99,7 @@ def _set_settings(settings: configuration) -> None:
 
 
 def _config_to(config: str = "default") -> None:
-    """Configs to a configuration stored in configs.py"""
+    """Configs to a preset configuration stored in configs.py"""
     _set_settings(_get_config(config))
 
 

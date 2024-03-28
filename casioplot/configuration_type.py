@@ -1,8 +1,16 @@
+"""This file contains the type `configuration`
+
+This type makes it possible to representing all settings and configs in a dictionary but still
+have type annotations for every settings.
+"""
+
 from typing import TypedDict
 from PIL import Image
 
 
-class configuration(TypedDict):
+# the option `total=False` makes it possible for a configuration
+# to not have a corresponding value for all settings
+class configuration(TypedDict, total=False):
     # canvas size
     width: int  # canvas width in pixels
     height: int  # canvas height in pixels
