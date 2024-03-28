@@ -103,4 +103,4 @@ Contributing
 5. Create a new Pull Request
 
 
-v 2.2.0 - Uniwix
+v 2.2.1 - Uniwix
