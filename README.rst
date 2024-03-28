@@ -49,7 +49,7 @@ Notes on performance
 
 The performance you get in the computer is not representative of the performance on the calculatores.
 Keep in mind the following differences:
-    * Obviosly ever operation that isn't from the casioplot package is going to be faster in the Computer
+    * Obviously ever operation that isn't from the casioplot package is going to be faster in the Computer
     * clear_screen, set_pixel, get_pixel and draw_string are faster in the computer
     * show_screen is slower in the computer
 
@@ -81,37 +81,7 @@ Nothing needed.
 Release history
 ---------------
 
-* 2.2.0
-    * Update the settings system to use toml
-    * Clean the code
-* 2.1.1
-    * Fix imports
-    * Add new presets
-    * Change example ``image_3d_test.py``
-* 2.1.0
-    * Add all the characters in the function ``draw_string``
-* 2.0.0
-    * Add tkinter support
-    * Change the way to show the screen
-    * Change settings implementation
-    * Thanks to `@miguelTorrinhaPereira <https://github.com/miguelTorrinhaPereira>`_ for the help
-* 1.3.2
-    * Minor fix
-* 1.3.1
-    * Minor fix
-* 1.3.0
-    * Update settings and usage
-    * Adding documentation
-* 1.2.0
-    * ADD: Character support
-* 1.0.9
-    * FIX: images in the docs
-* 1.0.5
-    * FIX: import in the ``__init__`` file
-* 1.0.1
-    * First release on PyPI (this release is no more available now)
-* 1.0.0
-    * Work in progress
+See `CHANGELOG <./CHANGELOG.md>`_.
 
 Meta
 ----
