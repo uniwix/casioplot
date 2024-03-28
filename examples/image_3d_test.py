@@ -1,13 +1,9 @@
 from time import sleep
-import casioplot.casioplot as csp
-from casioplot.casioplot import print_test, test
+
 from drawing_functions import *
-from casioplot import *
 
 R_2D = pi / 3  # 2D rotation angle (radians)
 R_3D = pi / 6  # 3D rotation angle (radians)
-
-casioplot_settings.config_to("casio_graph_90_plus_e")  # Use the casio graph 90+e screen template
 
 
 def dist(x, y):
@@ -59,12 +55,9 @@ def draw_cube(r2d, r3d):
     draw_line(d2_to_d3(50, -50, -50, r2d, r3d), d2_to_d3(50, -50, 50, r2d, r3d), (0, 0, 255, 255))
 
 
-print_test()
-csp.test += 'test'
-print_test()
-
 for i in range(1000):
     clear_screen()
+    draw_string(10, 10, "3D Cube", (0, 0, 0))
     draw_cube(i/100, R_3D)
     show_screen()
     sleep(0.01)

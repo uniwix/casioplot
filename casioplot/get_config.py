@@ -38,7 +38,7 @@ def _get_config_file(file_name: str) -> configuration:
             pass
 
     # 5
-    print(f"[Error] Config file {file_name} not found. Using default configuration.")
+    print(f"[Info] Config file {file_name} not found. Using default configuration.")
     with open(os.path.join(os.path.dirname(__file__), "default.toml"), "rb") as source:
         config = tomllib.load(source)
     return _toml_to_configuration(config, configuration())
@@ -48,7 +48,6 @@ def _set_settings(toml: dict) -> configuration:
     """Set the settings based on a TOML dictionary.
 
     :param toml: The TOML dictionary.
-    :param use_default: Whether to use the default configuration. Do not change its value, or it may break everything.
     :return: The configuration dictionary.
     """
     if "preset" in toml:

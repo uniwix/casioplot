@@ -1,0 +1,21 @@
+[screen]
+# use tkinter to show the screen
+show = true
+# save the screen in the disk
+save = false
+filename = "casioplot.png"
+format = "png"
+# save 1 image each n call of `show_screen()`
+#rate = n
+
+# margins around the screen
+[margins]
+left = 0
+right = 0
+top = 0
+bottom = 0
+
+# size of the screen
+[size]
+width = 400
+height = 200
