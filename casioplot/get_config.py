@@ -1,11 +1,13 @@
 import os
 import tomllib
-from typing import Any
+from typing import cast
+
+from casioplot.configuration_type import configuration
 
 THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
-def _get_config_file(file_name: str) -> tuple[dict[str, Any] | str, str]:
+def _get_config_file(file_name: str) -> tuple[configuration | str, str]:
     """Get the configuration file.
 
     This function searches for the configuration file in the following order:
@@ -19,6 +21,7 @@ def _get_config_file(file_name: str) -> tuple[dict[str, Any] | str, str]:
     :param file_name: The name of the configuration file.
     :return: The configuration file path.
     """
+
     locations = (
         "",
         os.curdir,
@@ -26,13 +29,14 @@ def _get_config_file(file_name: str) -> tuple[dict[str, Any] | str, str]:
         os.environ.get("CASIOPLOT_CONF"),
         THIS_DIR
     )
+
     for loc in locations:
         try:
             path = os.path.join(loc, file_name)
             with open(path, "rb") as source:
-                return tomllib.load(source), os.path.dirname(path)
+                return cast("configuration", tomllib.load(source)), os.path.dirname(path)
         except (IOError, TypeError):
             pass
     print(f"[Error] Config file {file_name} not found. Using default configuration.")
     with open(os.path.join(os.path.dirname(__file__), "default.toml"), "rb") as source:
-        return tomllib.load(source), os.path.dirname(__file__)
+        return cast("configuration", tomllib.load(source)), os.path.dirname(__file__)

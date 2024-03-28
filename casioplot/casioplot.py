@@ -1,30 +1,28 @@
 """Contains all the functions from ``casioplot`` calculator module.
 
 Available functions:
+  - :py:func:`show_screen`
+  - :py:func:`clear_screen`
   - :py:func:`set_pixel`
   - :py:func:`get_pixel`
   - :py:func:`draw_string`
-  - :py:func:`clear_screen`
-  - :py:func:`show_screen`
-
-You can also use :py:data:`casioplot_settings` to change some behavior.
 """
 
 from typing import Literal
 from PIL import Image, ImageTk
 import tkinter as tk
+
 from casioplot.configs import _get_config
 from casioplot.characters import _get_char
+from casioplot.configuratoin_type import configuration
 
 # color type
 COLOR = tuple[int, int, int]
 # some frequently used colors
 _WHITE: COLOR = (255, 255, 255)  # RGB white
 _BLACK: COLOR = (0, 0, 0)  # RGBA black
-# a list of all settings that if change should trigger the _redraw_screen function
-redraw_settings: tuple = ('width', 'height', 'left_margin', 'right_margin', 'top_margin', 'bottom_margin')
-# create virtual screen
-_screen: Image.Image = Image.new("RGB", (384, 192), _WHITE)
+# create virtual screen, a proper image will be attributed when _config_to("default") is called in the end
+_screen: Image.Image = Image.new("RBG", (0, 0))
 # creates a tkinter window
 _window = tk.Tk()
 _window.grab_release()
@@ -37,126 +35,70 @@ _screen_display = tk.Label(_window, image=_photo_image)
 _screen_display.pack()
 
 
-class CasioplotSettings:
-    """Manage casioplot_settings for the casioplot module."""
-
-    def __init__(self) -> None:
-        # canvas size
-        self.width: int  # canvas width in pixels
-        self.height: int  # canvas height in pixels
-        # margins
-        self.left_margin: int
-        self.right_margin: int
-        self.top_margin: int
-        self.bottom_margin: int
-        # background Image
-        self.bg_image_is_set: bool  # is used when changing settings
-        self.background_image: Image.Image  # some configs like casio_graph_90_plus_e
-        # have a special background image
-        # Output settings
-        self.show_screen: bool  # Show the screen, do not misstake for the functin show_screen()
-        self.save_screen: bool  # Save the screen as an image
-        # Saving settings
-        self.filename: str
-        self.image_format: str
-
-        self.config_to('default')  # sets all settings to the default ones
-
-    def _screen_dimensions(self) -> tuple[int, int]:
-        """Calculates the dimensions of the screen"""
-        return (
-            self.left_margin + self.width + self.right_margin,
-            self.top_margin + self.height + self.bottom_margin
-        )
-
-    def _setup_screen(self):
-        """Calculates some screen attributes
-
-        Checks if the margin and size attributes are correctly configured,
-        and calculates some attributes.
-        """
-        if self.bg_image_is_set is True:
-            bg_width, bg_height = self.background_image.size
-            if self.left_margin + self.right_margin >= bg_width:
-                raise ValueError("Invalid settings, the combained values of \
-                    left_margin and right_margin must be smaller than the \
-                    width of the background image")
-            if self.top_margin + self.bottom_margin >= bg_height:
-                raise ValueError("Invalid settings, the combained values of \
-                    top_margin and bottom_margin must be smaller than the \
-                    height of the background image")
-
-            self.width = bg_width - (self.left_margin + self.right_margin)
-            self.height = bg_height - (self.top_margin + self.bottom_margin)
-        else:
-            if self.width <= 0:
-                raise ValueError("the setting width must be larger than 0")
-            if self.height <= 0:
-                raise ValueError("the setting height must be larger than 0")
-
-            _redraw_screen()
-
-    def _set_settings(self, settings: dict) -> None:
-        """Sets all settings based on a dictionary
-
-        :param settings: A dictionary where every key/value pare represents
-        a settings and the corresponding value. The value can be None, in that case
-        the corresponding settings isn't changed.
-        """
-
-        global _screen, _window
-        for setting, value in settings.items():
-            if value is None:
-                continue
-            setattr(self, setting, value)
-
-        self._setup_screen()
-        # in case self.show_screen is altered
-        if self.show_screen is True:
-            _window.deiconify()
-        else:
-            _window.withdraw()
-        # in case the screen dimensions are altered
-        screen_width, screen_height = self._screen_dimensions()
-        _window.geometry(f"{screen_width}x{screen_height}")
-
-    def config_to(self, config: str = "default") -> None:
-        """Configs to a configuration stored in configs.py"""
-        settings: dict = _get_config(config)
-        self._set_settings(settings)
-
-    def set(self, **settings) -> None:
-        """Set an attribute for each given setting with the corresponding value."""
-        should_redraw_screen: bool = False
-
-        for setting, value in settings.items():
-            if getattr(self, setting, None) is None:
-                raise AttributeError(f"There is no setting {setting}")
-
-            if setting == 'background_image':
-                raise ValueError("you can't set background_image")
-
-            elif setting in redraw_settings:
-                should_redraw_screen = True
-
-            elif setting == "show_screen":
-                global _window
-                if value is True:
-                    _window.deiconify()
-                else:
-                    _window.withdraw()
-
-            setattr(self, setting, value)
-
-        if should_redraw_screen:
-            _redraw_screen()
-
-    def get(self, setting: str):
-        """Returns an attribute"""
-        return getattr(self, setting)
+def _screen_dimensions() -> tuple[int, int]:
+    """Calculates the dimensions of the screen"""
+    return (
+        settings.left_margin + settings.width + settings.right_margin,
+        settings.top_margin + settings.height + settings.bottom_margin
+    )
 
 
-casioplot_settings = CasioplotSettings()
+def _setup_screen():
+    """Calculates some screen attributes
+
+    Checks if the margin and size attributes are correctly configured,
+    and calculates some attributes.
+    """
+    if settings.bg_image_is_set is True:
+        bg_width, bg_height = settings.background_image.size
+        if settings.left_margin + settings.right_margin >= bg_width:
+            raise ValueError("Invalid settings, the combained values of \
+                left_margin and right_margin must be smaller than the \
+                width of the background image")
+        if settings.top_margin + settings.bottom_margin >= bg_height:
+            raise ValueError("Invalid settings, the combained values of \
+                top_margin and bottom_margin must be smaller than the \
+                height of the background image")
+
+        settings.width = bg_width - (settings.left_margin + settings.right_margin)
+        settings.height = bg_height - (settings.top_margin + settings.bottom_margin)
+    else:
+        if settings.width <= 0:
+            raise ValueError("the setting width must be larger than 0")
+        if settings.height <= 0:
+            raise ValueError("the setting height must be larger than 0")
+
+        _redraw_screen()
+
+
+def _set_settings(settings: configuration) -> None:
+    """Sets all settings based on a dictionary
+
+    :param settings: A dictionary where every key/value pare represents
+    a settings and the corresponding value. The value can be None, in that case
+    the corresponding settings isn't changed.
+    """
+
+    global _screen, _window
+    for setting, value in settings.items():
+        if value is None:
+            continue
+        setattr(settings, setting, value)
+
+    _setup_screen()
+    # in case settings.show_screen is altered
+    if settings.show_screen is True:
+        _window.deiconify()
+    else:
+        _window.withdraw()
+    # in case the screen dimensions are altered
+    screen_width, screen_height = _screen_dimensions()
+    _window.geometry(f"{screen_width}x{screen_height}")
+
+
+def _config_to(config: str = "default") -> None:
+    """Configs to a configuration stored in configs.py"""
+    _set_settings(_get_config(config))
 
 
 def _redraw_screen() -> None:
@@ -167,11 +109,14 @@ def _redraw_screen() -> None:
     """
     global _screen, _window
 
-    screen_width, screen_height = casioplot_settings._screen_dimensions()
+    screen_width, screen_height = _screen_dimensions()
     # Create a new white image
     _screen = Image.new("RGB", (screen_width, screen_height), _WHITE)
     # updates the window dimensions
     _window.geometry(f"{screen_width}x{screen_height}")
+
+
+# functions only used by the function for the user
 
 
 def _coordenates_in_bounds(x: int, y: int) -> bool:
@@ -181,7 +126,7 @@ def _coordenates_in_bounds(x: int, y: int) -> bool:
     :param y: y coordinate (from the top)
     :return: a bool that says if the given coordenates are in bounds of the canvas
     """
-    return 0 <= x < casioplot_settings.get("width") and 0 <= y < casioplot_settings.get("height")
+    return 0 <= x < settings.width and 0 <= y < settings.height
 
 
 def _canvas_to_screen(x: int, y: int) -> tuple[int, int]:
@@ -191,7 +136,10 @@ def _canvas_to_screen(x: int, y: int) -> tuple[int, int]:
     :param y: y coordinate (from the top)
     :return: The coresponding coordenates in the virtual screen
     """
-    return x + casioplot_settings.get("left_margin"), y + casioplot_settings.get("top_margin")
+    return x + settings.left_margin, y + settings.top_margin
+
+
+# functions for the user
 
 
 def show_screen() -> None:
@@ -202,24 +150,24 @@ def show_screen() -> None:
       - Save the screen to the disk (enabled using `casioplot_settings.get('save_screen')`).
         The image is saved with the filename found in `casioplot_settings.get('filename')`
     """
-    if casioplot_settings.get("show_screen") is True:
+    if settings.show_screen is True:
         global _photo_image, _screen_display, _window
         # show the screen
         _photo_image = ImageTk.PhotoImage(_screen)
         _screen_display["image"] = _photo_image
         _window.update()
-    if casioplot_settings.get("save_screen") is True:
+    if settings.save_screen is True:
         # Save the screen to the disk as an image with the given filename
         _screen.save(
-            casioplot_settings.get("filename") + '.' + casioplot_settings.get("image_format"),
-            format=casioplot_settings.get("image_format"),
+            settings.filename + '.' + settings.image_format,
+            format=settings.image_format,
         )
 
 
 def clear_screen() -> None:
     """Clear the virtual screen."""
-    for x in range(casioplot_settings.get('width')):
-        for y in range(casioplot_settings.get('height')):
+    for x in range(settings.width):
+        for y in range(settings.height):
             set_pixel(*_canvas_to_screen(x, y), _WHITE)
 
 
@@ -286,3 +234,7 @@ def draw_string(
         char_map = _get_char(char, size)
         draw_char(x, y, char_map, color)
         x += len(char_map[0])
+
+
+settings: configuration = {}
+_config_to("default")
