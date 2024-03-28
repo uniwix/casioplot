@@ -5,6 +5,7 @@ have type annotations for every settings.
 """
 
 from typing import TypedDict
+
 from PIL import Image
 
 
@@ -28,12 +29,12 @@ class configuration(TypedDict, total=False):
     # have a special background image
     #
     # Output settings
-    show_screen: bool  # Show the screen, do not misstake for the functin show_screen()
+    show_screen: bool  # Show the screen, do not mistake for the function show_screen()
     save_screen: bool  # Save the screen as an image
 
     # Saving settings
     filename: str
     image_format: str
     save_multiple: bool  # save multiple images so that the user can examine better the screen
-    save_rate: int  # if save_multiple is True a new image will be save
+    save_rate: int  # if save_multiple is True a new image will be saved
     # every `save_rate` times show_screen is called
