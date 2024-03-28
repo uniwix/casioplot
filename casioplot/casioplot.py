@@ -33,6 +33,9 @@ _window.attributes("-topmost", True)
 _photo_image = ImageTk.PhotoImage(_screen)
 _screen_display = tk.Label(_window, image=_photo_image)
 _screen_display.pack()
+# this two are only used if the setting save_multiple is set to True
+save_screen_counter = 0
+current_image_number = 1
 
 
 def _screen_dimensions() -> tuple[int, int]:
@@ -141,6 +144,19 @@ def _canvas_to_screen(x: int, y: int) -> tuple[int, int]:
     return x + settings.left_margin, y + settings.top_margin
 
 
+def save_screen(image_suffix: str = ""):
+    """Saves _screen as an image_suffix
+
+    Only used by show_screen
+    :param image_suffix: If the setting save_multiple is True existes a need to
+    create images with the name `casioplot2.png` for example.
+    """
+    _screen.save(
+        settings.filename + image_suffix + '.' + settings.image_format,
+        format=settings.image_format,
+    )
+
+
 # functions for the user
 
 
@@ -152,18 +168,26 @@ def show_screen() -> None:
       - Save the screen to the disk (enabled using `casioplot_settings.get('save_screen')`).
         The image is saved with the filename found in `casioplot_settings.get('filename')`
     """
+
     if settings.show_screen is True:
         global _photo_image, _screen_display, _window
         # show the screen
         _photo_image = ImageTk.PhotoImage(_screen)
         _screen_display["image"] = _photo_image
         _window.update()
+
     if settings.save_screen is True:
-        # Save the screen to the disk as an image with the given filename
-        _screen.save(
-            settings.filename + '.' + settings.image_format,
-            format=settings.image_format,
-        )
+        if settings.save_multiple is True:
+            global save_screen_counter, current_image_number
+            if save_screen_counter == settings.save_rate:
+                save_screen(str(current_image_number))
+                current_image_number += 1
+                save_screen_counter = 0
+
+            save_screen_counter += 1
+        else:
+            # When the program ends, the saved image will show the screen as it was in the last call of show_screen
+            save_screen()
 
 
 def clear_screen() -> None:

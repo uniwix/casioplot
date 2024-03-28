@@ -31,6 +31,8 @@ configs: dict[str, configuration] = {
         "save_screen": False,
         "filename": "casioplot",
         "image_format": "png",
+        "save_multiple": False,
+        "save_rate": 0
     },
     "fx-CG50": {
         "width": 384,
@@ -45,6 +47,8 @@ configs: dict[str, configuration] = {
         "save_screen": False,
         "filename": "casioplot",
         "image_format": "png",
+        "save_multiple": False,
+        "save_rate": 0
     },
 }
 # this options only exist for better user experience
