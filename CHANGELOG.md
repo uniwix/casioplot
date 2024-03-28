@@ -1,3 +1,11 @@
+# v2.2.1
+
+## What's Changed
+
+* Fix README.md
+
+**Full Changelog**: https://github.com/uniwix/casioplot/compare/v2.2.0...v2.2.1
+
 # v2.2.0
 
 ## What's Changed
