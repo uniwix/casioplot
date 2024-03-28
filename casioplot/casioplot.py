@@ -8,13 +8,15 @@ Available functions:
   - :py:func:`draw_string`
 """
 
-from typing import Literal
-from PIL import Image, ImageTk
 import tkinter as tk
+from typing import Literal
 
-from casioplot.configs import _get_config
+from PIL import Image, ImageTk
+
 from casioplot.characters import _get_char
-from casioplot.configuratoin_type import configuration
+from casioplot.configs import _get_config
+from casioplot.configuration_type import configuration
+from casioplot.get_config import _get_config_file
 
 # color type
 COLOR = tuple[int, int, int]
@@ -74,6 +76,7 @@ def _setup_screen() -> None:
         _redraw_screen()
 
 
+# TODO: Update this
 def _set_settings(new_settings: configuration) -> None:
     """Sets all settings based on a configuration
 
@@ -101,6 +104,7 @@ def _set_settings(new_settings: configuration) -> None:
     _window.geometry(f"{screen_width}x{screen_height}")
 
 
+# TODO: remove this function as it is not used
 def _config_to(config: str = "default") -> None:
     """Configs to a preset configuration stored in configs.py"""
     _set_settings(_get_config(config))
@@ -262,5 +266,4 @@ def draw_string(
         x += len(char_map[0])
 
 
-settings: configuration = {}
-_config_to("default")
+settings: configuration = _get_config_file("config.toml")
