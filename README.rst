@@ -49,9 +49,10 @@ Notes on performance
 
 The performance you get in the computer is not representative of the performance on the calculatores.
 Keep in mind the following differences:
-    * Obviously ever operation that isn't from the casioplot package is going to be faster in the Computer
-    * clear_screen, set_pixel, get_pixel and draw_string are faster in the computer
-    * show_screen is slower in the computer
+
+* Obviously ever operation that isn't from the casioplot package is going to be faster in the Computer
+* clear_screen, set_pixel, get_pixel and draw_string are faster in the computer
+* show_screen is slower in the computer
 
 For example, the following codes draw a black square of 100 by 100 pixels.
 
