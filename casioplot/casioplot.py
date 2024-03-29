@@ -14,7 +14,7 @@ from PIL import Image, ImageTk
 
 from casioplot.characters import _get_char
 from casioplot.configuration_type import configuration
-from casioplot.get_config import _get_config_file
+from casioplot.get_config import _get_settings
 
 # color type
 COLOR = tuple[int, int, int]
@@ -237,7 +237,7 @@ def draw_string(
 
 
 
-settings: configuration = _get_config_file("config.toml")
+settings: configuration = _get_settings()
 
 # avoids runing the package with wrong settings
 _settings_are_valid(settings)

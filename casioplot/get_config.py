@@ -8,7 +8,7 @@ from casioplot.configuration_type import configuration
 THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
-def _get_config_file(file_name: str) -> configuration:
+def _get_config_file(file_name: str) -> str:
     """Get the configuration file.
 
     This function searches for the configuration file in the following order:
@@ -30,33 +30,29 @@ def _get_config_file(file_name: str) -> configuration:
 
     for loc in locations:
         try:
-            path = os.path.join(loc, file_name)
-            with open(path, "rb") as source:
-                config = tomllib.load(source)
-            return _set_settings(config)
+            return os.path.join(loc, file_name)
         except (IOError, TypeError):
             pass
 
     # 5
     print(f"[Info] Config file {file_name} not found. Using default configuration.")
-    with open(os.path.join(os.path.dirname(__file__), "default.toml"), "rb") as source:
-        config = tomllib.load(source)
-    return _toml_to_configuration(config, configuration())
+    return os.path.join(os.path.dirname(__file__), "default.toml")
 
 
 def _set_settings(toml: dict) -> configuration:
-    """Set the settings based on a TOML dictionary.
+    """Get the settings based on a TOML dictionary.
 
     :param toml: The TOML dictionary.
     :return: The configuration dictionary.
     """
     if "preset" in toml:
-        config = _get_config_file(toml["preset"])
+        path = _get_config_file(toml["preset"])
+        with open(path, "rb") as source:
+            toml2 = tomllib.load(source)
+        config = _set_settings(toml2)
     else:
-        default_file = os.path.join(THIS_DIR, "default.toml")
-        with open(default_file, "rb") as source:
-            default = tomllib.load(source)
-        config = _toml_to_configuration(default, configuration())
+        config = configuration()
+
 
     return _toml_to_configuration(toml, config)
 
@@ -104,3 +100,10 @@ def _toml_to_configuration(toml: dict, config: configuration) -> configuration:
                     config[setting] = toml[section][setting]
 
     return config
+
+
+def _get_settings() -> configuration:
+    first_config = _get_config_file("default.toml")
+    with open(first_config, "rb") as toml_file:
+        toml = tomllib.load(toml_file)
+    return _set_settings(toml)
