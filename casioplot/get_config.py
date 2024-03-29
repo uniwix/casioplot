@@ -77,24 +77,6 @@ def _get_image_path(bg_image_setting: str) -> str:
         raise ValueError(f"The image {path} doesn't exist")
 
 
-def _set_settings(toml: dict) -> configuration:
-    """Get the settings based on a TOML dictionary.
-
-    :param toml: The TOML dictionary.
-    :return: The configuration dictionary.
-    """
-    if "preset" in toml:
-        path = _get_file_from_preset(toml["preset"])
-        with open(path, "rb") as source:
-            toml2 = tomllib.load(source)
-        config = _set_settings(toml2)
-    else:
-        config = configuration()
-
-
-    return _toml_to_configuration(toml, config)
-
-
 _toml_settings = {
     "canvas": (
         "width",
@@ -123,13 +105,15 @@ _toml_settings = {
 }
 
 
-def _toml_to_configuration(toml: dict, config: configuration) -> configuration:
-    """Add the settings from a TOML dictionary to a configuration dictionary.
+def _get_configuration_from_file(file_path: str) -> tuple[configuration, str]:
+    config = configuration()
+    with open(file_path, "rb") as toml_file:
+        toml = tomllib.load(toml_file)
 
-    :param toml: The TOML dictionary.
-    :param config: The configuration dictionary.
-    :return: The configuration dictionary with the new settings.
-    """
+    if "preset" in toml:
+        preset = toml["preset"]
+    else:
+        preset = ""
 
     for section, settings in _toml_settings.items():
         if section in toml:
@@ -137,11 +121,24 @@ def _toml_to_configuration(toml: dict, config: configuration) -> configuration:
                 if setting in toml[section]:
                     config[setting] = toml[section][setting]
 
+    return config, preset
+
+
+def _join_configs(config: configuration, preset_config: configuration) -> configuration:
+    for setting in configuration.__annotations__.keys():
+        if setting not in config and setting in preset_config:
+            config[setting] = preset_config[setting]
+
     return config
 
 
 def _get_settings() -> configuration:
-    first_config = _get_first_config_file()
-    with open(first_config, "rb") as toml_file:
-        toml = tomllib.load(toml_file)
-    return _set_settings(toml)
+    current_config_file = _get_first_config_file()
+    config, current_preset = _get_configuration_from_file(current_config_file)
+
+    while current_preset != "":
+        current_config_file = _get_file_from_preset(current_preset)
+        preset_config, current_preset = _get_configuration_from_file(current_config_file)
+        config = _join_configs(config, preset_config)
+
+    return config
