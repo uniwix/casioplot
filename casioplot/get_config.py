@@ -45,17 +45,24 @@ def _get_first_config_file() -> str:
 
 
 def _get_file_from_preset(preset: str) -> str:
+    """Translates a preset into a full path for the file"""
     dir, file_name = preset.split('/')
 
     if dir == "global":
-        return os.path.join(GLOBAL_DIR, file_name)
+        path = os.path.join(GLOBAL_DIR, file_name)
     elif dir == "presets":
-        return os.path.join(PRESETS_DIR, file_name)
+        path = os.path.join(PRESETS_DIR, file_name)
     else:
         raise ValueError(f"preset must be global/<file_name> or presets/<file_name> not {dir}/<file_name>")
 
+    if os.path.exists(path):
+        return path
+    else:
+        raise ValueError(f"The config file {path} doesn't exist")
+
 
 def _get_image_path(bg_image_setting: str) -> str:
+    """Translates the setting background_image to the full path for the image"""
     if "/" not in bg_image_setting:
         path = os.path.join(PROJECT_DIR, bg_image_setting)
 
@@ -106,6 +113,10 @@ _toml_settings = {
 
 
 def _get_configuration_from_file(file_path: str) -> tuple[configuration, str]:
+    """Gets the configuration and the preset of a config file from it's path
+
+    Preset configuration files like default.toml have no preset
+    """
     config = configuration()
     with open(file_path, "rb") as toml_file:
         toml = tomllib.load(toml_file)
@@ -125,6 +136,7 @@ def _get_configuration_from_file(file_path: str) -> tuple[configuration, str]:
 
 
 def _join_configs(config: configuration, preset_config: configuration) -> configuration:
+    """Adds settings from preset_config to config if they are missing form config"""
     for setting in configuration.__annotations__.keys():
         if setting not in config and setting in preset_config:
             config[setting] = preset_config[setting]
@@ -133,6 +145,7 @@ def _join_configs(config: configuration, preset_config: configuration) -> config
 
 
 def _get_settings() -> configuration:
+    """Gets the settings from config files"""
     current_config_file = _get_first_config_file()
     config, current_preset = _get_configuration_from_file(current_config_file)
 

@@ -50,9 +50,11 @@ def _screen_dimensions() -> tuple[int, int]:
 
 
 def _settings_are_valid(config: configuration) -> bool:
+    """Checks if all settings have a value and have the correct type of data"""
     for setting, correct_type in configuration.__annotations__.items():
         if setting not in config:
             raise ValueError(f"The setting {setting} must have a value attributed")
+
         if not isinstance(config[setting], correct_type):
             raise ValueError(f"The setting {setting} must be of type {correct_type} \
                 but the value given is of the type {type(config[setting])}")
