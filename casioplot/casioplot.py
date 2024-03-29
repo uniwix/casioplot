@@ -10,7 +10,6 @@ Available functions:
 
 import tkinter as tk
 from typing import Literal
-
 from PIL import Image, ImageTk
 
 from casioplot.characters import _get_char
@@ -23,13 +22,12 @@ COLOR = tuple[int, int, int]
 _WHITE: COLOR = (255, 255, 255)  # RGB white
 _BLACK: COLOR = (0, 0, 0)  # RGBA black
 
-# create virtual screen, a proper image will be attributed at the end
-_screen: Image.Image = Image.new("RGB", (0, 0))
+# create virtual screen, a proper image will be attributed latter
+_screen: Image.Image = Image.new("RGB", (1, 1))
 
 # creates a tkinter window
 _window = tk.Tk()
 _window.grab_release()
-_window.geometry("384x192")
 _window.title("casioplot")
 _window.attributes("-topmost", True)
 
@@ -42,8 +40,6 @@ _screen_display.pack()
 save_screen_counter = 0
 current_image_number = 1
 
-settings: configuration = _get_config_file("config.toml")
-
 
 def _screen_dimensions() -> tuple[int, int]:
     """Calculates the dimensions of the screen"""
@@ -53,13 +49,23 @@ def _screen_dimensions() -> tuple[int, int]:
     )
 
 
+def _settings_are_valid(config: configuration) -> bool:
+    for setting, correct_type in configuration.__annotations__.items():
+        if setting not in config:
+            raise ValueError(f"The setting {setting} must have a value attributed")
+        if not isinstance(config[setting], correct_type):
+            raise ValueError(f"The setting {setting} must be of type {correct_type} \
+                but the value given is of the type {type(config[setting])}")
+    return True
+
+
 def _setup_screen() -> None:
-    """Calculates some screen attributes
+    """Calculates some screen attributesn
 
     Checks if the margin and size attributes are correctly configured,
-    and calculates some settings.
+    and calculates some settings
     """
-    if hasattr(settings, "background_image"):
+    if settings["bg_image_is_set"] is True:
         bg_width, bg_height = settings["background_image"].size
         if settings["left_margin"] + settings["right_margin"] >= bg_width:
             raise ValueError("Invalid settings, the combained values of \
@@ -119,7 +125,7 @@ def _canvas_to_screen(x: int, y: int) -> tuple[int, int]:
     return x + settings["left_margin"], y + settings["top_margin"]
 
 
-def save_screen(image_suffix: str = ""):
+def _save_screen(image_suffix: str = ""):
     """Saves _screen as an image_suffix
 
     Only used by show_screen
@@ -155,14 +161,14 @@ def show_screen() -> None:
         if settings["save_multiple"] is True:
             global save_screen_counter, current_image_number
             if save_screen_counter == settings["save_rate"]:
-                save_screen(str(current_image_number))
+                _save_screen(str(current_image_number))
                 current_image_number += 1
                 save_screen_counter = 0
 
             save_screen_counter += 1
         else:
             # When the program ends, the saved image will show the screen as it was in the last call of show_screen
-            save_screen()
+            _save_screen()
 
 
 def clear_screen() -> None:
@@ -230,12 +236,18 @@ def draw_string(
         x += len(char_map[0])
 
 
+
+settings: configuration = _get_config_file("config.toml")
+
+# avoids runing the package with wrong settings
+_settings_are_valid(settings)
+
 _setup_screen()
-# in case settings["show_screen"] is altered
-if settings["show_screen"] is True:
-    _window.deiconify()
-else:
+
+# hides the screen in case it isn't needed
+if settings["show_screen"] is False:
     _window.withdraw()
+
 # in case the screen dimensions are altered
 screen_width, screen_height = _screen_dimensions()
 _window.geometry(f"{screen_width}x{screen_height}")
