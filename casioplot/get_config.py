@@ -5,38 +5,52 @@ from PIL import Image
 
 from casioplot.configuration_type import configuration
 
-THIS_DIR = os.path.abspath(os.path.dirname(__file__))
+PROJECT_DIR = os.path.curdir
+GLOBAL_DIR = os.path.expanduser("~/.config/casioplot")
+PRESETS_DIR = os.path.join(
+    os.path.abspath(os.path.dirname(__file__)),
+    "presets"
+)
 
 
-def _get_config_file(file_name: str) -> str:
-    """Get the configuration file.
+def _get_first_config_file() -> str:
+    """Get the most 'custom' configuration file
 
-    This function searches for the configuration file in the following order:
-    1. Absolute path.
-    2. The current directory.
-    3. The `~/.config/casioplot` directory.
-    4. The directory of the package (default configuration files).
-    5. The default configuration file.
+    This function returns the most `custom` configuration file in the following order:
+    1. casioplot_config.toml file in the directory of the project that is using casiplot
+    2. The first toml file in `~/.config/casioplot` directory in alphabetical order
+    3. The default configuration file, casioplot/presets/default.toml
 
-    :param file_name: The name of the configuration file.
-    :return: The configuration file path.
+    :return: The configuration file path
     """
 
-    locations = (
-        "",  # 1 and 2
-        os.path.expanduser("~/.config/casioplot"),  # 3
-        THIS_DIR  # 4
-    )
+    # 1
+    project_config_file_name = "config.toml"
+    project_config_file = os.path.join(PROJECT_DIR, project_config_file_name)
+    if os.path.exists(project_config_file):
+        return project_config_file
 
-    for loc in locations:
-        try:
-            return os.path.join(loc, file_name)
-        except (IOError, TypeError):
-            pass
+    # 2
+    global_config_files = os.listdir(GLOBAL_DIR)
+    global_config_files.sort()  # makes sure that the files are in alphabetical order
+    if global_config_files == []:
+        for file in global_config_files:
+            if os.path.splitext(file)[-1] == ".toml":  # see if it is a toml file
+                return file
 
-    # 5
-    print(f"[Info] Config file {file_name} not found. Using default configuration.")
-    return os.path.join(os.path.dirname(__file__), "default.toml")
+    # 3
+    return os.path.join(PRESETS_DIR, "default.toml")
+
+
+def _get_file_from_preset(preset: str) -> str:
+    dir, file_name = preset.split('/')
+
+    if dir == "global":
+        return os.path.join(GLOBAL_DIR, file_name)
+    elif dir == "presets":
+        return os.path.join(PRESETS_DIR, file_name)
+    else:
+        raise ValueError(f"preset must be global/<file_name> or presets/<file_name> not {dir}/<file_name>")
 
 
 def _set_settings(toml: dict) -> configuration:
@@ -46,7 +60,7 @@ def _set_settings(toml: dict) -> configuration:
     :return: The configuration dictionary.
     """
     if "preset" in toml:
-        path = _get_config_file(toml["preset"])
+        path = _get_file_from_preset(toml["preset"])
         with open(path, "rb") as source:
             toml2 = tomllib.load(source)
         config = _set_settings(toml2)
@@ -103,7 +117,7 @@ def _toml_to_configuration(toml: dict, config: configuration) -> configuration:
 
 
 def _get_settings() -> configuration:
-    first_config = _get_config_file("default.toml")
+    first_config = _get_first_config_file()
     with open(first_config, "rb") as toml_file:
         toml = tomllib.load(toml_file)
     return _set_settings(toml)
