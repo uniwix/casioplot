@@ -14,7 +14,7 @@ from PIL import Image, ImageTk
 
 from casioplot.characters import _get_char
 from casioplot.configuration_type import configuration
-from casioplot.get_config import _get_settings
+from casioplot.get_config import _get_settings, _get_image_path
 
 # color type
 COLOR = tuple[int, int, int]
@@ -78,6 +78,11 @@ def _setup_screen() -> None:
 
         settings["width"] = bg_width - (settings["left_margin"] + settings["right_margin"])
         settings["height"] = bg_height - (settings["top_margin"] + settings["bottom_margin"])
+
+        bg_image_path = _get_image_path(settings["background_image"])
+        global _screen
+        _screen = Image.open(bg_image_path)
+
     else:
         if settings["width"] <= 0:
             raise ValueError("the setting width must be larger than 0")

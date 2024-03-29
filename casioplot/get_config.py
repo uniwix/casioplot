@@ -1,8 +1,6 @@
 import os
 import tomllib
 
-from PIL import Image
-
 from casioplot.configuration_type import configuration
 
 PROJECT_DIR = os.path.curdir
@@ -10,6 +8,10 @@ GLOBAL_DIR = os.path.expanduser("~/.config/casioplot")
 PRESETS_DIR = os.path.join(
     os.path.abspath(os.path.dirname(__file__)),
     "presets"
+)
+BG_IMAGES_DIR = os.path.join(
+    os.path.abspath(os.path.dirname(__file__)),
+    "bg_images"
 )
 
 
@@ -51,6 +53,28 @@ def _get_file_from_preset(preset: str) -> str:
         return os.path.join(PRESETS_DIR, file_name)
     else:
         raise ValueError(f"preset must be global/<file_name> or presets/<file_name> not {dir}/<file_name>")
+
+
+def _get_image_path(bg_image_setting: str) -> str:
+    if "/" not in bg_image_setting:
+        path = os.path.join(PROJECT_DIR, bg_image_setting)
+
+    dir, bg_image_name = bg_image_setting.split('/')
+
+    if dir == "global":
+        path = os.path.join(GLOBAL_DIR, bg_image_name)
+    elif dir == "bg_images":
+        path = os.path.join(BG_IMAGES_DIR, bg_image_name)
+    else:
+        raise ValueError(f"the background image setting can't be {bg_image_setting}, it must be:\
+            - <image_name> if it is in the same directory as the configs.py file \n\
+            - global/<image_name> if it is the global configs directory \n\
+            - bg_images/<image_name> if it is one of the predefined images")
+
+    if os.path.exists(path):
+        return path
+    else:
+        raise ValueError(f"The image {path} doesn't exist")
 
 
 def _set_settings(toml: dict) -> configuration:
