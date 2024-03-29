@@ -137,8 +137,15 @@ def _get_settings() -> configuration:
     config, current_preset = _get_configuration_from_file(current_config_file)
 
     while current_preset != "":
+        preset_is_global: bool = "global/" in current_preset
+
         current_config_file = _get_file_from_preset(current_preset)
         preset_config, current_preset = _get_configuration_from_file(current_config_file)
         config = _join_configs(config, preset_config)
+
+        # avoids loops
+        if preset_is_global and "global/" in current_preset:
+            raise ValueError("A global config file must not have as preset another global config file\
+                , only a preset file like presets/default or presets/fx-CG50")
 
     return config
