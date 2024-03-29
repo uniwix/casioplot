@@ -86,9 +86,10 @@ def _toml_to_configuration(toml: dict, config: configuration) -> configuration:
             config["bottom_margin"] = toml["margins"]["bottom"]
 
     if "background" in toml:
-        if "path" in toml["background"]:
-            config["background_image"] = Image.open(toml["background"]["path"])
-            config["bg_image_is_set"] = True
+        if "background" in toml["background"]:
+            config["background_image"] = toml["background"]["background_image"]
+        if "bg_image_is_set" in toml["background"]:
+            config["bg_image_is_set"] = toml["background"]["bg_image_is_set"]
 
     if "screen" in toml:
         if "show" in toml["screen"]:

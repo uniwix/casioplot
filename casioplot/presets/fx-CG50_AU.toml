@@ -1,5 +1,3 @@
-preset = ""
-
 [canvas]
 width = 384
 height = 192
@@ -12,7 +10,7 @@ bottom = 10
 
 [background_image]
 bg_image_is_set = false
-background_image = "casioplot/calculator"
+background_image = "bg_images/calculator"
 
 [show_screen]
 show_screen = true
