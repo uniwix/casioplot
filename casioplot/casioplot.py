@@ -41,6 +41,9 @@ save_screen_counter = 0
 current_image_number = 1
 
 
+# auxiliar functions
+
+
 def _screen_dimensions() -> tuple[int, int]:
     """Calculates the dimensions of the screen"""
     return (
@@ -49,87 +52,7 @@ def _screen_dimensions() -> tuple[int, int]:
     )
 
 
-settings_checks = {
-    "width": lambda width: width > 0,
-    "height": lambda height: height > 0,
-    "left_margin": lambda left_margin: left_margin >= 0,
-    "right_margin": lambda right_margin: right_margin >= 0,
-    "top_margin": lambda top_margin: top_margin >= 0,
-    "bottom_margin": lambda bottom_margin: bottom_margin >= 0,
-    "save_rate": lambda save_rate: save_rate > 0
-}
-
-settings_errors = {
-    "width": "be greater than zero",
-    "height": "be greater than zero",
-    "left_margin": "be greater or equal to zero",
-    "right_margin": "be greater or equal to zero",
-    "top_margin": "be greater or equal to zero",
-    "bottom_margin": "be greater or equal to zero",
-    "save_rate": "be greater than zero"
-}
-
-
-def _check_settings() -> bool:
-    """Checks if all settings have a value, have the correct type of data and have a proper value"""
-    for setting, correct_type in configuration.__annotations__.items():
-        value = settings[setting]
-        # does it exist?
-        if setting not in settings:
-            raise ValueError(f"The setting {setting} must have a value attributed")
-        # does it have the correct type?
-        if not isinstance(value, correct_type):
-            raise ValueError(f"The setting {setting} must be of type {correct_type} \
-                but the value given is of the type {type(value)}")
-        # does it have a proper value?
-        if setting in settings_checks and not settings_checks[setting](value):
-            raise ValueError(f"The settings {setting} must {settings_errors[setting]}")
-
-    # some additional checks in case there is a background image
-    if settings["bg_image_is_set"] is True:
-        bg_width, bg_height = settings["background_image"].size
-
-        if settings["left_margin"] + settings["right_margin"] >= bg_width:
-            raise ValueError("Invalid settings, the combained values of \
-                left_margin and right_margin must be smaller than the \
-                width of the background image")
-        if settings["top_margin"] + settings["bottom_margin"] >= bg_height:
-            raise ValueError("Invalid settings, the combained values of \
-                top_margin and bottom_margin must be smaller than the \
-                height of the background image")
-
-    return True
-
-
-def _setup_screen() -> None:
-    """Calculates some screen attributesn and redraw the screen if necessary"""
-    if settings["bg_image_is_set"] is True:
-        bg_width, bg_height = settings["background_image"].size
-
-        settings["width"] = bg_width - (settings["left_margin"] + settings["right_margin"])
-        settings["height"] = bg_height - (settings["top_margin"] + settings["bottom_margin"])
-
-        bg_image_path = _get_image_path(settings["background_image"])
-        global _screen
-        _screen = Image.open(bg_image_path)
-
-    else:
-        _redraw_screen()
-
-
-def _redraw_screen() -> None:
-    """Redraws _image with custom margins, width and height.
-    """
-    global _screen, _window
-
-    screen_width, screen_height = _screen_dimensions()
-    # Create a new white image
-    _screen = Image.new("RGB", (screen_width, screen_height), _WHITE)
-    # updates the window dimensions
-    _window.geometry(f"{screen_width}x{screen_height}")
-
-
-# functions only used by the function for the user
+# auxiliar functions for the functions used by the user
 
 
 def _coordinates_in_bounds(x: int, y: int) -> bool:
@@ -263,18 +186,95 @@ def draw_string(
         x += len(char_map[0])
 
 
+# functinos used only by the package
+
+
+# stores checks for specific settings
+_settings_checks = {
+    "width": lambda width: width > 0,
+    "height": lambda height: height > 0,
+    "left_margin": lambda left_margin: left_margin >= 0,
+    "right_margin": lambda right_margin: right_margin >= 0,
+    "top_margin": lambda top_margin: top_margin >= 0,
+    "bottom_margin": lambda bottom_margin: bottom_margin >= 0,
+    "save_rate": lambda save_rate: save_rate > 0
+}
+
+# stores the error messages if a check of `_settings_cheks` fails
+_settings_errors = {
+    "width": "be greater than zero",
+    "height": "be greater than zero",
+    "left_margin": "be greater or equal to zero",
+    "right_margin": "be greater or equal to zero",
+    "top_margin": "be greater or equal to zero",
+    "bottom_margin": "be greater or equal to zero",
+    "save_rate": "be greater than zero"
+}
+
+
+def _check_settings() -> None:
+    """Checks if all settings have a value, have the correct type of data and have a proper value"""
+    for setting, correct_type in configuration.__annotations__.items():
+        value = settings[setting]
+        # does it exist?
+        if setting not in settings:
+            raise ValueError(f"The setting {setting} must have a value attributed")
+        # does it have the correct type?
+        if not isinstance(value, correct_type):
+            raise ValueError(f"The setting {setting} must be of type {correct_type} \
+                but the value given is of the type {type(value)}")
+        # does it have a proper value?
+        if setting in _settings_checks and not _settings_checks[setting](value):
+            raise ValueError(f"The settings {setting} must {_settings_errors[setting]}")
+
+    # some additional checks in case there is a background image
+    if settings["bg_image_is_set"] is True:
+        bg_width, bg_height = settings["background_image"].size
+
+        if settings["left_margin"] + settings["right_margin"] >= bg_width:
+            raise ValueError("Invalid settings, the combained values of \
+                left_margin and right_margin must be smaller than the \
+                width of the background image")
+        if settings["top_margin"] + settings["bottom_margin"] >= bg_height:
+            raise ValueError("Invalid settings, the combained values of \
+                top_margin and bottom_margin must be smaller than the \
+                height of the background image")
+
+
+def _setup_screen() -> None:
+    """Calculates some screen attributesn and redraw the screen if necessary"""
+    if settings["bg_image_is_set"] is True:
+        bg_width, bg_height = settings["background_image"].size
+
+        settings["width"] = bg_width - (settings["left_margin"] + settings["right_margin"])
+        settings["height"] = bg_height - (settings["top_margin"] + settings["bottom_margin"])
+
+        bg_image_path = _get_image_path(settings["background_image"])
+        global _screen
+        _screen = Image.open(bg_image_path)
+
+    else:
+        global _screen, _window
+
+        # Create a new white image
+        _screen = Image.new("RGB", (screen_width, screen_height), _WHITE)
+        # updates the window dimensions
+        _window.geometry(f"{screen_width}x{screen_height}")
+
+
+def _setup_window() -> None:
+    """Configures properly _window"""
+    # hides the screen in case it isn't needed
+    if settings["show_screen"] is False:
+        _window.withdraw()
+
+    # makes _window the same size as _screen, so it fits
+    screen_width, screen_height = _screen_dimensions()
+    _window.geometry(f"{screen_width}x{screen_height}")
+
 
 settings: configuration = _get_settings()
 
-# avoids runing the package with wrong settings
-_check_settings()
-
+_check_settings()  # avoids runing the package with wrong settings
 _setup_screen()
-
-# hides the screen in case it isn't needed
-if settings["show_screen"] is False:
-    _window.withdraw()
-
-# in case the screen dimensions are altered
-screen_width, screen_height = _screen_dimensions()
-_window.geometry(f"{screen_width}x{screen_height}")
+_setup_window()
