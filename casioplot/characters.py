@@ -8,8 +8,6 @@ a sort of character map, every string corresonds to a row.
 serves as an interface for casioplot.py to get the characters it needs.
 """
 
-from typing import Literal
-
 
 large = {
     " ": (
@@ -5342,7 +5340,10 @@ small = {
 }
 
 
-def _get_char(char: str, size: Literal["small", "medium", "large"] = "medium") -> tuple:
+_size_to_dict = {"small": small, "medium": medium, "large": large}
+
+
+def _get_char(char: str, size: str = "medium") -> tuple:
     """Gets the char_map of a character in a given size
 
     :param char: The character
@@ -5351,9 +5352,4 @@ def _get_char(char: str, size: Literal["small", "medium", "large"] = "medium") -
     if char not in small.keys():
         raise ValueError(f"character {char} not implemented")
 
-    if size == "small":
-        return small[char]
-    elif size == "medium":
-        return medium[char]
-    else:
-        return large[char]
+    return _size_to_dict[size][char]

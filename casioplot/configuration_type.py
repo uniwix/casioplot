@@ -6,8 +6,6 @@ have type annotations for every settings.
 
 from typing import TypedDict
 
-from PIL import Image
-
 
 # the option `total=False` makes it possible for a configuration
 # to not have a corresponding value for all settings
@@ -27,7 +25,7 @@ class configuration(TypedDict, total=False):
     # will be ignored
     background_image: str  # some configs like casio_graph_90_plus_e
     # have a special background image
-    #
+
     # Output settings
     show_screen: bool  # Show the screen, do not mistake for the function show_screen()
     save_screen: bool  # Save the screen as an image
