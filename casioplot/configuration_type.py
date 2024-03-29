@@ -25,7 +25,7 @@ class configuration(TypedDict, total=False):
     # background Image
     bg_image_is_set: bool  # is used when changing settings, if it is False the background_image
     # will be ignored
-    background_image: Image.Image  # some configs like casio_graph_90_plus_e
+    background_image: str  # some configs like casio_graph_90_plus_e
     # have a special background image
     #
     # Output settings

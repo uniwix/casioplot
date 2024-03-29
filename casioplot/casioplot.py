@@ -49,26 +49,46 @@ def _screen_dimensions() -> tuple[int, int]:
     )
 
 
-def _settings_are_valid(config: configuration) -> bool:
-    """Checks if all settings have a value and have the correct type of data"""
+settings_checks = {
+    "width": lambda width: width > 0,
+    "height": lambda height: height > 0,
+    "left_margin": lambda left_margin: left_margin >= 0,
+    "right_margin": lambda right_margin: right_margin >= 0,
+    "top_margin": lambda top_margin: top_margin >= 0,
+    "bottom_margin": lambda bottom_margin: bottom_margin >= 0,
+    "save_rate": lambda save_rate: save_rate > 0
+}
+
+settings_errors = {
+    "width": "be greater than zero",
+    "height": "be greater than zero",
+    "left_margin": "be greater or equal to zero",
+    "right_margin": "be greater or equal to zero",
+    "top_margin": "be greater or equal to zero",
+    "bottom_margin": "be greater or equal to zero",
+    "save_rate": "be greater than zero"
+}
+
+
+def _check_settings() -> bool:
+    """Checks if all settings have a value, have the correct type of data and have a proper value"""
     for setting, correct_type in configuration.__annotations__.items():
-        if setting not in config:
+        value = settings[setting]
+        # does it exist?
+        if setting not in settings:
             raise ValueError(f"The setting {setting} must have a value attributed")
-
-        if not isinstance(config[setting], correct_type):
+        # does it have the correct type?
+        if not isinstance(value, correct_type):
             raise ValueError(f"The setting {setting} must be of type {correct_type} \
-                but the value given is of the type {type(config[setting])}")
-    return True
+                but the value given is of the type {type(value)}")
+        # does it have a proper value?
+        if setting in settings_checks and not settings_checks[setting](value):
+            raise ValueError(f"The settings {setting} must {settings_errors[setting]}")
 
-
-def _setup_screen() -> None:
-    """Calculates some screen attributesn
-
-    Checks if the margin and size attributes are correctly configured,
-    and calculates some settings
-    """
+    # some additional checks in case there is a background image
     if settings["bg_image_is_set"] is True:
         bg_width, bg_height = settings["background_image"].size
+
         if settings["left_margin"] + settings["right_margin"] >= bg_width:
             raise ValueError("Invalid settings, the combained values of \
                 left_margin and right_margin must be smaller than the \
@@ -78,6 +98,14 @@ def _setup_screen() -> None:
                 top_margin and bottom_margin must be smaller than the \
                 height of the background image")
 
+    return True
+
+
+def _setup_screen() -> None:
+    """Calculates some screen attributesn and redraw the screen if necessary"""
+    if settings["bg_image_is_set"] is True:
+        bg_width, bg_height = settings["background_image"].size
+
         settings["width"] = bg_width - (settings["left_margin"] + settings["right_margin"])
         settings["height"] = bg_height - (settings["top_margin"] + settings["bottom_margin"])
 
@@ -86,19 +114,11 @@ def _setup_screen() -> None:
         _screen = Image.open(bg_image_path)
 
     else:
-        if settings["width"] <= 0:
-            raise ValueError("the setting width must be larger than 0")
-        if settings["height"] <= 0:
-            raise ValueError("the setting height must be larger than 0")
-
         _redraw_screen()
 
 
 def _redraw_screen() -> None:
-    """Redraws _image.
-
-    Only called when casioplot_settings.set() is called,
-    used to redraw _image with custom margins, width and height.
+    """Redraws _image with custom margins, width and height.
     """
     global _screen, _window
 
@@ -115,8 +135,8 @@ def _redraw_screen() -> None:
 def _coordinates_in_bounds(x: int, y: int) -> bool:
     """Checks if the given coordinates are in bounds of the canvas
 
-    :param x: x coordinate (from the left)
-    :param y: y coordinate (from the top)
+    :param x: x coordinate (from the left to the right)
+    :param y: y coordinate (from the top to the bottom)
     :return: a bool that says if the given coordinates are in bounds of the canvas
     """
     return 0 <= x < settings["width"] and 0 <= y < settings["height"]
@@ -135,7 +155,7 @@ def _canvas_to_screen(x: int, y: int) -> tuple[int, int]:
 def _save_screen(image_suffix: str = ""):
     """Saves _screen as an image_suffix
 
-    Only used by show_screen
+    Only used by the function show_screen
     :param image_suffix: If the setting save_multiple is True existes a need to
     create images with the name `casioplot2.png` for example.
     """
@@ -152,9 +172,9 @@ def show_screen() -> None:
     """Show or saves the virtual screen
 
     This function implement two modes that can be enabled or disabled using the :py:class:`casioplot_settings`:
-      - Open the screen as an image (enabled using `casioplot_settings.get('open_image')`).
-      - Save the screen to the disk (enabled using `casioplot_settings.get('save_screen')`).
-        The image is saved with the filename found in `casioplot_settings.get('filename')`
+      - show the screen as an image, if `show_screen` is True
+      - Save the screen to the disk, if `save_screen` in True
+        The image is saved with the filename found in `filename`
     """
 
     if settings["show_screen"] is True:
@@ -179,7 +199,7 @@ def show_screen() -> None:
 
 
 def clear_screen() -> None:
-    """Clear the virtual screen."""
+    """Clear the virtual screen"""
     for x in range(settings["width"]):
         for y in range(settings["height"]):
             set_pixel(*_canvas_to_screen(x, y), _WHITE)
@@ -247,7 +267,7 @@ def draw_string(
 settings: configuration = _get_settings()
 
 # avoids runing the package with wrong settings
-_settings_are_valid(settings)
+_check_settings()
 
 _setup_screen()
 
