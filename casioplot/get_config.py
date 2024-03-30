@@ -3,7 +3,7 @@ import tomllib
 
 from casioplot.configuration_type import configuration
 
-PROJECT_DIR = os.path.curdir
+PROJECT_DIR = os.path.getcwd()
 GLOBAL_DIR = os.path.expanduser("~/.config/casioplot")
 PRESETS_DIR = os.path.join(
     os.path.abspath(os.path.dirname(__file__)),
@@ -19,7 +19,7 @@ def _get_first_config_file() -> str:
     """Get the most 'custom' configuration file
 
     This function returns the most `custom` configuration file in the following order:
-    1. casioplot_config.toml file in the directory of the project that is using casiplot
+    1. casioplot_config.toml file in the directory of the project that is using casioplot
     2. The first toml file in `~/.config/casioplot` directory in alphabetical order
     3. The default configuration file, casioplot/presets/default.toml
 
