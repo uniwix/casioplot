@@ -1,4 +1,3 @@
-from math import *
 from casioplot import *
 
 
@@ -7,47 +6,6 @@ def get_color(rgb, rgba):
     g = (rgb[1] * (255 - rgba[3]) + rgba[1] * rgba[3]) / 255
     b = (rgb[2] * (255 - rgba[3]) + rgba[2] * rgba[3]) / 255
     return int(r), int(g), int(b)
-
-
-def draw(p, color=(0, 0, 0)):
-    x, y = p
-    x += casioplot_settings.get('width') // 2
-    y += casioplot_settings.get('height') // 2
-
-    if casioplot_settings.get('width') >= x >= 0 and casioplot_settings.get('height') >= y >= 0:
-        bg = get_pixel(x, y)
-        if len(color) == 4:
-            c = get_color(bg, (color[0], color[1], color[2], color[3]))
-        else:
-            c = get_color(bg, (color[0], color[1], color[2], 255))
-
-        set_pixel(round(x), round(y), c)
-    else:
-        print("Warning: Pixel at position ({};{}) doesn't exist.".format(
-            x - casioplot_settings.get('width') // 2,
-            y - casioplot_settings.get('height') // 2))
-
-
-def line(p1, p2, color):
-    """
-    Test of a line drawing function that use trigonometry to find the nearest pixel for each point of a line.
-    """
-    xa, ya = p1
-    xb, yb = p2
-    x, y = xa - xb, ya - yb
-    d = dist(x, y)
-    if x != 0:
-        a = atan2(y, x)
-        # if x < 0:
-        #     a += pi
-    elif y > 0:
-        a = pi / 2
-    else:
-        a = 3 * pi / 2
-    for i in range(round(d)):
-        x1 = round(cos(a) * i) - xa
-        y1 = round(sin(a) * i) - ya
-        draw((x1, y1), color)
 
 
 def _f_part(x):
