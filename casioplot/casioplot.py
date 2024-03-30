@@ -197,6 +197,7 @@ _settings_checks = {
     "right_margin": lambda right_margin: right_margin >= 0,
     "top_margin": lambda top_margin: top_margin >= 0,
     "bottom_margin": lambda bottom_margin: bottom_margin >= 0,
+    "image_format": lambda image_format: image_format in ("jpeg", "jpg", "png", "gif", "bmp", "tiff", "tif"),
     "save_rate": lambda save_rate: save_rate > 0
 }
 
@@ -208,6 +209,7 @@ _settings_errors = {
     "right_margin": "be greater or equal to zero",
     "top_margin": "be greater or equal to zero",
     "bottom_margin": "be greater or equal to zero",
+    "image_format": "be on of the following values, jpeg, jpg, png, gif, bmp, tiff or tif",
     "save_rate": "be greater than zero"
 }
 
