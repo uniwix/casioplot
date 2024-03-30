@@ -42,7 +42,7 @@ def _save_screen(screen: tk.PhotoImage, filename: str, image_format: str, image_
     )
 
 
-def _color_tuple2str(color: Color) -> str:
+def _color_tuple_to_hex(color: Color) -> str:
     """Converts a color tuple to a string
 
     :param color: a color tuple

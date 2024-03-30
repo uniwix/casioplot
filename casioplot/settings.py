@@ -46,16 +46,16 @@ def _get_first_config_file() -> str:
     return os.path.join(PRESETS_DIR, "default.toml")
 
 
-def _get_file_from_preset(preset: str) -> str:
-    """Translates a preset into a full path for the file"""
-    dir, file_name = preset.split('/')
+def _get_file_from_link(link: str) -> str:
+    """Translates a default file link into a full path for the file"""
+    dir, file_name = link.split('/')
 
     if dir == "global":
         path = os.path.join(GLOBAL_DIR, file_name)
     elif dir == "presets":
         path = os.path.join(PRESETS_DIR, file_name)
     else:
-        raise ValueError(f"preset must be global/<file_name> or presets/<file_name> not {dir}/<file_name>")
+        raise ValueError(f"default file link must be global/<file_name> or presets/<file_name> not {dir}/<file_name>")
 
     if os.path.exists(path):
         return path
@@ -86,64 +86,62 @@ def _get_image_path(bg_image_setting: str) -> str:
         raise ValueError(f"The image {path} doesn't exist")
 
 
-_toml_settings = {
-    "canvas": (
-        "width",
-        "height"
-    ),
-    "margins": (
-        "left_margin",
-        "right_margin",
-        "top_margin",
-        "bottom_margin"
-    ),
-    "background_image": (
-        "bg_image_is_set",
-        "background_image"
-    ),
-    "show_screen": (
-        "show_screen",
-    ),
-    "saving_screen": (
-        "save_screen",
-        "filename",
-        "image_format",
-        "save_multiple",
-        "save_rate"
-    )
-}
-
-
 def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
-    """Gets the configuration and the preset of a config file from it's path
+    """Gets the configuration and the default file link of a config file from it's path
 
-    Preset configuration files like default.toml have no preset
+    Preset configuration files like default.toml have no default file link 
     """
+
+    _toml_settings = {
+        "canvas": (
+            "width",
+            "height"
+        ),
+        "margins": (
+            "left_margin",
+            "right_margin",
+            "top_margin",
+            "bottom_margin"
+        ),
+        "background_image": (
+            "bg_image_is_set",
+            "background_image"
+        ),
+        "show_screen": (
+            "show_screen",
+        ),
+        "saving_screen": (
+            "save_screen",
+            "filename",
+            "image_format",
+            "save_multiple",
+            "save_rate"
+        )
+    }
+
     config = Configuration()
+
     with open(file_path, "rb") as toml_file:
         toml = tomllib.load(toml_file)
 
-    if "preset" in toml:
-        preset = toml["preset"]
+    if "default_to" in toml:
+        link = toml["default_to"]
     else:
-        preset = ""
+        link = ""
 
     for section, settings in _toml_settings.items():
         if section in toml:
             for setting in settings:
-                if setting == "background_image":
-                    config[setting] = _get_image_path(toml[section][setting])
-                    config["width"], config["height"] = imagesize.get(config[setting])
-                elif setting in toml[section]:
+                if setting in toml[section]:
                     config[setting] = toml[section][setting]
-    return config, preset
+    return config, link
 
 
-def _join_configs(config: Configuration, preset_config: Configuration) -> Configuration:
-    """Adds settings from preset_config to config if they are missing form config"""
+def _join_configs(config: Configuration, default_config: Configuration) -> Configuration:
+    """Adds settings from default_config to config if they are missing form config"""
     for setting in Configuration.__annotations__.keys():
-        if setting not in config and setting in preset_config:
-            config[setting] = preset_config[setting]
+        if setting not in config and setting in default_config:
+            config[setting] = default_config[setting]
 
     return config
 
@@ -151,28 +149,31 @@ def _join_configs(config: Configuration, preset_config: Configuration) -> Config
 def _get_settings() -> Configuration:
     """Gets the settings from config files"""
     current_config_file = _get_first_config_file()
-    config, current_preset = _get_configuration_from_file(current_config_file)
+    settings, current_link = _get_configuration_from_file(current_config_file)
 
-    while current_preset != "":
-        preset_is_global: bool = "global/" in current_preset
+    while current_link != "":
+        link_is_global: bool = "global/" in current_link
 
-        current_config_file = _get_file_from_preset(current_preset)
-        preset_config, current_preset = _get_configuration_from_file(current_config_file)
-        config = _join_configs(config, preset_config)
-        print(config)
+        current_config_file = _get_file_from_link(current_link)
+        default_config, current_link = _get_configuration_from_file(current_config_file)
+        settings = _join_configs(settings, default_config)
+        print(settings)
         # avoids loops
-        if preset_is_global and "preset/" not in current_preset:
-            raise ValueError("A global config file must not have as preset another global config file\
+        if link_is_global and "presets/" not in current_link:
+            raise ValueError("A global config file must not have as default file another global config file\
                 , only a preset file like presets/default or presets/fx-CG50")
 
-    # Set correct width and height if a background image is set
-    if config["bg_image_is_set"] is True:
-        config["width"] = config["width"] - (config["left_margin"] - config["right_margin"])
-        config["height"] = config["height"] - (config["top_margin"] - config["bottom_margin"])
+    _check_settings(settings)  # avoids runing the package with wrong settings
 
-    _check_settings(config)  # avoids runing the package with wrong settings
+    # Set the correct width and height if a background image is set
+    if settings["bg_image_is_set"] is True:
+        settings["background_image"] = _get_image_path(settings["background_image"])
+        bg_size_x, bg_size_y = imagesize.get(settings["background_image"])
 
-    return config
+        settings["width"] = bg_size_x - (settings["left_margin"] - settings["right_margin"])
+        settings["height"] = bg_size_y - (settings["top_margin"] - settings["bottom_margin"])
+
+    return settings
 
 
 def _check_settings(settings: Configuration) -> None:
@@ -221,14 +222,13 @@ def _check_settings(settings: Configuration) -> None:
             raise ValueError(f"The settings {setting} must {_settings_errors[setting]}")
 
     # some additional checks in case there is a background image
-    ## already done by checking height and width
-    # if settings["bg_image_is_set"] is True:
-    #
-    #     if settings["left_margin"] + settings["right_margin"] >= settings["width"]:
-    #         raise ValueError("Invalid settings, the combined values of \
-    #             left_margin and right_margin must be smaller than the \
-    #             width of the background image")
-    #     if settings["top_margin"] + settings["bottom_margin"] >= settings["height"]:
-    #         raise ValueError("Invalid settings, the combined values of \
-    #             top_margin and bottom_margin must be smaller than the \
-    #             height of the background image")
+    if settings["bg_image_is_set"] is True:
+        if settings["left_margin"] + settings["right_margin"] >= settings["width"]:
+            raise ValueError("Invalid settings, the combined values of \
+                left_margin and right_margin must be smaller than the \
+                width of the background image")
+
+        if settings["top_margin"] + settings["bottom_margin"] >= settings["height"]:
+            raise ValueError("Invalid settings, the combined values of \
+                top_margin and bottom_margin must be smaller than the \
+                height of the background image")

@@ -16,19 +16,18 @@ from typing import Literal
 from casioplot.characters import _get_char
 from casioplot.settings import _get_settings
 from casioplot.types import Configuration, Color
-from casioplot.utils import _coordinates_in_bounds, _save_screen, _color_tuple2str, _canvas_to_screen
+from casioplot.utils import _coordinates_in_bounds, _save_screen, _color_tuple_to_hex, _canvas_to_screen
 
 # some frequently used colors
 _WHITE: Color = (255, 255, 255)  # RGB white
 _BLACK: Color = (0, 0, 0)  # RGBA black
 
-
 # these two are only used if the setting save_multiple is set to True
 save_screen_counter = 0
 current_image_number = 1
 
-# functions for the user
 
+# functions for the user
 
 def show_screen() -> None:
     """Show or saves the virtual screen
@@ -96,7 +95,7 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     """
     if _coordinates_in_bounds(x, y, settings["width"], settings["height"]):
         virtual_screen.put(
-            _color_tuple2str(color),
+            _color_tuple_to_hex(color),
             _canvas_to_screen(x, y, settings["left_margin"], settings["top_margin"])
         )
 
