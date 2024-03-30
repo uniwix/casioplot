@@ -1,76 +1,70 @@
-# inspired by https://stackoverflow.com/a/64329015
-import threading
 import tkinter as tk
 
+from casioplot.configuration_type import configuration
+from casioplot.get_config import _get_settings
 
 # TODO: use settings instead of hardcoded values
 # TODO: implement save screen
 # TODO: change how characters are drawn to be more efficient and faster
-class Screen:
-    def __init__(self, width: int, height: int):
-        self.width = width
-        self.height = height
-        self.image = tk.PhotoImage(width=width, height=height)
 
-    def set_pixel(self, x: int, y: int, color=(0, 0, 0)):
-        self.image.put(f"#{color[0]:02x}{color[1]:02x}{color[2]:02x}", (x, y))
-
-    def get_pixel(self, x: int, y: int):
-        return self.image.get(x, y)
-
-    def clear_screen(self):
-        self.image.put("#ffffff", (0, 0, self.width, self.height))
-
-    def get_screen(self):
-        return self.image.copy()
+# get the settings
+settings: configuration = _get_settings()
 
 
-class Window(tk.Tk):
-    def __init__(self):
-        super().__init__()
-        self.geometry("420x248")
-        self.title("casioplot")
-        self.attributes("-topmost", True)
-
-        self.background_image = tk.PhotoImage(
-            file='/mnt/147CDBD07CDBAAAE/Users/jbeno/PycharmProjects/casioplot/casioplot/images/calculator.png')
-        self.screen = tk.PhotoImage(width=384, height=192)
-        self.virtual_screen = Screen(width=384, height=192)
-
-        # self.label = tk.Label(image=self.image)
-        # self.label.pack()
-        self.canvas = tk.Canvas(self, width=402, height=230, bg="ivory")
-        self.canvas.pack(padx=9, pady=9)
-        self.canvas.create_image((201, 115), image=self.background_image)
-        self.screen_element = self.canvas.create_image((201, 123), image=self.screen)
-
-    def show_screen(self):
-        # new_screen is for updating canvas before deleting the old image
-        new_screen = self.virtual_screen.get_screen()
-        self.canvas.itemconfig(self.screen_element, image=new_screen)
-        self.screen = new_screen
-
-    def clear_screen(self):
-        self.virtual_screen.clear_screen()
-        self.show_screen()
-
-    def run(self):
-        self.mainloop()
+def _screen_dimensions() -> tuple[int, int]:
+    """Calculates the dimensions of the screen"""
+    return (
+        settings["left_margin"] + settings["width"] + settings["right_margin"],
+        settings["top_margin"] + settings["height"] + settings["bottom_margin"]
+    )
 
 
-class runtk:
-    """Instance of the window and the main loop.
+# Create the window
+window = tk.Tk()
+width, height = _screen_dimensions()
+window.geometry(f"{width}x{height}")
+window.title("casioplot")
+window.attributes("-topmost", True)
+window.deiconify()
 
-    Allows to run the tkinter main loop in a background thread.
-    It ensures that the window is running in the same thread as the one it was created in.
-    """
+# Create images
+# TODO: change settings to store the path to the background image instead of the image itself
+background_image = tk.PhotoImage(master=window,
+                                 file='/mnt/147CDBD07CDBAAAE/Users/jbeno/PycharmProjects/casioplot/casioplot/images/calculator.png')
+screen = tk.PhotoImage(master=window, width=settings["width"], height=settings["height"])
+virtual_screen = tk.PhotoImage(master=window, width=settings["width"], height=settings["height"])
 
-    def __call__(self):  # runs in background thread
-        self.window = Window()
-        self.window.run()
+# Create labels (that hold the images)
+label_bg = tk.Label(master=window, image=background_image, border=0)
+label_bg.pack()
+label_bg.place(relx=0.0, rely=0.0, x=0, y=0, anchor="nw")
+label_screen = tk.Label(master=window, image=screen, border=0)
+label_screen.pack()
+label_screen.place(relx=0.0, rely=0.0, x=settings["left_margin"], y=settings["top_margin"], anchor="nw")
 
 
-rtk = runtk()
-thd = threading.Thread(target=rtk)  # gui thread
-thd.daemon = True  # background thread will exit if main thread exits
-thd.start()  # start tk loop
+def set_pixel(x: int, y: int, color=(0, 0, 0)):
+    try:
+        virtual_screen.put(f"#{color[0]:02x}{color[1]:02x}{color[2]:02x}", (x, y))
+    except tk.TclError:  # if the pixel is out of bounds
+        return None
+
+
+def get_pixel(x: int, y: int):
+    try:
+        return virtual_screen.get(x, y)
+    except tk.TclError:  # if the pixel is out of bounds
+        return None
+
+
+def clear_screen():
+    virtual_screen.put("#ffffff", (0, 0, settings["width"], settings["height"]))
+
+
+def show_screen():
+    # new_screen is for updating canvas before deleting the old image
+    global screen
+    new_screen = virtual_screen.copy()
+    label_screen.configure(image=new_screen)
+    screen = new_screen
+    window.update()
