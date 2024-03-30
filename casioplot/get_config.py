@@ -1,7 +1,9 @@
 import os
 import tomllib
 
-from casioplot.configuration_type import configuration
+import imagesize
+
+from casioplot.types import configuration
 
 PROJECT_DIR = os.getcwd()
 GLOBAL_DIR = os.path.expanduser("~/.config/casioplot")
@@ -95,12 +97,12 @@ _toml_settings = {
         "top_margin",
         "bottom_margin"
     ),
-    "background": (
+    "background_image": (
         "bg_image_is_set",
         "background_image"
     ),
     "show_screen": (
-        "show_screen"
+        "show_screen",
     ),
     "saving_screen": (
         "save_screen",
@@ -129,10 +131,11 @@ def _get_configuration_from_file(file_path: str) -> tuple[configuration, str]:
     for section, settings in _toml_settings.items():
         if section in toml:
             for setting in settings:
-                if setting in toml[section]:
+                if setting == "background_image":
+                    config[setting] = _get_image_path(toml[section][setting])
+                    config["width"], config["height"] = imagesize.get(config[setting])
+                elif setting in toml[section]:
                     config[setting] = toml[section][setting]
-                    print(f"setting {setting} to {config[setting]}")
-
     return config, preset
 
 
@@ -156,10 +159,76 @@ def _get_settings() -> configuration:
         current_config_file = _get_file_from_preset(current_preset)
         preset_config, current_preset = _get_configuration_from_file(current_config_file)
         config = _join_configs(config, preset_config)
-
+        print(config)
         # avoids loops
-        if preset_is_global and "global/" in current_preset:
+        if preset_is_global and "preset/" not in current_preset:
             raise ValueError("A global config file must not have as preset another global config file\
                 , only a preset file like presets/default or presets/fx-CG50")
 
+    # Set correct width and height if a background image is set
+    if config["bg_image_is_set"] is True:
+        config["width"] = config["width"] - (config["left_margin"] - config["right_margin"])
+        config["height"] = config["height"] - (config["top_margin"] - config["bottom_margin"])
+
+    _check_settings(config)  # avoids runing the package with wrong settings
+
     return config
+
+
+def _check_settings(settings: configuration) -> None:
+    """Checks if all settings have a value, have the correct type of data and have a proper value
+
+    :param settings: The settings to be checked
+    """
+    print(settings)
+    # stores checks for specific settings
+    _settings_checks = {
+        "width": lambda width: width > 0,
+        "height": lambda height: height > 0,
+        "left_margin": lambda left_margin: left_margin >= 0,
+        "right_margin": lambda right_margin: right_margin >= 0,
+        "top_margin": lambda top_margin: top_margin >= 0,
+        "bottom_margin": lambda bottom_margin: bottom_margin >= 0,
+        "image_format": lambda image_format: image_format in ("jpeg", "jpg", "png", "gif", "bmp", "tiff", "tif"),
+        "save_rate": lambda save_rate: save_rate > 0
+    }
+
+    # stores the error messages if a check of `_settings_cheks` fails
+    _settings_errors = {
+        "width": "be greater than zero",
+        "height": "be greater than zero",
+        "left_margin": "be greater or equal to zero",
+        "right_margin": "be greater or equal to zero",
+        "top_margin": "be greater or equal to zero",
+        "bottom_margin": "be greater or equal to zero",
+        "image_format": "be on of the following values, jpeg, jpg, png, gif, bmp, tiff or tif",
+        "save_rate": "be greater than zero"
+    }
+
+    for setting, correct_type in configuration.__annotations__.items():
+        # does it exist?
+        if setting not in settings:
+            raise ValueError(f"The setting {setting} must have a value attributed")
+
+        value = settings[setting]
+
+        # does it have the correct type?
+        if not isinstance(value, correct_type):
+            raise ValueError(f"The setting {setting} must be of type {correct_type} \
+                but the value given is of the type {type(value)}")
+        # does it have a proper value?
+        if setting in _settings_checks and not _settings_checks[setting](value):
+            raise ValueError(f"The settings {setting} must {_settings_errors[setting]}")
+
+    # some additional checks in case there is a background image
+    ## already done by checking height and width
+    # if settings["bg_image_is_set"] is True:
+    #
+    #     if settings["left_margin"] + settings["right_margin"] >= settings["width"]:
+    #         raise ValueError("Invalid settings, the combined values of \
+    #             left_margin and right_margin must be smaller than the \
+    #             width of the background image")
+    #     if settings["top_margin"] + settings["bottom_margin"] >= settings["height"]:
+    #         raise ValueError("Invalid settings, the combined values of \
+    #             top_margin and bottom_margin must be smaller than the \
+    #             height of the background image")
