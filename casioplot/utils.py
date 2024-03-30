@@ -1,7 +1,7 @@
 """This module contains utility functions for the casioplot package"""
 import tkinter as tk
 
-from casioplot.types import COLOR
+from casioplot.types import Color
 
 
 def _canvas_to_screen(x: int, y: int, start_x: int, start_y: int) -> tuple[int, int]:
@@ -42,7 +42,7 @@ def _save_screen(screen: tk.PhotoImage, filename: str, image_format: str, image_
     )
 
 
-def _color_tuple2str(color: COLOR) -> str:
+def _color_tuple2str(color: Color) -> str:
     """Converts a color tuple to a string
 
     :param color: a color tuple

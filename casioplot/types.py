@@ -9,7 +9,7 @@ from typing import TypedDict
 
 # the option `total=False` makes it possible for a configuration
 # to not have a corresponding value for all settings
-class configuration(TypedDict, total=False):
+class Configuration(TypedDict, total=False):
     # canvas size
     width: int  # canvas width in pixels
     height: int  # canvas height in pixels
@@ -39,4 +39,4 @@ class configuration(TypedDict, total=False):
 
 
 # color type
-COLOR = tuple[int, int, int]
+Color = tuple[int, int, int]

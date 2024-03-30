@@ -3,7 +3,7 @@ import tomllib
 
 import imagesize
 
-from casioplot.types import configuration
+from casioplot.types import Configuration
 
 PROJECT_DIR = os.getcwd()
 GLOBAL_DIR = os.path.expanduser("~/.config/casioplot")
@@ -114,12 +114,12 @@ _toml_settings = {
 }
 
 
-def _get_configuration_from_file(file_path: str) -> tuple[configuration, str]:
+def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
     """Gets the configuration and the preset of a config file from it's path
 
     Preset configuration files like default.toml have no preset
     """
-    config = configuration()
+    config = Configuration()
     with open(file_path, "rb") as toml_file:
         toml = tomllib.load(toml_file)
 
@@ -139,16 +139,16 @@ def _get_configuration_from_file(file_path: str) -> tuple[configuration, str]:
     return config, preset
 
 
-def _join_configs(config: configuration, preset_config: configuration) -> configuration:
+def _join_configs(config: Configuration, preset_config: Configuration) -> Configuration:
     """Adds settings from preset_config to config if they are missing form config"""
-    for setting in configuration.__annotations__.keys():
+    for setting in Configuration.__annotations__.keys():
         if setting not in config and setting in preset_config:
             config[setting] = preset_config[setting]
 
     return config
 
 
-def _get_settings() -> configuration:
+def _get_settings() -> Configuration:
     """Gets the settings from config files"""
     current_config_file = _get_first_config_file()
     config, current_preset = _get_configuration_from_file(current_config_file)
@@ -175,7 +175,7 @@ def _get_settings() -> configuration:
     return config
 
 
-def _check_settings(settings: configuration) -> None:
+def _check_settings(settings: Configuration) -> None:
     """Checks if all settings have a value, have the correct type of data and have a proper value
 
     :param settings: The settings to be checked
@@ -205,7 +205,7 @@ def _check_settings(settings: configuration) -> None:
         "save_rate": "be greater than zero"
     }
 
-    for setting, correct_type in configuration.__annotations__.items():
+    for setting, correct_type in Configuration.__annotations__.items():
         # does it exist?
         if setting not in settings:
             raise ValueError(f"The setting {setting} must have a value attributed")

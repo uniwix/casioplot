@@ -14,13 +14,13 @@ import tkinter as tk
 from typing import Literal
 
 from casioplot.characters import _get_char
-from casioplot.get_config import _get_settings
-from casioplot.types import configuration, COLOR
+from casioplot.settings import _get_settings
+from casioplot.types import Configuration, Color
 from casioplot.utils import _coordinates_in_bounds, _save_screen, _color_tuple2str, _canvas_to_screen
 
 # some frequently used colors
-_WHITE: COLOR = (255, 255, 255)  # RGB white
-_BLACK: COLOR = (0, 0, 0)  # RGBA black
+_WHITE: Color = (255, 255, 255)  # RGB white
+_BLACK: Color = (0, 0, 0)  # RGBA black
 
 
 # these two are only used if the setting save_multiple is set to True
@@ -74,7 +74,7 @@ def clear_screen() -> None:
     )
 
 
-def get_pixel(x: int, y: int) -> COLOR | None:
+def get_pixel(x: int, y: int) -> Color | None:
     """Get the RGB color of the pixel at the given position.
 
     :param x: x coordinate (from the left)
@@ -87,7 +87,7 @@ def get_pixel(x: int, y: int) -> COLOR | None:
         return None
 
 
-def set_pixel(x: int, y: int, color: COLOR = _BLACK) -> None:
+def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     """Set the RGB color of the pixel at the given position (from top left)
 
     :param x: x coordinate (from the left)
@@ -105,7 +105,7 @@ def draw_string(
         x: int,
         y: int,
         text: str,
-        color: COLOR = _BLACK,
+        color: Color = _BLACK,
         size: Literal["small", "medium", "large"] = "medium"
 ) -> None:
     """Draw a string on the virtual screen with the given RGB color and size.
@@ -144,7 +144,7 @@ def _screen_dimensions() -> tuple[int, int]:
     )
 
 
-settings: configuration = _get_settings()
+settings: Configuration = _get_settings()
 
 if settings["show_screen"] is True:
     # Creates a tkinter window
