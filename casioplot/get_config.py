@@ -3,7 +3,7 @@ import tomllib
 
 from casioplot.configuration_type import configuration
 
-PROJECT_DIR = os.path.getcwd()
+PROJECT_DIR = os.getcwd()
 GLOBAL_DIR = os.path.expanduser("~/.config/casioplot")
 PRESETS_DIR = os.path.join(
     os.path.abspath(os.path.dirname(__file__)),
@@ -131,6 +131,7 @@ def _get_configuration_from_file(file_path: str) -> tuple[configuration, str]:
             for setting in settings:
                 if setting in toml[section]:
                     config[setting] = toml[section][setting]
+                    print(f"setting {setting} to {config[setting]}")
 
     return config, preset
 
