@@ -82,7 +82,7 @@ Nothing needed.
 Release history
 ---------------
 
-See `CHANGELOG <./CHANGELOG.md>`_.
+See `CHANGELOG.md <https://github.com/uniwix/casioplot/blob/master/CHANGELOG.md>`_.
 
 Meta
 ----
