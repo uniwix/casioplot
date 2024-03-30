@@ -1,106 +1,164 @@
 import os
 import tomllib
 
-from PIL import Image
-
 from casioplot.configuration_type import configuration
 
-THIS_DIR = os.path.abspath(os.path.dirname(__file__))
+PROJECT_DIR = os.path.getcwd()
+GLOBAL_DIR = os.path.expanduser("~/.config/casioplot")
+PRESETS_DIR = os.path.join(
+    os.path.abspath(os.path.dirname(__file__)),
+    "presets"
+)
+BG_IMAGES_DIR = os.path.join(
+    os.path.abspath(os.path.dirname(__file__)),
+    "bg_images"
+)
 
 
-def _get_config_file(file_name: str) -> configuration:
-    """Get the configuration file.
+def _get_first_config_file() -> str:
+    """Get the most 'custom' configuration file
 
-    This function searches for the configuration file in the following order:
-    1. Absolute path.
-    2. The current directory.
-    3. The `~/.config/casioplot` directory.
-    4. The directory of the package (default configuration files).
-    5. The default configuration file.
+    This function returns the most `custom` configuration file in the following order:
+    1. casioplot_config.toml file in the directory of the project that is using casioplot
+    2. The first toml file in `~/.config/casioplot` directory in alphabetical order
+    3. The default configuration file, casioplot/presets/default.toml
 
-    :param file_name: The name of the configuration file.
-    :return: The configuration file path.
+    :return: The configuration file path
     """
 
-    locations = (
-        "",  # 1 and 2
-        os.path.expanduser("~/.config/casioplot"),  # 3
-        THIS_DIR  # 4
-    )
+    # 1
+    project_config_file_name = "config.toml"
+    project_config_file = os.path.join(PROJECT_DIR, project_config_file_name)
+    if os.path.exists(project_config_file):
+        return project_config_file
 
-    for loc in locations:
-        try:
-            path = os.path.join(loc, file_name)
-            with open(path, "rb") as source:
-                config = tomllib.load(source)
-            return _set_settings(config)
-        except (IOError, TypeError):
-            pass
+    # 2
+    global_config_files = os.listdir(GLOBAL_DIR)
+    global_config_files.sort()  # makes sure that the files are in alphabetical order
+    if global_config_files == []:
+        for file in global_config_files:
+            if os.path.splitext(file)[-1] == ".toml":  # see if it is a toml file
+                return file
 
-    # 5
-    print(f"[Info] Config file {file_name} not found. Using default configuration.")
-    with open(os.path.join(os.path.dirname(__file__), "default.toml"), "rb") as source:
-        config = tomllib.load(source)
-    return _toml_to_configuration(config, configuration())
+    # 3
+    return os.path.join(PRESETS_DIR, "default.toml")
 
 
-def _set_settings(toml: dict) -> configuration:
-    """Set the settings based on a TOML dictionary.
+def _get_file_from_preset(preset: str) -> str:
+    """Translates a preset into a full path for the file"""
+    dir, file_name = preset.split('/')
 
-    :param toml: The TOML dictionary.
-    :return: The configuration dictionary.
-    """
-    if "preset" in toml:
-        config = _get_config_file(toml["preset"])
+    if dir == "global":
+        path = os.path.join(GLOBAL_DIR, file_name)
+    elif dir == "presets":
+        path = os.path.join(PRESETS_DIR, file_name)
     else:
-        default_file = os.path.join(THIS_DIR, "default.toml")
-        with open(default_file, "rb") as source:
-            default = tomllib.load(source)
-        config = _toml_to_configuration(default, configuration())
+        raise ValueError(f"preset must be global/<file_name> or presets/<file_name> not {dir}/<file_name>")
 
-    return _toml_to_configuration(toml, config)
+    if os.path.exists(path):
+        return path
+    else:
+        raise ValueError(f"The config file {path} doesn't exist")
 
 
-def _toml_to_configuration(toml: dict, config: configuration) -> configuration:
-    """Add the settings from a TOML dictionary to a configuration dictionary.
+def _get_image_path(bg_image_setting: str) -> str:
+    """Translates the setting background_image to the full path for the image"""
+    if "/" not in bg_image_setting:
+        path = os.path.join(PROJECT_DIR, bg_image_setting)
 
-    :param toml: The TOML dictionary.
-    :param config: The configuration dictionary.
-    :return: The configuration dictionary with the new settings.
+    dir, bg_image_name = bg_image_setting.split('/')
+
+    if dir == "global":
+        path = os.path.join(GLOBAL_DIR, bg_image_name)
+    elif dir == "bg_images":
+        path = os.path.join(BG_IMAGES_DIR, bg_image_name)
+    else:
+        raise ValueError(f"the background image setting can't be {bg_image_setting}, it must be:\
+            - <image_name> if it is in the same directory as the configs.py file \n\
+            - global/<image_name> if it is the global configs directory \n\
+            - bg_images/<image_name> if it is one of the predefined images")
+
+    if os.path.exists(path):
+        return path
+    else:
+        raise ValueError(f"The image {path} doesn't exist")
+
+
+_toml_settings = {
+    "canvas": (
+        "width",
+        "height"
+    ),
+    "margins": (
+        "left_margin",
+        "right_margin",
+        "top_margin",
+        "bottom_margin"
+    ),
+    "background": (
+        "bg_image_is_set",
+        "background_image"
+    ),
+    "show_screen": (
+        "show_screen"
+    ),
+    "saving_screen": (
+        "save_screen",
+        "filename",
+        "image_format",
+        "save_multiple",
+        "save_rate"
+    )
+}
+
+
+def _get_configuration_from_file(file_path: str) -> tuple[configuration, str]:
+    """Gets the configuration and the preset of a config file from it's path
+
+    Preset configuration files like default.toml have no preset
     """
+    config = configuration()
+    with open(file_path, "rb") as toml_file:
+        toml = tomllib.load(toml_file)
 
-    if "size" in toml:
-        if "width" in toml["size"]:
-            config["width"] = toml["size"]["width"]
-        if "height" in toml["size"]:
-            config["height"] = toml["size"]["height"]
+    if "preset" in toml:
+        preset = toml["preset"]
+    else:
+        preset = ""
 
-    if "margins" in toml:
-        if "left" in toml["margins"]:
-            config["left_margin"] = toml["margins"]["left"]
-        if "right" in toml["margins"]:
-            config["right_margin"] = toml["margins"]["right"]
-        if "top" in toml["margins"]:
-            config["top_margin"] = toml["margins"]["top"]
-        if "bottom" in toml["margins"]:
-            config["bottom_margin"] = toml["margins"]["bottom"]
+    for section, settings in _toml_settings.items():
+        if section in toml:
+            for setting in settings:
+                if setting in toml[section]:
+                    config[setting] = toml[section][setting]
 
-    if "background" in toml:
-        if "path" in toml["background"]:
-            config["background_image"] = Image.open(toml["background"]["path"])
-            config["bg_image_is_set"] = True
+    return config, preset
 
-    if "screen" in toml:
-        if "show" in toml["screen"]:
-            config["show_screen"] = toml["screen"]["show"]
-        if "save" in toml["screen"]:
-            config["save_screen"] = toml["screen"]["save"]
-        if "rate" in toml["screen"]:
-            config["save_rate"] = toml["screen"]["rate"]
-            config["save_multiple"] = True
-        if "filename" in toml["screen"]:
-            config["filename"] = toml["screen"]["filename"]
-        if "format" in toml["screen"]:
-            config["image_format"] = toml["screen"]["format"]
+
+def _join_configs(config: configuration, preset_config: configuration) -> configuration:
+    """Adds settings from preset_config to config if they are missing form config"""
+    for setting in configuration.__annotations__.keys():
+        if setting not in config and setting in preset_config:
+            config[setting] = preset_config[setting]
+
+    return config
+
+
+def _get_settings() -> configuration:
+    """Gets the settings from config files"""
+    current_config_file = _get_first_config_file()
+    config, current_preset = _get_configuration_from_file(current_config_file)
+
+    while current_preset != "":
+        preset_is_global: bool = "global/" in current_preset
+
+        current_config_file = _get_file_from_preset(current_preset)
+        preset_config, current_preset = _get_configuration_from_file(current_config_file)
+        config = _join_configs(config, preset_config)
+
+        # avoids loops
+        if preset_is_global and "global/" in current_preset:
+            raise ValueError("A global config file must not have as preset another global config file\
+                , only a preset file like presets/default or presets/fx-CG50")
 
     return config
