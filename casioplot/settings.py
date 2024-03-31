@@ -1,7 +1,7 @@
 import os
 import tomllib
 
-import imagesize
+from PIL import Image
 
 from casioplot.types import Configuration
 
@@ -168,7 +168,7 @@ def _get_settings() -> Configuration:
     # Set the correct width and height if a background image is set
     if settings["bg_image_is_set"] is True:
         settings["background_image"] = _get_image_path(settings["background_image"])
-        bg_size_x, bg_size_y = imagesize.get(settings["background_image"])
+        bg_size_x, bg_size_y = Image.open(settings["background_image"]).size
 
         settings["width"] = bg_size_x - (settings["left_margin"] + settings["right_margin"])
         settings["height"] = bg_size_y - (settings["top_margin"] + settings["bottom_margin"])

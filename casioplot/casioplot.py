@@ -16,7 +16,6 @@ from typing import Literal
 from casioplot.characters import _get_char
 from casioplot.settings import _settings
 from casioplot.types import Color
-from casioplot.utils import _coordinates_in_bounds, _save_screen
 
 # some frequently used colors
 _WHITE: Color = (255, 255, 255)  # RGB white
@@ -26,6 +25,46 @@ _BLACK: Color = (0, 0, 0)  # RGBA black
 save_screen_counter = 0
 current_image_number = 1
 
+
+# functions used by the package
+
+def _canvas_to_screen(x: int, y: int, start_x: int, start_y: int) -> tuple[int, int]:
+    """Converts coordinates to canvas coordinates
+
+    :param x: x coordinate (from the left to the right)
+    :param y: y coordinate (from the top to the bottom)
+    :param start_x: the x coordinate of the top left corner of the canvas
+    :param start_y: the y coordinate of the top left corner of the canvas
+    :return: a tuple with the canvas coordinates
+    """
+    return x + start_x, y + start_y
+
+
+# TODO: Takes too much time so needs improvements
+def _coordinates_in_bounds(x: int, y: int, max_x: int, max_y: int) -> bool:
+    """Checks if the given coordinates are in bounds of the canvas
+
+    :param x: x coordinate (from the left to the right)
+    :param y: y coordinate (from the top to the bottom)
+    :param max_x: the maximum x coordinate
+    :param max_y: the maximum y coordinate
+    :return: a bool that says if the given coordinates are in bounds of the canvas
+    """
+    return 0 <= x < max_x and 0 <= y < max_y
+
+
+def _save_screen(filename: str, image_format: str, image_suffix: str = ""):
+    """Saves _screen as an image_suffix
+
+    Only used by the function show_screen
+    :param image_suffix: If the setting save_multiple is True existes a need to
+    create images with the name `casioplot2.png` for example.
+    """
+
+    _virtual_screen.write(
+        filename + image_suffix + '.' + image_format,
+        format=image_format,
+    )
 
 # functions for the user
 
@@ -46,7 +85,7 @@ def show_screen() -> None:
         if _settings["save_multiple"] is True:
             global save_screen_counter, current_image_number
             if save_screen_counter == _settings["save_rate"]:
-                _save_screen(_virtual_screen, _settings["filename"], _settings["image_format"],
+                _save_screen(_settings["filename"], _settings["image_format"],
                              str(current_image_number))
                 current_image_number += 1
                 save_screen_counter = 0
@@ -54,7 +93,7 @@ def show_screen() -> None:
             save_screen_counter += 1
         else:
             # When the program ends, the saved image will show the screen as it was in the last call of show_screen
-            _save_screen(_virtual_screen, _settings["filename"], _settings["image_format"])
+            _save_screen(_settings["filename"], _settings["image_format"])
 
 
 def clear_screen() -> None:
