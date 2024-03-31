@@ -46,20 +46,19 @@ def show_screen() -> None:
         if _settings["save_multiple"] is True:
             global save_screen_counter, current_image_number
             if save_screen_counter == _settings["save_rate"]:
-                _save_screen(_virtual_screen, _settings["filename"], _settings["image_format"],
-                             str(current_image_number))
+                _save_screen(_canvas, str(current_image_number))
                 current_image_number += 1
                 save_screen_counter = 0
 
             save_screen_counter += 1
         else:
             # When the program ends, the saved image will show the screen as it was in the last call of show_screen
-            _save_screen(_virtual_screen, _settings["filename"], _settings["image_format"])
+            _save_screen(_canvas)
 
 
 def clear_screen() -> None:
     """Clear the virtual screen"""
-    _virtual_screen.put(
+    _canvas.put(
         "white",
         to=(0, 0, _settings["width"], _settings["height"])
     )
@@ -73,7 +72,7 @@ def get_pixel(x: int, y: int) -> Color | None:
     :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the canvas.
     """
     try:
-        return _virtual_screen.get(x, y)
+        return _canvas.get(x, y)
     except tk.TclError:
         return None
 
@@ -86,7 +85,7 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
     """
     try:
-        _virtual_screen.put(
+        _canvas.put(
             "#%02x%02x%02x" % color,  # convert the color (RGB tuple) to a hexadecimal string '#RRGGBB'
             to=(x, y)
         )
@@ -120,7 +119,7 @@ def draw_string(
                     set_pixel(x + x2, y + y2, color)
 
     for char in text:
-        if not _coordinates_in_bounds(x, y, _settings["width"], _settings["height"]):
+        if not _coordinates_in_bounds(x, y):
             return
 
         char_map = _get_char(char, size)
@@ -153,17 +152,16 @@ else:
 
 # screen
 
-_virtual_screen = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
+_canvas = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
 
 if _settings["bg_image_is_set"] is True:
-    _screen = tk.PhotoImage(file=_settings["background_image"])
+    _background = tk.PhotoImage(file=_settings["background_image"])
 else:
-    width, height = _screen_dimensions()
-    _screen = tk.PhotoImage(width=width, height=height)
+    _background = _canvas.copy()
 
-_screen_display = tk.Label(master=_window, image=_screen, border=0)
-_screen_display.place(x=0, y=0)
-_screen_canvas = tk.Label(master=_window, image=_virtual_screen, border=0)
-_screen_canvas.place(x=_settings["left_margin"], y=_settings["top_margin"])
+_background_display = tk.Label(master=_window, image=_background, border=0)
+_background_display.place(x=0, y=0)
+_canvas_display = tk.Label(master=_window, image=_canvas, border=0)
+_canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
 
 clear_screen()  # ensures the pixels are set to white and not transparent
