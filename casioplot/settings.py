@@ -152,14 +152,14 @@ def _get_settings() -> Configuration:
     settings, current_link = _get_configuration_from_file(current_config_file)
 
     while current_link != "":
-        link_is_global: bool = "global/" in current_link
+        link_is_global: bool = current_link.startswith("global/")
 
         current_config_file = _get_file_from_link(current_link)
         default_config, current_link = _get_configuration_from_file(current_config_file)
         settings = _join_configs(settings, default_config)
-        print(settings)
+
         # avoids loops
-        if link_is_global and "presets/" not in current_link:
+        if link_is_global and not current_link.startswith("presets/"):
             raise ValueError("A global config file must not have as default file another global config file\
                 , only a preset file like presets/default or presets/fx-CG50")
 
@@ -176,12 +176,12 @@ def _get_settings() -> Configuration:
     return settings
 
 
-def _check_settings(settings: Configuration) -> None:
+def _check_settings(config: Configuration) -> None:
     """Checks if all settings have a value, have the correct type of data and have a proper value
 
-    :param settings: The settings to be checked
+    :param config: The settings to be checked
     """
-    print(settings)
+
     # stores checks for specific settings
     _settings_checks = {
         "width": lambda width: width > 0,
@@ -208,10 +208,10 @@ def _check_settings(settings: Configuration) -> None:
 
     for setting, correct_type in Configuration.__annotations__.items():
         # does it exist?
-        if setting not in settings:
+        if setting not in config:
             raise ValueError(f"The setting {setting} must have a value attributed")
 
-        value = settings[setting]
+        value = config[setting]
 
         # does it have the correct type?
         if not isinstance(value, correct_type):
@@ -222,13 +222,16 @@ def _check_settings(settings: Configuration) -> None:
             raise ValueError(f"The settings {setting} must {_settings_errors[setting]}")
 
     # some additional checks in case there is a background image
-    if settings["bg_image_is_set"] is True:
-        if settings["left_margin"] + settings["right_margin"] >= settings["width"]:
+    if config["bg_image_is_set"] is True:
+        if config["left_margin"] + config["right_margin"] >= config["width"]:
             raise ValueError("Invalid settings, the combined values of \
                 left_margin and right_margin must be smaller than the \
                 width of the background image")
 
-        if settings["top_margin"] + settings["bottom_margin"] >= settings["height"]:
+        if config["top_margin"] + config["bottom_margin"] >= config["height"]:
             raise ValueError("Invalid settings, the combined values of \
                 top_margin and bottom_margin must be smaller than the \
                 height of the background image")
+
+
+_settings: Configuration = _get_settings()

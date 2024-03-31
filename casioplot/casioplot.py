@@ -14,8 +14,8 @@ import tkinter as tk
 from typing import Literal
 
 from casioplot.characters import _get_char
-from casioplot.settings import _get_settings
-from casioplot.types import Configuration, Color
+from casioplot.settings import _settings
+from casioplot.types import Color
 from casioplot.utils import _coordinates_in_bounds, _save_screen, _color_tuple_to_hex, _canvas_to_screen
 
 # some frequently used colors
@@ -38,33 +38,33 @@ def show_screen() -> None:
         The image is saved with the filename found in `filename`
     """
 
-    if settings["show_screen"] is True:
+    if _settings["show_screen"] is True:
         # show the screen
-        window.update()
+        _window.update()
 
-    if settings["save_screen"] is True:
-        if settings["save_multiple"] is True:
+    if _settings["save_screen"] is True:
+        if _settings["save_multiple"] is True:
             global save_screen_counter, current_image_number
-            if save_screen_counter == settings["save_rate"]:
-                _save_screen(screen, settings["filename"], settings["image_format"], str(current_image_number))
+            if save_screen_counter == _settings["save_rate"]:
+                _save_screen(_screen, _settings["filename"], _settings["image_format"], str(current_image_number))
                 current_image_number += 1
                 save_screen_counter = 0
 
             save_screen_counter += 1
         else:
             # When the program ends, the saved image will show the screen as it was in the last call of show_screen
-            _save_screen(screen, settings["filename"], settings["image_format"])
+            _save_screen(_screen, _settings["filename"], _settings["image_format"])
 
 
 def clear_screen() -> None:
     """Clear the virtual screen"""
-    screen.put(
+    _screen.put(
         "white",
         to=(
-            settings["left_margin"],
-            settings["top_margin"],
-            settings["left_margin"] + settings["width"],
-            settings["top_margin"] + settings["height"]
+            _settings["left_margin"],
+            _settings["top_margin"],
+            _settings["left_margin"] + _settings["width"],
+            _settings["top_margin"] + _settings["height"]
         )
     )
 
@@ -76,8 +76,8 @@ def get_pixel(x: int, y: int) -> Color | None:
     :param y: y coordinate (from the top)
     :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the canvas.
     """
-    if _coordinates_in_bounds(x, y, settings["width"], settings["height"]):
-        return screen.get(*_canvas_to_screen(x, y, settings["left_margin"], settings["top_margin"]))
+    if _coordinates_in_bounds(x, y, _settings["width"], _settings["height"]):
+        return _screen.get(*_canvas_to_screen(x, y, _settings["left_margin"], _settings["top_margin"]))
     else:
         return None
 
@@ -89,16 +89,16 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     :param y: y coordinate (from the top)
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
     """
-    if _coordinates_in_bounds(x, y, settings["width"], settings["height"]):
+    if _coordinates_in_bounds(x, y, _settings["width"], _settings["height"]):
         # speeds up the function in case color is black
         if color == _BLACK:
             final_color = "black"
         else:
             final_color = _color_tuple_to_hex(color)
 
-        screen.put(
+        _screen.put(
             final_color,
-            to=_canvas_to_screen(x, y, settings["left_margin"], settings["top_margin"])
+            to=_canvas_to_screen(x, y, _settings["left_margin"], _settings["top_margin"])
         )
 
 
@@ -127,7 +127,7 @@ def draw_string(
                     set_pixel(x + x2, y + y2, color)
 
     for char in text:
-        if not _coordinates_in_bounds(x, y, settings["width"], settings["height"]):
+        if not _coordinates_in_bounds(x, y, _settings["width"], _settings["height"]):
             return
 
         char_map = _get_char(char, size)
@@ -140,34 +140,30 @@ def draw_string(
 def _screen_dimensions() -> tuple[int, int]:
     """Calculates the dimensions of the screen"""
     return (
-        settings["left_margin"] + settings["width"] + settings["right_margin"],
-        settings["top_margin"] + settings["height"] + settings["bottom_margin"]
+        _settings["left_margin"] + _settings["width"] + _settings["right_margin"],
+        _settings["top_margin"] + _settings["height"] + _settings["bottom_margin"]
     )
 
 
-# settings
-
-settings: Configuration = _get_settings()
-
 # window
 
-window = tk.Tk()
-if settings["show_screen"] is True:
-    window.geometry("{}x{}".format(*_screen_dimensions()))
+_window = tk.Tk()
+if _settings["show_screen"] is True:
+    _window.geometry("{}x{}".format(*_screen_dimensions()))
 
-    window.grab_release()
-    window.title("casioplot")
-    window.attributes("-topmost", True)
+    _window.grab_release()
+    _window.title("casioplot")
+    _window.attributes("-topmost", True)
 else:
-    window.withdraw()
+    _window.withdraw()
 
 # screen
 
-if settings["bg_image_is_set"] is True:
-    screen = tk.PhotoImage(file=settings["background_image"],)
+if _settings["bg_image_is_set"] is True:
+    _screen = tk.PhotoImage(file=_settings["background_image"], )
 else:
     width, height = _screen_dimensions()
-    screen = tk.PhotoImage(width=width, height=height)
+    _screen = tk.PhotoImage(width=width, height=height)
 
-screen_display = tk.Label(master=window, image=screen, border=0)
-screen_display.pack()
+_screen_display = tk.Label(master=_window, image=_screen, border=0)
+_screen_display.pack()
