@@ -170,8 +170,8 @@ def _get_settings() -> Configuration:
         settings["background_image"] = _get_image_path(settings["background_image"])
         bg_size_x, bg_size_y = imagesize.get(settings["background_image"])
 
-        settings["width"] = bg_size_x - (settings["left_margin"] - settings["right_margin"])
-        settings["height"] = bg_size_y - (settings["top_margin"] - settings["bottom_margin"])
+        settings["width"] = bg_size_x - (settings["left_margin"] + settings["right_margin"])
+        settings["height"] = bg_size_y - (settings["top_margin"] + settings["bottom_margin"])
 
     return settings
 
