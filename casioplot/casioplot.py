@@ -40,10 +40,6 @@ def show_screen() -> None:
 
     if settings["show_screen"] is True:
         # show the screen
-        global screen
-        new_screen = virtual_screen.copy()
-        label_screen.configure(image=new_screen)
-        screen = new_screen
         window.update()
 
     if settings["save_screen"] is True:
@@ -62,9 +58,9 @@ def show_screen() -> None:
 
 def clear_screen() -> None:
     """Clear the virtual screen"""
-    virtual_screen.put(
+    screen.put(
         "white",
-        (
+        to=(
             settings["left_margin"],
             settings["top_margin"],
             settings["left_margin"] + settings["width"],
@@ -81,7 +77,7 @@ def get_pixel(x: int, y: int) -> Color | None:
     :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the canvas.
     """
     if _coordinates_in_bounds(x, y, settings["width"], settings["height"]):
-        return virtual_screen.get(*_canvas_to_screen(x, y, settings["left_margin"], settings["top_margin"]))
+        return screen.get(*_canvas_to_screen(x, y, settings["left_margin"], settings["top_margin"]))
     else:
         return None
 
@@ -94,9 +90,15 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
     """
     if _coordinates_in_bounds(x, y, settings["width"], settings["height"]):
-        virtual_screen.put(
-            _color_tuple_to_hex(color),
-            _canvas_to_screen(x, y, settings["left_margin"], settings["top_margin"])
+        # speeds up the function in case color is black
+        if color == _BLACK:
+            final_color = "black"
+        else:
+            final_color = _color_tuple_to_hex(color)
+
+        screen.put(
+            final_color,
+            to=_canvas_to_screen(x, y, settings["left_margin"], settings["top_margin"])
         )
 
 
@@ -143,43 +145,29 @@ def _screen_dimensions() -> tuple[int, int]:
     )
 
 
+# settings
+
 settings: Configuration = _get_settings()
 
+# window
+
+window = tk.Tk()
 if settings["show_screen"] is True:
-    # Creates a tkinter window
-    window = tk.Tk()
-    width, height = _screen_dimensions()
-    window.geometry(f"{width}x{height}")
+    window.geometry("{}x{}".format(*_screen_dimensions()))
 
     window.grab_release()
     window.title("casioplot")
     window.attributes("-topmost", True)
 else:
-    window = None
+    window.withdraw()
 
-# Create images
+# screen
 
 if settings["bg_image_is_set"] is True:
-    screen = tk.PhotoImage(
-        master=window,
-        file=settings["background_image"],
-    )
-    virtual_screen = screen.copy()
-
-    bg_width, bg_height = screen.width(), screen.height()
-
-    settings["width"] = bg_width - (settings["left_margin"] + settings["right_margin"])
-    settings["height"] = bg_height - (settings["top_margin"] + settings["bottom_margin"])
-
-    width, height = _screen_dimensions()
-    window.geometry(f"{width}x{height}")
-
+    screen = tk.PhotoImage(file=settings["background_image"],)
 else:
     width, height = _screen_dimensions()
-    window.geometry(f"{width}x{height}")
-    screen = tk.PhotoImage(master=window, width=width, height=height)
-    virtual_screen = tk.PhotoImage(master=window, width=width, height=height)
+    screen = tk.PhotoImage(width=width, height=height)
 
-if settings["show_screen"] is True:
-    label_screen = tk.Label(master=window, image=screen, border=0)
-    label_screen.pack()
+screen_display = tk.Label(master=window, image=screen, border=0)
+screen_display.pack()
