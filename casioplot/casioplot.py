@@ -16,7 +16,7 @@ from typing import Literal
 from casioplot.characters import _get_char
 from casioplot.settings import _settings
 from casioplot.types import Color
-from casioplot.utils import _coordinates_in_bounds, _save_screen, _color_tuple_to_hex, _canvas_to_screen
+from casioplot.utils import _coordinates_in_bounds, _save_screen
 
 # some frequently used colors
 _WHITE: Color = (255, 255, 255)  # RGB white
@@ -46,26 +46,22 @@ def show_screen() -> None:
         if _settings["save_multiple"] is True:
             global save_screen_counter, current_image_number
             if save_screen_counter == _settings["save_rate"]:
-                _save_screen(_screen, _settings["filename"], _settings["image_format"], str(current_image_number))
+                _save_screen(_virtual_screen, _settings["filename"], _settings["image_format"],
+                             str(current_image_number))
                 current_image_number += 1
                 save_screen_counter = 0
 
             save_screen_counter += 1
         else:
             # When the program ends, the saved image will show the screen as it was in the last call of show_screen
-            _save_screen(_screen, _settings["filename"], _settings["image_format"])
+            _save_screen(_virtual_screen, _settings["filename"], _settings["image_format"])
 
 
 def clear_screen() -> None:
     """Clear the virtual screen"""
-    _screen.put(
+    _virtual_screen.put(
         "white",
-        to=(
-            _settings["left_margin"],
-            _settings["top_margin"],
-            _settings["left_margin"] + _settings["width"],
-            _settings["top_margin"] + _settings["height"]
-        )
+        to=(0, 0, _settings["width"], _settings["height"])
     )
 
 
@@ -76,9 +72,9 @@ def get_pixel(x: int, y: int) -> Color | None:
     :param y: y coordinate (from the top)
     :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the canvas.
     """
-    if _coordinates_in_bounds(x, y, _settings["width"], _settings["height"]):
-        return _screen.get(*_canvas_to_screen(x, y, _settings["left_margin"], _settings["top_margin"]))
-    else:
+    try:
+        return _virtual_screen.get(x, y)
+    except tk.TclError:
         return None
 
 
@@ -89,17 +85,14 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     :param y: y coordinate (from the top)
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
     """
-    if _coordinates_in_bounds(x, y, _settings["width"], _settings["height"]):
-        # speeds up the function in case color is black
-        if color == _BLACK:
-            final_color = "black"
-        else:
-            final_color = _color_tuple_to_hex(color)
-
-        _screen.put(
-            final_color,
-            to=_canvas_to_screen(x, y, _settings["left_margin"], _settings["top_margin"])
+    try:
+        _virtual_screen.put(
+            "#%02x%02x%02x" % color,  # convert the color (RGB tuple) to a hexadecimal string '#RRGGBB'
+            to=(x, y)
         )
+    except tk.TclError:
+        # the pixel is out of the canvas
+        pass
 
 
 def draw_string(
@@ -154,16 +147,23 @@ if _settings["show_screen"] is True:
     _window.grab_release()
     _window.title("casioplot")
     _window.attributes("-topmost", True)
+    _window.resizable(False, False)
 else:
     _window.withdraw()
 
 # screen
 
+_virtual_screen = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
+
 if _settings["bg_image_is_set"] is True:
-    _screen = tk.PhotoImage(file=_settings["background_image"], )
+    _screen = tk.PhotoImage(file=_settings["background_image"])
 else:
     width, height = _screen_dimensions()
     _screen = tk.PhotoImage(width=width, height=height)
 
 _screen_display = tk.Label(master=_window, image=_screen, border=0)
-_screen_display.pack()
+_screen_display.place(x=0, y=0)
+_screen_canvas = tk.Label(master=_window, image=_virtual_screen, border=0)
+_screen_canvas.place(x=_settings["left_margin"], y=_settings["top_margin"])
+
+clear_screen()  # ensures the pixels are set to white and not transparent
