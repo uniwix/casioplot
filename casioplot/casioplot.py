@@ -41,19 +41,17 @@ def _canvas_to_screen(x: int, y: int, start_x: int, start_y: int) -> tuple[int, 
 
 
 # TODO: Takes too much time so needs improvements
-def _coordinates_in_bounds(x: int, y: int, max_x: int, max_y: int) -> bool:
+def _coordinates_in_bounds(x: int, y: int) -> bool:
     """Checks if the given coordinates are in bounds of the canvas
 
     :param x: x coordinate (from the left to the right)
     :param y: y coordinate (from the top to the bottom)
-    :param max_x: the maximum x coordinate
-    :param max_y: the maximum y coordinate
     :return: a bool that says if the given coordinates are in bounds of the canvas
     """
-    return 0 <= x < max_x and 0 <= y < max_y
+    return 0 <= x < _settings["width"] and 0 <= y < _settings["height"]
 
 
-def _save_screen(filename: str, image_format: str, image_suffix: str = ""):
+def _save_screen(image_suffix: str = ""):
     """Saves _screen as an image_suffix
 
     Only used by the function show_screen
@@ -61,9 +59,9 @@ def _save_screen(filename: str, image_format: str, image_suffix: str = ""):
     create images with the name `casioplot2.png` for example.
     """
 
-    _virtual_screen.write(
-        filename + image_suffix + '.' + image_format,
-        format=image_format,
+    _canvas.write(
+        _settings["filename"] + image_suffix + '.' + _settings["image_format"],
+        format=_settings["image_format"],
     )
 
 # functions for the user
@@ -85,20 +83,19 @@ def show_screen() -> None:
         if _settings["save_multiple"] is True:
             global save_screen_counter, current_image_number
             if save_screen_counter == _settings["save_rate"]:
-                _save_screen(_settings["filename"], _settings["image_format"],
-                             str(current_image_number))
+                _save_screen(str(current_image_number))
                 current_image_number += 1
                 save_screen_counter = 0
 
             save_screen_counter += 1
         else:
             # When the program ends, the saved image will show the screen as it was in the last call of show_screen
-            _save_screen(_settings["filename"], _settings["image_format"])
+            _save_screen()
 
 
 def clear_screen() -> None:
     """Clear the virtual screen"""
-    _virtual_screen.put(
+    _canvas.put(
         "white",
         to=(0, 0, _settings["width"], _settings["height"])
     )
@@ -112,7 +109,7 @@ def get_pixel(x: int, y: int) -> Color | None:
     :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the canvas.
     """
     try:
-        return _virtual_screen.get(x, y)
+        return _canvas.get(x, y)
     except tk.TclError:
         return None
 
@@ -125,7 +122,7 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
     """
     try:
-        _virtual_screen.put(
+        _canvas.put(
             "#%02x%02x%02x" % color,  # convert the color (RGB tuple) to a hexadecimal string '#RRGGBB'
             to=(x, y)
         )
@@ -159,7 +156,7 @@ def draw_string(
                     set_pixel(x + x2, y + y2, color)
 
     for char in text:
-        if not _coordinates_in_bounds(x, y, _settings["width"], _settings["height"]):
+        if not _coordinates_in_bounds(x, y):
             return
 
         char_map = _get_char(char, size)
@@ -192,17 +189,16 @@ else:
 
 # screen
 
-_virtual_screen = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
+_canvas = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
 
 if _settings["bg_image_is_set"] is True:
-    _screen = tk.PhotoImage(file=_settings["background_image"])
+    _background = tk.PhotoImage(file=_settings["background_image"])
 else:
-    width, height = _screen_dimensions()
-    _screen = tk.PhotoImage(width=width, height=height)
+    _background = _canvas.copy()
 
-_screen_display = tk.Label(master=_window, image=_screen, border=0)
-_screen_display.place(x=0, y=0)
-_screen_canvas = tk.Label(master=_window, image=_virtual_screen, border=0)
-_screen_canvas.place(x=_settings["left_margin"], y=_settings["top_margin"])
+_background_display = tk.Label(master=_window, image=_background, border=0)
+_background_display.place(x=0, y=0)
+_canvas_display = tk.Label(master=_window, image=_canvas, border=0)
+_canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
 
 clear_screen()  # ensures the pixels are set to white and not transparent
