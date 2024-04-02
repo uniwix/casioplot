@@ -1,20 +1,41 @@
+# This is the default configuration file
+
+# Set the size of the canvas where you are able to draw
+# Should not be used if bg_image_is_set is true:
+# it will be automatically set to the size of the background image
+# minus the margins
 [canvas]
 width = 384
 height = 192
 
+# Set the size of the margind around the canvas
+# Useful if your background image has a border
 [margins]
 left_margin = 0
 right_margin = 0
 top_margin = 0
 bottom_margin = 0
 
+# Set the background image
+# If your image is in local folder, you must place it in the directory
+# where you run the program
+# You can use ``global/`` prefix to set global images
+# You can use ``bg_images/`` prefix to use preset images
 [background]
 bg_image_is_set = false
 background_image = "bg_images/blanck.png"
 
+# Show the screen with tkinter
 [show_screen]
 show_screen = true
 
+# Save the screen in the current directory
+# if save_multiple is set to true, the screen will be saved at each save_rate
+# and file name will be filename + number + '.' + image_format
+# where number is the number of the save
+# if save_multiple is set to false, the screen will be saved at each
+# ``show_screen`` call, overwriting the previous save
+# The file name will be filename + '.' + image_format
 [saving_screen]
 save_screen = false
 filename = "casioplot"

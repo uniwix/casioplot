@@ -59,7 +59,7 @@ For example, the following codes draw a black square of 100 by 100 pixels.
 .. code-block:: python3
 
     for x in range(100):
-        for y in raange(100):
+        for y in range(100):
             set_pixel(x, y)
     show_screen()
 
@@ -68,7 +68,7 @@ Is faster on the computer, but
 .. code-block:: python3
 
     for x in range(100):
-        for y in raange(100):
+        for y in range(100):
             set_pixel(x, y)
             show_screen()
 
