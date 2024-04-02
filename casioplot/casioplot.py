@@ -46,11 +46,11 @@ def _save_screen(image_suffix: str = ""):
     create images with the name `casioplot2.png` for example.
     """
 
-    if settings["bg_image_is_set"] is True:
+    if _settings["bg_image_is_set"] is True:
         canvas_image: Image.Image = ImageTk.getimage(_canvas)
         background_image: Image.Image = ImageTk.getimage(_background)
 
-        background_image.paste(canvas_image, (settings["left_margin"], settings["top_margin"]))
+        background_image.paste(canvas_image, (_settings["left_margin"], _settings["top_margin"]))
 
         background_image.save(
             _settings["image_name"] + image_suffix + '.' + _settings["image_format"],

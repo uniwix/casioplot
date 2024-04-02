@@ -134,12 +134,12 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
             if section not in _toml_settings:
                 raise ValueError(f"The section [{section}] doesn't exist")
 
-            for setting in section:
+            for setting in toml[section]:
                 # does the setting exist?
                 if setting not in Configuration.__annotations__:
                     raise ValueError(f"The setting {setting} doesn't exist")
                 # is the setting in the correct section?
-                if setting not in _toml_settings["section"]:
+                if setting not in _toml_settings[section]:
                     raise ValueError(f"The setting {setting} doesn't belong to the section {section},\
                     it belongs to another section")
 
