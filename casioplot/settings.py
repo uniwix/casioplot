@@ -53,7 +53,7 @@ def _get_first_config_file() -> str:
 
         for file in global_config_files:
             if os.path.splitext(file)[-1] == ".toml":  # see if it is a toml file
-                return file
+                return os.path.join(GLOBAL_DIR, file)
 
     # 3
     return os.path.join(PRESETS_DIR, "default.toml")
@@ -212,11 +212,12 @@ def _get_settings() -> Configuration:
             raise ValueError("A global config file must not have as default file another global config file \
             , only preset files like 'presets/default' or 'presets/fx-CG50'")
 
+    settings["background_image"] = _get_image_path(settings["background_image"])
+
     _check_settings(settings)  # avoids runing the package with wrong settings
 
     # Set the settings `width` and `height` to the correct values if a background image is set
     if settings["bg_image_is_set"] is True:
-        settings["background_image"] = _get_image_path(settings["background_image"])
         bg_size_x, bg_size_y = Image.open(settings["background_image"]).size
 
         settings["width"] = bg_size_x - (settings["left_margin"] + settings["right_margin"])
