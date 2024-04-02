@@ -184,15 +184,20 @@ else:
 # screen
 
 _canvas = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
+clear_screen()  # ensures the pixels are set to white and not transparent
 
 if _settings["bg_image_is_set"] is True:
     _background = tk.PhotoImage(file=_settings["background_image"])
 else:
-    _background = _canvas.copy()
+    bg_width, bg_height = _screen_dimensions()
+    _background = tk.PhotoImage(width=bg_width, height=bg_height)
+    _background.put(  # same as clear_screen but for the background image
+        "white",
+        to=(0, 0, bg_width, bg_height)
+    )
 
 _background_display = tk.Label(master=_window, image=_background, border=0)
 _background_display.place(x=0, y=0)
 _canvas_display = tk.Label(master=_window, image=_canvas, border=0)
 _canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
 
-clear_screen()  # ensures the pixels are set to white and not transparent
