@@ -193,4 +193,3 @@ _background_display = tk.Label(master=_window, image=_background, border=0)
 _background_display.place(x=0, y=0)
 _canvas_display = tk.Label(master=_window, image=_canvas, border=0)
 _canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
-

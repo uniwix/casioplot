@@ -56,12 +56,13 @@ def _get_file_from_link(link: str) -> str:
     elif dir == "presets":
         path = os.path.join(PRESETS_DIR, file_name)
     else:
-        raise ValueError(f"default file link must be global/<file_name> or presets/<file_name> not {dir}/<file_name>")
+        raise ValueError(f"Default file link must be 'global/<file_name>' or 'presets/<file_name>' \
+        not '{dir}/<file_name>'")
 
     if os.path.exists(path):
         return path
     else:
-        raise ValueError(f"The config file {path} doesn't exist")
+        raise ValueError(f"The config file '{path}' doesn't exist")
 
 
 def _get_image_path(bg_image_setting: str) -> str:
@@ -76,15 +77,15 @@ def _get_image_path(bg_image_setting: str) -> str:
     elif dir == "bg_images":
         path = os.path.join(BG_IMAGES_DIR, bg_image_name)
     else:
-        raise ValueError(f"the background image setting can't be {bg_image_setting}, it must be:\n\
-            - <image_name> if it is in the same directory as the configs.py file \n\
-            - global/<image_name> if it is the global configs directory \n\
-            - bg_images/<image_name> if it is one of the predefined images")
+        raise ValueError(f"The background image setting can't be '{bg_image_setting}', it must be:\n\
+            - '<image_name>' if it is in the same directory as the configs.py file \n\
+            - 'global/<image_name>' if it is the global configs directory \n\
+            - 'bg_images/<image_name>' if it is one of the predefined images")
 
     if os.path.exists(path):
         return path
     else:
-        raise ValueError(f"The image {path} doesn't exist")
+        raise ValueError(f"The image '{path}' doesn't exist")
 
 
 def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
@@ -132,15 +133,15 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
 
             # does the section exist?
             if section not in _toml_settings:
-                raise ValueError(f"The section [{section}] doesn't exist")
+                raise ValueError(f"The section '[{section}]' doesn't exist")
 
             for setting in toml[section]:
                 # does the setting exist?
                 if setting not in Configuration.__annotations__:
-                    raise ValueError(f"The setting {setting} doesn't exist")
+                    raise ValueError(f"The setting '{setting}' doesn't exist")
                 # is the setting in the correct section?
                 if setting not in _toml_settings[section]:
-                    raise ValueError(f"The setting {setting} doesn't belong to the section {section},\
+                    raise ValueError(f"The setting '{setting}' doesn't belong to the section '[{section}]', \
                     it belongs to another section")
 
 
@@ -187,8 +188,8 @@ def _get_settings() -> Configuration:
 
         # avoids loops
         if link_is_global and not current_link.startswith("presets/"):
-            raise ValueError("A global config file must not have as default file another global config file\
-            , only a preset file like presets/default or presets/fx-CG50")
+            raise ValueError("A global config file must not have as default file another global config file \
+            , only a preset file like 'presets/default' or 'presets/fx-CG50'")
 
     _check_settings(settings)  # avoids runing the package with wrong settings
 
@@ -236,29 +237,29 @@ def _check_settings(config: Configuration) -> None:
     for setting, correct_type in Configuration.__annotations__.items():
         # does it exist?
         if setting not in config:
-            raise ValueError(f"The setting {setting} must have a value attributed")
+            raise ValueError(f"The setting '{setting}' must have a value attributed")
 
         value = config[setting]
 
         # does it have the correct type?
         if not isinstance(value, correct_type):
-            raise ValueError(f"The setting {setting} must be of type {correct_type} \
-            but the value given is of the type {type(value)}")
+            raise ValueError(f"The setting '{setting}' must be of type '{correct_type}' \
+            but the value given is of the type '{type(value)}'")
 
         # does it have a proper value?
         if setting in _settings_checks and not _settings_checks[setting](value):
-            raise ValueError(f"The settings {setting} must {_settings_errors[setting]}")
+            raise ValueError(f"The settings '{setting}' must '{_settings_errors[setting]}'")
 
     # some additional checks in case there is a background image
     if config["bg_image_is_set"] is True:
         if config["left_margin"] + config["right_margin"] >= config["width"]:
             raise ValueError("Invalid settings, the combined values of \
-            left_margin and right_margin must be smaller than the \
+            'left_margin' and 'right_margin' must be smaller than the \
             width of the background image")
 
         if config["top_margin"] + config["bottom_margin"] >= config["height"]:
             raise ValueError("Invalid settings, the combined values of \
-            top_margin and bottom_margin must be smaller than the \
+            'top_margin' and 'bottom_margin' must be smaller than the \
             height of the background image")
 
 
