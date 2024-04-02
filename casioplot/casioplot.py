@@ -37,17 +37,6 @@ def _screen_dimensions() -> tuple[int, int]:
     )
 
 
-# TODO: Takes too much time so needs improvements
-def _coordinates_in_bounds(x: int, y: int) -> bool:
-    """Checks if the given coordinates are in bounds of the canvas
-
-    :param x: x coordinate (from the left to the right)
-    :param y: y coordinate (from the top to the bottom)
-    :return: a bool that says if the given coordinates are in bounds of the canvas
-    """
-    return 0 <= x < _settings["width"] and 0 <= y < _settings["height"]
-
-
 def _save_screen(image_suffix: str = ""):
     """Saves _screen as an image_suffix
 
@@ -157,7 +146,7 @@ def draw_string(
                     set_pixel(x + x2, y + y2, color)
 
     for char in text:
-        if not _coordinates_in_bounds(x, y):
+        if not (0 <= x < _settings["width"] and 0 <= y < _settings["height"]):  # if coordinates aren't in bounds stop
             return
 
         char_map = _get_char(char, size)
