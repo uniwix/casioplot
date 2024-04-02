@@ -1,3 +1,13 @@
+# v3.0.0
+
+## What's Changed
+
+* Changing the window management by @uniwix in https://github.com/uniwix/casioplot/pull/20
+* Changing the settings management by @miguelTorrinhaPereira in https://github.com/uniwix/casioplot/issues/15
+  and https://github.com/uniwix/casioplot/issues/18
+
+**Full Changelog**: https://github.com/uniwix/casioplot/compare/v2.2.1...v3.0.0
+
 # v2.2.1
 
 ## What's Changed
