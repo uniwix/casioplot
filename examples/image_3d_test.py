@@ -1,4 +1,4 @@
-from time import sleep
+from math import pi, sqrt, atan2, cos, sin
 
 from drawing_functions import *
 
@@ -60,4 +60,3 @@ for i in range(1000):
     draw_string(10, 10, "3D Cube", (0, 0, 0))
     draw_cube(i/100, R_3D)
     show_screen()
-    sleep(0.01)

@@ -1,4 +1,4 @@
-"""This file contains the type `configuration`
+"""This file contains the type `configuration` and the type `COLOR`.
 
 This type makes it possible to representing all settings and configs in a dictionary but still
 have type annotations for every settings.
@@ -9,7 +9,7 @@ from typing import TypedDict
 
 # the option `total=False` makes it possible for a configuration
 # to not have a corresponding value for all settings
-class configuration(TypedDict, total=False):
+class Configuration(TypedDict, total=False):
     # canvas size
     width: int  # canvas width in pixels
     height: int  # canvas height in pixels
@@ -36,3 +36,7 @@ class configuration(TypedDict, total=False):
     save_multiple: bool  # save multiple images so that the user can examine better the screen
     save_rate: int  # if save_multiple is True a new image will be saved
     # every `save_rate` times show_screen is called
+
+
+# color type
+Color = tuple[int, int, int]

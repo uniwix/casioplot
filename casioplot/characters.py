@@ -7,6 +7,7 @@ a sort of character map, every string corresonds to a row.
 :py:func:`_get_char` gets the correct character from the dictionarys,
 serves as an interface for casioplot.py to get the characters it needs.
 """
+# TODO: change how characters are drawn to be more efficient and faster
 
 
 large = {

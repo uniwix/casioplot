@@ -31,7 +31,7 @@ def put_pixel(p, color, alpha=1):
     set_pixel(x, y, c)
 
 
-def draw_line(p1, p2, color):
+def draw_aa_line(p1, p2, color):
     """Draws an anti-aliased line in img from p1 to p2 with the given color."""
     x1, y1 = p1
     x2, y2 = p2
@@ -73,3 +73,28 @@ def draw_line(p1, p2, color):
         put_pixel(p(x, y), color, _reverse_f_part(inter_y))
         put_pixel(p(x, y + 1), color, _f_part(inter_y))
         inter_y += grad
+
+
+def draw_line(p1, p2, color):
+    x0, y0, x1, y1 = round(p1[0]), round(p1[1]), round(p2[0]), round(p2[1])
+    dx = abs(x1 - x0)
+    sx = 1 if x0 < x1 else -1
+    dy = -abs(y1 - y0)
+    sy = 1 if y0 < y1 else -1
+    error = dx + dy
+
+    while True:
+        set_pixel(x0, y0, color[:3])
+        if x0 == x1 and y0 == y1:
+            break
+        e2 = 2 * error
+        if e2 >= dy:
+            if x0 == x1:
+                break
+            error = error + dy
+            x0 = x0 + sx
+        if e2 <= dx:
+            if y0 == y1:
+                break
+            error = error + dx
+            y0 = y0 + sy
