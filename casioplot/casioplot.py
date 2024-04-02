@@ -12,6 +12,7 @@ Contains the original functions from the `casioplot` calculator module and the c
 
 import tkinter as tk
 from typing import Literal
+from PIL import Image, ImageTk
 
 from casioplot.characters import _get_char
 from casioplot.settings import _settings
@@ -45,10 +46,22 @@ def _save_screen(image_suffix: str = ""):
     create images with the name `casioplot2.png` for example.
     """
 
-    _canvas.write(
-        _settings["image_name"] + image_suffix + '.' + _settings["image_format"],
-        format=_settings["image_format"],
-    )
+    if settings["bg_image_is_set"] is True:
+        canvas_image: Image.Image = ImageTk.getimage(_canvas)
+        background_image: Image.Image = ImageTk.getimage(_background)
+
+        background_image.paste(canvas_image, (settings["left_margin"], settings["top_margin"]))
+
+        background_image.save(
+            _settings["image_name"] + image_suffix + '.' + _settings["image_format"],
+            format=_settings["image_format"],
+        )
+    else:
+        # the approach used above would save the screen properly, but this is faster
+        _canvas.write(
+            _settings["image_name"] + image_suffix + '.' + _settings["image_format"],
+            format=_settings["image_format"],
+        )
 
 
 # functions for the user
