@@ -35,9 +35,10 @@ def _get_first_config_file() -> str:
         return project_config_file
 
     # 2
-    global_config_files = os.listdir(GLOBAL_DIR)
-    global_config_files.sort()  # makes sure that the files are in alphabetical order
-    if global_config_files == []:
+    if os.path.exists(GLOBAL_DIR) and os.listdir(GLOBAL_DIR) != []:
+        global_config_files = os.listdir(GLOBAL_DIR)
+        global_config_files.sort()  # makes sure that the files are in alphabetical order
+
         for file in global_config_files:
             if os.path.splitext(file)[-1] == ".toml":  # see if it is a toml file
                 return file
@@ -103,7 +104,7 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
             "top_margin",
             "bottom_margin"
         ),
-        "background_image": (
+        "background": (
             "bg_image_is_set",
             "background_image"
         ),
