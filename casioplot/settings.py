@@ -1,7 +1,7 @@
 import os
 import tomllib
 
-from PIL import Image
+from PIL import Image  # Image.open().size is used to know the dimension of the background image
 
 from casioplot.types import Configuration
 
@@ -29,7 +29,7 @@ def _get_first_config_file() -> str:
     """
 
     # 1
-    project_config_file_name = "config.toml"
+    project_config_file_name = "casioplot_config.toml"
     project_config_file = os.path.join(PROJECT_DIR, project_config_file_name)
     if os.path.exists(project_config_file):
         return project_config_file
@@ -89,7 +89,7 @@ def _get_image_path(bg_image_setting: str) -> str:
 def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
     """Gets the configuration and the default file link of a config file from it's path
 
-    Preset configuration files like default.toml have no default file link 
+    Preset configuration files like default.toml have no default file link
     """
 
     _toml_settings = {
@@ -112,7 +112,7 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
         ),
         "saving_screen": (
             "save_screen",
-            "filename",
+            "image_name",
             "image_format",
             "save_multiple",
             "save_rate"

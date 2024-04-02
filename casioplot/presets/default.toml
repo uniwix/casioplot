@@ -1,44 +1,46 @@
 # This is the default configuration file
 
-# Set the size of the canvas where you are able to draw
-# Should not be used if bg_image_is_set is true:
-# it will be automatically set to the size of the background image
-# minus the margins
+# Set the size of the canvas where you are able to draw.
+# Should not be used if bg_image_is_set is true,
+# since it will be automatically set to the size of the background image
+# minus the margins.
 [canvas]
 width = 384
 height = 192
 
-# Set the size of the margind around the canvas
-# Useful if your background image has a border
+# Set the size of the margind around the canvas.
+# Useful if your background image has a border.
 [margins]
 left_margin = 0
 right_margin = 0
 top_margin = 0
 bottom_margin = 0
 
-# Set the background image
+# Set the background image.
 # If your image is in local folder, you must place it in the directory
-# where you run the program
-# You can use ``global/`` prefix to set global images
-# You can use ``bg_images/`` prefix to use preset images
+# where you run the program.
+# You can use ``global/`` prefix to set global images.
+# You can use ``bg_images/`` prefix to use preset images.
+# Include the extencion in the name.
 [background]
 bg_image_is_set = false
 background_image = "bg_images/blanck.png"
 
-# Show the screen with tkinter
+# Show the screen with tkinter.
 [show_screen]
 show_screen = true
 
-# Save the screen in the current directory
-# if save_multiple is set to true, the screen will be saved at each save_rate
-# and file name will be filename + number + '.' + image_format
-# where number is the number of the save
-# if save_multiple is set to false, the screen will be saved at each
-# ``show_screen`` call, overwriting the previous save
-# The file name will be filename + '.' + image_format
+# Save the screen in the current directory.
+# If save_multiple is set to true, the screen will be saved every time
+# show_screen is called save_rate times,
+# and file name will be image_name + number + '.' + image_format
+# where number is the number of the save.
+# If save_multiple is set to false, the screen will be saved at each
+# ``show_screen`` call, overwriting the previous save,
+# the file name will be image_name + '.' + image_format.
 [saving_screen]
 save_screen = false
-filename = "casioplot"
+image_name = "casioplot"
 image_format = "png"
 save_multiple = false
 save_rate = 1

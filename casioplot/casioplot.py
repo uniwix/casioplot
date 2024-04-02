@@ -28,16 +28,13 @@ current_image_number = 1
 
 # functions used by the package
 
-def _canvas_to_screen(x: int, y: int, start_x: int, start_y: int) -> tuple[int, int]:
-    """Converts coordinates to canvas coordinates
 
-    :param x: x coordinate (from the left to the right)
-    :param y: y coordinate (from the top to the bottom)
-    :param start_x: the x coordinate of the top left corner of the canvas
-    :param start_y: the y coordinate of the top left corner of the canvas
-    :return: a tuple with the canvas coordinates
-    """
-    return x + start_x, y + start_y
+def _screen_dimensions() -> tuple[int, int]:
+    """Calculates the dimensions of the screen"""
+    return (
+        _settings["left_margin"] + _settings["width"] + _settings["right_margin"],
+        _settings["top_margin"] + _settings["height"] + _settings["bottom_margin"]
+    )
 
 
 # TODO: Takes too much time so needs improvements
@@ -60,11 +57,13 @@ def _save_screen(image_suffix: str = ""):
     """
 
     _canvas.write(
-        _settings["filename"] + image_suffix + '.' + _settings["image_format"],
+        _settings["image_name"] + image_suffix + '.' + _settings["image_format"],
         format=_settings["image_format"],
     )
 
+
 # functions for the user
+
 
 def show_screen() -> None:
     """Show or saves the virtual screen
@@ -72,7 +71,7 @@ def show_screen() -> None:
     This function implement two modes that can be enabled or disabled using the :py:class:`casioplot_settings`:
       - show the screen as an image, if `show_screen` is True
       - Save the screen to the disk, if `save_screen` in True
-        The image is saved with the filename found in `filename`
+        The image is saved with the image_name found in `image_name`
     """
 
     if _settings["show_screen"] is True:
@@ -104,9 +103,10 @@ def clear_screen() -> None:
 def get_pixel(x: int, y: int) -> Color | None:
     """Get the RGB color of the pixel at the given position.
 
+    Using a try statment is faster than checking if the coordinates are in bounds.
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
-    :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the canvas.
+    :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the canvas
     """
     try:
         return _canvas.get(x, y)
@@ -117,9 +117,10 @@ def get_pixel(x: int, y: int) -> Color | None:
 def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     """Set the RGB color of the pixel at the given position (from top left)
 
+    Using a try statement is faster than checking if the coordinates are in bounds.
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
-    :param color: The pixel color. A tuple that contain 3 integers from 0 to 255.
+    :param color: The pixel color. A tuple that contain 3 integers from 0 to 255
     """
     try:
         _canvas.put(
@@ -143,9 +144,9 @@ def draw_string(
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
     :param text: text that will be drawn
-    :param color: The color of the text. A tuple that contain 3 integers from 0 to 255.
-    :param size: Size of the text. String from the following values: "small", "medium" or "large".
-    :raise ValueError: Raise a ValueError if the size isn't correct.
+    :param color: The color of the text. A tuple that contain 3 integers from 0 to 255
+    :param size: Size of the text. String from the following values: "small", "medium" or "large"
+    :raise ValueError: Raise a ValueError if the size isn't correct
     """
 
     def draw_char() -> None:
@@ -163,15 +164,6 @@ def draw_string(
         draw_char()
         x += len(char_map[0])
 
-
-# functions used only by the package
-
-def _screen_dimensions() -> tuple[int, int]:
-    """Calculates the dimensions of the screen"""
-    return (
-        _settings["left_margin"] + _settings["width"] + _settings["right_margin"],
-        _settings["top_margin"] + _settings["height"] + _settings["bottom_margin"]
-    )
 
 
 # window

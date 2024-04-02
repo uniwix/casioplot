@@ -17,7 +17,7 @@ show_screen = true
 
 [saving_screen]
 save_screen = false
-filename = "casioplot"
+image_name = "casioplot"
 image_format = "png"
 save_multiple = false
 save_rate = 1

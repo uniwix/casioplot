@@ -20,18 +20,18 @@ class Configuration(TypedDict, total=False):
     top_margin: int
     bottom_margin: int
 
-    # background Image
+    # background
     bg_image_is_set: bool  # is used when changing settings, if it is False the background_image
     # will be ignored
     background_image: str  # some configs like casio_graph_90_plus_e
     # have a special background image
 
-    # Output settings
-    show_screen: bool  # Show the screen, do not mistake for the function show_screen()
-    save_screen: bool  # Save the screen as an image
+    # showscreen
+    show_screen: bool  # do not mistake for the function show_screen()
 
-    # Saving settings
-    filename: str
+    # saving_screen
+    save_screen: bool  # Save the screen as an image
+    image_name: str
     image_format: str
     save_multiple: bool  # save multiple images so that the user can examine better the screen
     save_rate: int  # if save_multiple is True a new image will be saved
