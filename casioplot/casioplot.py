@@ -1,6 +1,6 @@
 """Contains all the functions from `casioplot` calculator module.
 
-Available functions:
+Available functions for the user:
   - :py:func:`show_screen`
   - :py:func:`clear_screen`
   - :py:func:`set_pixel`
@@ -12,7 +12,7 @@ Contains the original functions from the `casioplot` calculator module and the c
 
 import tkinter as tk
 from typing import Literal
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk  # used to save the screen
 
 from casioplot.characters import _get_char
 from casioplot.settings import _settings
@@ -31,19 +31,19 @@ current_image_number = 1
 
 
 def _screen_dimensions() -> tuple[int, int]:
-    """Calculates the dimensions of the screen"""
+    """Calculates the dimensions of the screen in pixels"""
     return (
         _settings["left_margin"] + _settings["width"] + _settings["right_margin"],
         _settings["top_margin"] + _settings["height"] + _settings["bottom_margin"]
     )
 
 
-def _save_screen(image_suffix: str = ""):
-    """Saves _screen as an image_suffix
+def _save_screen(image_suffix: str = "") -> None:
+    """Saves the virtual screen as an image
 
     Only used by the function show_screen
     :param image_suffix: If the setting save_multiple is True existes a need to
-    create images with the name `casioplot2.png` for example.
+    create images with the name `casioplot2.png` for example
     """
 
     canvas_image: Image.Image = ImageTk.getimage(_canvas)
@@ -61,16 +61,16 @@ def _save_screen(image_suffix: str = ""):
 
 
 def show_screen() -> None:
-    """Show or saves the virtual screen
+    """Shows or saves the virtual screen
 
-    This function implement two modes that can be enabled or disabled using the :py:class:`casioplot_settings`:
-      - show the screen as an image, if `show_screen` is True
+    This function implement two distinct modes:
+      - show the virtual screen in real time in a tkinter window, if `show_screen` is True
       - Save the screen to the disk, if `save_screen` in True
-        The image is saved with the image_name found in `image_name`
+    This modes are independent and can work at the same time
     """
 
     if _settings["show_screen"] is True:
-        # show the screen
+        # the virtual screen is already updated, the tkinter window just needs to update what it is showing
         _window.update()
 
     if _settings["save_screen"] is True:
@@ -88,7 +88,7 @@ def show_screen() -> None:
 
 
 def clear_screen() -> None:
-    """Clear the virtual screen"""
+    """Clear the canvas, sets every pixel to white"""
     _canvas.put(
         "white",
         to=(0, 0, _settings["width"], _settings["height"])
@@ -96,21 +96,21 @@ def clear_screen() -> None:
 
 
 def get_pixel(x: int, y: int) -> Color | None:
-    """Get the RGB color of the pixel at the given position.
+    """Get the RGB color of the pixel at the given coordinates of the canvas
 
-    Using a try statment is faster than checking if the coordinates are in bounds.
+    Using a try statment is faster than checking if the coordinates are in bounds
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
     :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the canvas
     """
     try:
         return _canvas.get(x, y)
-    except tk.TclError:
+    except tk.TclError:  # the pixel is out of the canvas
         return None
 
 
 def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
-    """Set the RGB color of the pixel at the given position (from top left)
+    """Set the RGB color of the pixel at the given coordinates
 
     Using a try statement is faster than checking if the coordinates are in bounds.
     :param x: x coordinate (from the left)
@@ -122,8 +122,7 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
             "#%02x%02x%02x" % color,  # convert the color (RGB tuple) to a hexadecimal string '#RRGGBB'
             to=(x, y)
         )
-    except tk.TclError:
-        # the pixel is out of the canvas
+    except tk.TclError:  # the pixel is out of the canvas
         pass
 
 

@@ -1,14 +1,29 @@
-# This is the default configuration file
+# This is the default configuration file, if no config file is specified,
+# the package uses this file for settings
+
+# This file doesn't coutain the attribute `default_to` because it is not necessary
+# since there isn't any file to default to, this is defaultiest file!
+# Note that default_to = "" would have the same efect.
+# Every config file can do this, but must have a value for every setting, even the
+# ones that aren't going to be used.
+
+# In any config file it is possible to specified a default file in the following way:
+# - 'global/<file_name>' if it is the global config file.
+# - 'presets/<file_name>' if it is one of the preset files.
+# It is necessary to put the .toml extencion.
+#
+# A config file can only specify files less "custom" that them, 
+# following the following order of "customness" (more custom first) local > global > presets.
 
 # Set the size of the canvas where you are able to draw.
-# Should not be used if bg_image_is_set is true,
+# Should not be used if `bg_image_is_set` is true,
 # since it will be automatically set to the size of the background image
 # minus the margins.
 [canvas]
 width = 384
 height = 192
 
-# Set the size of the margind around the canvas.
+# Set the size of the margin around the canvas.
 # Useful if your background image has a border.
 [margins]
 left_margin = 0
@@ -17,27 +32,29 @@ top_margin = 0
 bottom_margin = 0
 
 # Set the background image.
-# If your image is in local folder, you must place it in the directory
-# where you run the program.
-# You can use ``global/`` prefix to set global images.
-# You can use ``bg_images/`` prefix to use preset images.
+# If `bg_image_is_set` is set to false, the background image is ignored
+# You can select where you image is in the following way:
+# Use `<image_name>` to select local images.
+# Use `global/<image_name>` to select global images.
+# Use `bg_images/<image_name>` to select preset images.
 # Include the extencion in the name.
 [background]
 bg_image_is_set = false
+# use this image if you don't want to have a background image and not use a default file
 background_image = "bg_images/blanck.png"
 
 # Show the screen with tkinter.
-[show_screen]
+[showing_screen]
 show_screen = true
 
 # Save the screen in the current directory.
-# If save_multiple is set to true, the screen will be saved every time
-# show_screen is called save_rate times,
-# and file name will be image_name + number + '.' + image_format
+# If `save_multiple` is set to false, the screen will be saved at each
+# `show_screen` call, overwriting the previous save,
+# the file name will be `image_name` + '.' + `image_format`.
+# If `save_multiple` is set to true, the screen will be saved every time
+# `show_screen` is called `save_rate` times,
+# and file name will be `image_name` + number + '.' + `image_format`
 # where number is the number of the save.
-# If save_multiple is set to false, the screen will be saved at each
-# ``show_screen`` call, overwriting the previous save,
-# the file name will be image_name + '.' + image_format.
 [saving_screen]
 save_screen = false
 image_name = "casioplot"

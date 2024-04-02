@@ -12,7 +12,7 @@ bottom_margin = 10
 bg_image_is_set = true
 background_image = "bg_images/calculator.png"
 
-[show_screen]
+[showing_screen]
 show_screen = true
 
 [saving_screen]

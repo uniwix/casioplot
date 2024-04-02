@@ -1,6 +1,6 @@
-"""This file contains the type `configuration` and the type `COLOR`.
+"""This file contains the type `Configuration` and the type `Color`.
 
-This type makes it possible to representing all settings and configs in a dictionary but still
+The type `Configuration` makes it possible to representing all settings and configs in a dictionary but still
 have type annotations for every settings.
 """
 
@@ -8,7 +8,7 @@ from typing import TypedDict
 
 
 # the option `total=False` makes it possible for a configuration
-# to not have a corresponding value for all settings
+# to not have a value for all settings
 class Configuration(TypedDict, total=False):
     # canvas size
     width: int  # canvas width in pixels
@@ -21,20 +21,19 @@ class Configuration(TypedDict, total=False):
     bottom_margin: int
 
     # background
-    bg_image_is_set: bool  # is used when changing settings, if it is False the background_image
-    # will be ignored
-    background_image: str  # some configs like casio_graph_90_plus_e
+    bg_image_is_set: bool  # if it is False the background_image will be ignored
+    background_image: str  # some config files like `graph_90+e.toml`
     # have a special background image
 
-    # showscreen
-    show_screen: bool  # do not mistake for the function show_screen()
+    # showing_creen
+    show_screen: bool  # do not mistake for the function `show_screen` from `casioplot.py`
 
     # saving_screen
     save_screen: bool  # Save the screen as an image
     image_name: str
-    image_format: str
-    save_multiple: bool  # save multiple images so that the user can examine better the screen
-    save_rate: int  # if save_multiple is True a new image will be saved
+    image_format: str  # should be one of the following image formats: jpeg, jpg, png, gif, bmp, tiff or tif
+    save_multiple: bool  # save multiple images so that the user can examine better the virtual screen
+    save_rate: int  # if `save_multiple is True a new image will be saved`
     # every `save_rate` times show_screen is called
 
 
