@@ -47,16 +47,20 @@ def _get_first_config_file() -> str:
     return os.path.join(PRESETS_DIR, "default.toml")
 
 
-def _get_file_from_link(link: str) -> str:
-    """Translates a default file link into a full path for the file"""
-    dir, file_name = link.split('/')
+def _get_file_from_pointer(pointer: str) -> str:
+    """Translates a default file pointer into a full path for the file"""
+    if "/" not in pointer:
+        raise ValueError("Default file pointer must be 'global/<file_name>' or 'presets/<file_name>' \
+        not '<file_name>'")
+
+    dir, file_name = pointer.split('/')
 
     if dir == "global":
         path = os.path.join(GLOBAL_DIR, file_name)
     elif dir == "presets":
         path = os.path.join(PRESETS_DIR, file_name)
     else:
-        raise ValueError(f"Default file link must be 'global/<file_name>' or 'presets/<file_name>' \
+        raise ValueError(f"Default file pointer must be 'global/<file_name>' or 'presets/<file_name>' \
         not '{dir}/<file_name>'")
 
     if os.path.exists(path):
@@ -89,9 +93,9 @@ def _get_image_path(bg_image_setting: str) -> str:
 
 
 def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
-    """Gets the configuration and the default file link of a config file from it's path
+    """Gets the configuration and the default file pointer of a config file from it's path
 
-    Preset configuration files like default.toml have no default file link
+    Preset configuration files like default.toml have no default file pointer
     """
 
     _toml_settings = {
@@ -153,16 +157,16 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
     check_toml(toml)
 
     if "default_to" in toml:
-        link = toml["default_to"]
+        pointer = toml["default_to"]
     else:
-        link = ""
+        pointer = ""
 
     for section, settings in _toml_settings.items():
         if section in toml:
             for setting in settings:
                 if setting in toml[section]:
                     config[setting] = toml[section][setting]
-    return config, link
+    return config, pointer
 
 
 def _join_configs(config: Configuration, default_config: Configuration) -> Configuration:
@@ -177,17 +181,17 @@ def _join_configs(config: Configuration, default_config: Configuration) -> Confi
 def _get_settings() -> Configuration:
     """Gets the settings from config files"""
     current_config_file = _get_first_config_file()
-    settings, current_link = _get_configuration_from_file(current_config_file)
+    settings, current_pointer = _get_configuration_from_file(current_config_file)
 
-    while current_link != "":
-        link_is_global: bool = current_link.startswith("global/")
+    while current_pointer != "":
+        pointer_is_global: bool = current_pointer.startswith("global/")
 
-        current_config_file = _get_file_from_link(current_link)
-        default_config, current_link = _get_configuration_from_file(current_config_file)
+        current_config_file = _get_file_from_pointer(current_pointer)
+        default_config, current_pointer = _get_configuration_from_file(current_config_file)
         settings = _join_configs(settings, default_config)
 
         # avoids loops
-        if link_is_global and not current_link.startswith("presets/"):
+        if pointer_is_global and not current_pointer.startswith("presets/"):
             raise ValueError("A global config file must not have as default file another global config file \
             , only a preset file like 'presets/default' or 'presets/fx-CG50'")
 
