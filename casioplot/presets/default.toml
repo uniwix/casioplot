@@ -20,16 +20,16 @@
 # since it will be automatically set to the size of the background image
 # minus the margins.
 [canvas]
-width = 384
-height = 192
+width = 400
+height = 200
 
 # Set the size of the margin around the canvas.
 # Useful if your background image has a border.
 [margins]
-left_margin = 0
-right_margin = 0
-top_margin = 0
-bottom_margin = 0
+left_margin = 5
+right_margin = 5
+top_margin = 5
+bottom_margin = 5
 
 # Set the background image.
 # If `bg_image_is_set` is set to false, the background image is ignored

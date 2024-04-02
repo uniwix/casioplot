@@ -1,12 +1,16 @@
-Casioplot for computer
+Casioplot for computers
 ======================
 
-    Module ``casioplot`` from Casio calculator for Computer.
+    Module ``casioplot`` from Casio calculator for Computers.
 
-This can help to develop python programs in your computer and run it before put it in your calculator.
+This can help to develop python programs in your computer and run it before you put it in your calculator.
+Due to it's customazibility, this package can also be used as simple way to draw at a pixel level.
 
-.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/rectangle.png
-    :alt: A red rectangle
+.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/colours.png
+    :alt: A colorfull image
+
+.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/3D_cube.png
+    :alt: A 3D cube
 
 Installation
 ------------
@@ -50,7 +54,7 @@ Draw a single pixel
     (255, 0, 0)
 
 For more examples and usage, please refer to the `Docs <https://casioplot.readthedocs.io/en/latest/>`_.
-There is also a demostration of the package in the folder `demo <https://raw.githubusercontent.com/uniwix/casioplot/master/demo>`_.
+There is also a demostration of the package in the folder `demo <https://github.com/uniwix/casioplot/tree/master/demo>`_.
 
 Development setup
 -----------------
