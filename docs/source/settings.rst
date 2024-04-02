@@ -17,7 +17,7 @@ placing a toml file in the ``~/.config/casioplot/`` directory.
 Available settings
 ------------------
 
-.. literalinclude :: <../../casioplot/presets/default.toml>
+.. literalinclude :: <presets/default.toml>
 :language: toml
 
 
@@ -31,7 +31,7 @@ that we made, you need to prefix the path with ``preset/``.
 
 Here is a example of how to use a preset:
 
-..code-block:: toml
+.. code-block:: toml
 
     config_to = "preset/fx-CG50.toml"
 
