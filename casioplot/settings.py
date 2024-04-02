@@ -120,10 +120,36 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
         )
     }
 
+
+    def check_toml(toml: dict) -> None:
+        """cheks for wrong settings and section in the toml
+
+        chek_settings doesn't nottice this type of error because _get_configuration_from_file doesn't read them
+        """
+        for section in toml:
+            if section == "default_to":  # default_to isn't a section
+                continue
+
+            # does the section exist?
+            if section not in _toml_settings:
+                raise ValueError(f"The section [{section}] doesn't exist")
+
+            for setting in section:
+                # does the setting exist?
+                if setting not in Configuration.__annotations__:
+                    raise ValueError(f"The setting {setting} doesn't exist")
+                # is the setting in the correct section?
+                if setting not in _toml_settings["section"]:
+                    raise ValueError(f"The setting {setting} doesn't belong to the section {section},\
+                    it belongs to another section")
+
+
     config = Configuration()
 
     with open(file_path, "rb") as toml_file:
         toml = tomllib.load(toml_file)
+
+    check_toml(toml)
 
     if "default_to" in toml:
         link = toml["default_to"]
@@ -218,6 +244,7 @@ def _check_settings(config: Configuration) -> None:
         if not isinstance(value, correct_type):
             raise ValueError(f"The setting {setting} must be of type {correct_type} \
             but the value given is of the type {type(value)}")
+
         # does it have a proper value?
         if setting in _settings_checks and not _settings_checks[setting](value):
             raise ValueError(f"The settings {setting} must {_settings_errors[setting]}")
