@@ -35,44 +35,22 @@ Draw a single pixel
 
     from casioplot import *
 
+    print(get_pixel(10, 10))
     red = (255, 0, 0)
     set_pixel(10, 10, red)
+    print(get_pixel(10, 10))
     show_screen()  # Don't forget to show the screen to see the result.
 
 .. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/pixel.png
     :alt: A single pixel on the screen
 
+.. code-block:: txt
+
+    (255, 255, 255)
+    (255, 0, 0)
+
 For more examples and usage, please refer to the `Docs <https://casioplot.readthedocs.io/en/latest/>`_.
-
-Notes on performance
---------------------
-
-The performance you get in the computer is not representative of the performance on the calculatores.
-Keep in mind the following differences:
-
-* Obviously ever operation that isn't from the casioplot package is going to be faster in the Computer
-* clear_screen, set_pixel, get_pixel and draw_string are faster in the computer
-* show_screen is slower in the computer
-
-For example, the following codes draw a black square of 100 by 100 pixels.
-
-.. code-block:: python3
-
-    for x in range(100):
-        for y in range(100):
-            set_pixel(x, y)
-    show_screen()
-
-Is faster on the computer, but
-
-.. code-block:: python3
-
-    for x in range(100):
-        for y in range(100):
-            set_pixel(x, y)
-            show_screen()
-
-Is slower.
+There is also a demostration of the package in the folder `demo <https://raw.githubusercontent.com/uniwix/casioplot/master/demo>`_.
 
 Development setup
 -----------------
