@@ -8,7 +8,7 @@ right_margin = 8
 top_margin = 26
 bottom_margin = 10
 
-[background_image]
+[background]
 bg_image_is_set = true
 background_image = "bg_images/calculator.png"
 

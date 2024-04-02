@@ -76,7 +76,7 @@ def _get_image_path(bg_image_setting: str) -> str:
     elif dir == "bg_images":
         path = os.path.join(BG_IMAGES_DIR, bg_image_name)
     else:
-        raise ValueError(f"the background image setting can't be {bg_image_setting}, it must be:\
+        raise ValueError(f"the background image setting can't be {bg_image_setting}, it must be:\n\
             - <image_name> if it is in the same directory as the configs.py file \n\
             - global/<image_name> if it is the global configs directory \n\
             - bg_images/<image_name> if it is one of the predefined images")
@@ -162,7 +162,7 @@ def _get_settings() -> Configuration:
         # avoids loops
         if link_is_global and not current_link.startswith("presets/"):
             raise ValueError("A global config file must not have as default file another global config file\
-                , only a preset file like presets/default or presets/fx-CG50")
+            , only a preset file like presets/default or presets/fx-CG50")
 
     _check_settings(settings)  # avoids runing the package with wrong settings
 
@@ -217,7 +217,7 @@ def _check_settings(config: Configuration) -> None:
         # does it have the correct type?
         if not isinstance(value, correct_type):
             raise ValueError(f"The setting {setting} must be of type {correct_type} \
-                but the value given is of the type {type(value)}")
+            but the value given is of the type {type(value)}")
         # does it have a proper value?
         if setting in _settings_checks and not _settings_checks[setting](value):
             raise ValueError(f"The settings {setting} must {_settings_errors[setting]}")
@@ -226,13 +226,13 @@ def _check_settings(config: Configuration) -> None:
     if config["bg_image_is_set"] is True:
         if config["left_margin"] + config["right_margin"] >= config["width"]:
             raise ValueError("Invalid settings, the combined values of \
-                left_margin and right_margin must be smaller than the \
-                width of the background image")
+            left_margin and right_margin must be smaller than the \
+            width of the background image")
 
         if config["top_margin"] + config["bottom_margin"] >= config["height"]:
             raise ValueError("Invalid settings, the combined values of \
-                top_margin and bottom_margin must be smaller than the \
-                height of the background image")
+            top_margin and bottom_margin must be smaller than the \
+            height of the background image")
 
 
 _settings: Configuration = _get_settings()
