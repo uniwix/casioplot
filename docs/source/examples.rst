@@ -18,7 +18,7 @@ Draw a pixel
 Result:
 ~~~~~~~
 
-.. image:: pixel.png
+.. image:: images/pixel.png
     :alt: A single pixel on the screen
 
 Draw a rectangle

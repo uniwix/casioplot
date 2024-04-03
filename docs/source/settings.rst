@@ -19,7 +19,7 @@ When the package starts it searches for a config file, in the following order:
 You must create the folder ``~/.config/casioplot`` first to use global config files.
 
 Available presets
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 The package comes with 4 preset files, `default.toml`, `fx-CG50.toml`, `fx-CG50_AU` and `graph_90+e.toml`.
 `fx-CG50.toml`, `fx-CG50_AU` and `graph_90+e.toml` have the exact same settings, the only reasson they are three instead of one is for better user experience.
