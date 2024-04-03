@@ -92,6 +92,5 @@ Graph 90+e
 
 The blank screen will look like, for all of theses presets:
 
-.. image::
-   ../../casioplot/images/calculator.png?raw=true
+.. image:: images/calculator.png
    :alt: Empty calculator screen
