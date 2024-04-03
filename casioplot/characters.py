@@ -1,10 +1,10 @@
-"""Contains every character in the three sizes, small, medium and large and the function `_get_char`
+"""Contains every character in the three sizes, small, medium and large and the function :py:func:`_get_char`
 
 It's main function is to store all the character maps.
 
 Every size has it's one dictionary there is a key for every character
 and the values are tuples of strings that represent the character in
-a sort of character map, every string corresonds to a row. An X means that
+a sort of character map, every string corresponds to a row. An X means that
 the pixel should be set and a space that the pixel should stay as it is.
 """
 
@@ -5348,13 +5348,15 @@ _size_to_dict = {"small": small, "medium": medium, "large": large}
 def _get_char(char: str, size: str = "medium") -> tuple:
     """Gets the char_map of a character in a given size
 
-    Gets the character from the dictionarys,
-    serves as an interface for `casioplot.py` to get the characters it needs
+    Gets the character from the dictionaries,
+    serves as an interface for :file:`casioplot.py` to get the characters it needs
+
     :param char: The character
     :param size: The size of the character
     :return: A tuple of string that represent the character
+    :raises ValueError: If the character is not implemented for the given size
     """
-    if char not in small.keys():
-        raise ValueError(f"Character '{char}' not implemented")
+    if char not in _size_to_dict[size].keys():
+        raise ValueError(f"Character '{char}' not implemented for size {size}")
 
     return _size_to_dict[size][char]

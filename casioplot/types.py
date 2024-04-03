@@ -1,13 +1,13 @@
-"""This file contains the type `Configuration` and the type `Color`.
+"""This file contains the type :py:class:`Configuration` and the type :py:class:`Color`.
 
-The type `Configuration` makes it possible to representing all settings and configs in a dictionary but still
-have type annotations for every settings.
+The type :py:class:`Configuration` makes it possible to representing all settings and configs in a dictionary but still
+have type annotations for every setting.
 """
 
 from typing import TypedDict
 
 
-# the option `total=False` makes it possible for a configuration
+# the option :python:`total=False` makes it possible for a configuration
 # to not have a value for all settings
 class Configuration(TypedDict, total=False):
     # canvas size
@@ -25,7 +25,7 @@ class Configuration(TypedDict, total=False):
     background_image: str  # some config files like `graph_90+e.toml`
     # have a special background image
 
-    # showing_creen
+    # showing_screen
     show_screen: bool  # do not mistake for the function `show_screen` from `casioplot.py`
 
     # saving_screen

@@ -1,4 +1,4 @@
-"""Contains all the functions from `casioplot` calculator module.
+"""Contains all the functions from :py:mod:`casioplot` calculator module.
 
 Available functions for the user:
   - :py:func:`show_screen`
@@ -7,11 +7,13 @@ Available functions for the user:
   - :py:func:`get_pixel`
   - :py:func:`draw_string`
 
-Contains the original functions from the `casioplot` calculator module and the code needed to emulate the screen.
+Contains the original functions from the :py:mod:`casioplot` calculator module
+and the code needed to emulate the screen.
 """
 
 import tkinter as tk
 from typing import Literal
+
 from PIL import Image, ImageTk  # used to save the screen
 
 from casioplot.characters import _get_char
@@ -41,9 +43,9 @@ def _screen_dimensions() -> tuple[int, int]:
 def _save_screen(image_suffix: str = "") -> None:
     """Saves the virtual screen as an image
 
-    Only used by the function show_screen
-    :param image_suffix: If the setting save_multiple is True existes a need to
-    create images with the name `casioplot2.png` for example
+    Only used by the function :py:func:`show_screen`
+    :param image_suffix: The setting ``save_multiple`` is True needs to
+                         create images with the name :file:`casioplot2.png` for example
     """
 
     canvas_image: Image.Image = ImageTk.getimage(_canvas)
@@ -64,9 +66,11 @@ def show_screen() -> None:
     """Shows or saves the virtual screen
 
     This function implement two distinct modes:
-      - show the virtual screen in real time in a tkinter window, if `show_screen` is True
-      - Save the screen to the disk, if `save_screen` in True
-    This modes are independent and can work at the same time
+
+      - show the virtual screen in real time in a tkinter window, if ``show_screen`` is True
+      - Save the screen to the disk, if ``save_screen`` in True
+
+    These modes are independent and can work at the same time
     """
 
     if _settings["show_screen"] is True:
@@ -98,7 +102,8 @@ def clear_screen() -> None:
 def get_pixel(x: int, y: int) -> Color | None:
     """Get the RGB color of the pixel at the given coordinates of the canvas
 
-    Using a try statment is faster than checking if the coordinates are in bounds
+    Using a try statement is faster than checking if the coordinates are in bounds
+
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
     :return: The pixel color. A tuple that contain 3 integers from 0 to 255 or None if the pixel is out of the canvas
@@ -113,6 +118,7 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     """Set the RGB color of the pixel at the given coordinates
 
     Using a try statement is faster than checking if the coordinates are in bounds.
+
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255
@@ -139,8 +145,9 @@ def draw_string(
     :param y: y coordinate (from the top)
     :param text: text that will be drawn
     :param color: The color of the text. A tuple that contain 3 integers from 0 to 255
-    :param size: Size of the text. String from the following values: "small", "medium" or "large"
-    :raise ValueError: Raise a ValueError if the size isn't correct
+    :param size: Size of the text.
+                 String from the following values: :python:`"small"`, :python:`"medium"` or :python:`"large"`
+    :raise ValueError: Raise a :py:exc:`ValueError` if the size isn't correct
     """
 
     def draw_char() -> None:
@@ -157,7 +164,6 @@ def draw_string(
         char_map = _get_char(char, size)
         draw_char()
         x += len(char_map[0])
-
 
 
 # window

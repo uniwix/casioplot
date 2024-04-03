@@ -7,7 +7,7 @@
 # Every config file can do this, but must have a value for every setting, even the
 # ones that aren't going to be used.
 
-# In any config file it is possible to specified a default file in the following way:
+# In any config file it is possible to specify a default file in the following way:
 # - 'global/<file_name>' if it is the global config file.
 # - 'presets/<file_name>' if it is one of the preset files.
 # It is necessary to put the .toml extencion.
@@ -37,7 +37,7 @@ bottom_margin = 5
 # Use `<image_name>` to select local images.
 # Use `global/<image_name>` to select global images.
 # Use `bg_images/<image_name>` to select preset images.
-# Include the extencion in the name.
+# Include the extension in the name.
 [background]
 bg_image_is_set = false
 # use this image if you don't want to have a background image and not use a default file

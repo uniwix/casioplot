@@ -25,7 +25,7 @@ Presets
 -------
 
 You can use a preset by specifying the path of the preset in the
-``config_to`` key in the toml file. If you want to use a global preset,
+``default_to`` key in the toml file. If you want to use a global preset,
 you need to prefix the path with ``global/``. If you want to use a preset
 that we made, you need to prefix the path with ``preset/``.
 
@@ -33,7 +33,7 @@ Here is a example of how to use a preset:
 
 .. code-block:: toml
 
-   config_to = "preset/fx-CG50.toml"
+   default_to = "preset/fx-CG50.toml"
 
    # enable saving the screen
    [saving_screen]
@@ -45,7 +45,7 @@ However, the ``save_screen`` setting will be set to ``true``
 in order to save an image of the screen.
 
 By default, no preset is loaded. You can load a preset by setting
-the ``config_to`` key in the toml file, without any other settings
+the ``default_to`` key in the toml file, without any other settings
 to use any preset.
 
 
