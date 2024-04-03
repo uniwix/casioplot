@@ -25,7 +25,7 @@ keywords = ["casioplot"]
 dependencies = [
     "Pillow",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 
 [project.urls]
 Homepage = "https://github.com/uniwix/casioplot"

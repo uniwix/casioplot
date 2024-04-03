@@ -19,7 +19,7 @@ Installation
 
     pip install casioplot
 
-This module use python 3.10.0.
+This module use python 3.11.
 
 Need the module ``Pillow`` to work.
 

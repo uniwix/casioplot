@@ -4,7 +4,7 @@ Examples
 Draw a pixel
 ------------
 
-.. code-block:: python
+.. code-block:: python3
 
     from casioplot import *
 
@@ -21,7 +21,7 @@ Result:
 Draw a rectangle
 ----------------
 
-.. code-block:: python
+.. code-block:: python3
 
     from casioplot import *
 
@@ -47,7 +47,7 @@ Result:
 Get a pixel value
 -----------------
 
-.. code-block:: python
+.. code-block:: python3
 
     from casioplot import *
 
@@ -85,4 +85,4 @@ Note that you don't need to show the screen to get the color of a pixel.
 More
 ----
 
-You can find more examples in the ``demo`` directory in the source code.
+You can find more examples in the :file:`demo` directory in the source code.

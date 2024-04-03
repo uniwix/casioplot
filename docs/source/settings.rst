@@ -1,3 +1,6 @@
+.. role:: toml(code)
+   :language: toml
+
 Settings
 ========
 
@@ -10,9 +13,9 @@ How to set a setting
 --------------------
 
 To set a setting, or use a preset, you must place the setting in a toml file. The file
-must be named ``config.toml`` and must be placed in the directory
+must be named :file:`casioplot_config.toml` and must be placed in the directory
 where the script is executed. You can also set global settings to all your projects by
-placing a toml file in the ``~/.config/casioplot/`` directory.
+placing a toml file in the :file:`~/.config/casioplot/` directory.
 
 Available settings
 ------------------
@@ -25,9 +28,9 @@ Presets
 -------
 
 You can use a preset by specifying the path of the preset in the
-``default_to`` key in the toml file. If you want to use a global preset,
-you need to prefix the path with ``global/``. If you want to use a preset
-that we made, you need to prefix the path with ``preset/``.
+:toml:`default_to` key in the toml file. If you want to use a global preset,
+you need to prefix the path with :file:`global/`. If you want to use a preset
+that we made, you need to prefix the path with :file:`preset/`.
 
 Here is a example of how to use a preset:
 
@@ -41,11 +44,11 @@ Here is a example of how to use a preset:
 
 This will use the preset for the **CASIO fx-CG50** calculator,
 which mean all the settings will be inherited from this file.
-However, the ``save_screen`` setting will be set to ``true``
+However, the :toml:`save_screen` setting will be set to :toml:`true`
 in order to save an image of the screen.
 
 By default, no preset is loaded. You can load a preset by setting
-the ``default_to`` key in the toml file, without any other settings
+the :toml:`default_to` key in the toml file, without any other settings
 to use any preset.
 
 

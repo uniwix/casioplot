@@ -12,7 +12,7 @@ Installation
 Requirements
 ------------
 
-This module use python 3.10.0.
+This module use python 3.11.
 
 Need the module :py:mod:`Pillow` to work.
 
