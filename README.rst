@@ -64,7 +64,7 @@ Nothing needed.
 Release history
 ---------------
 
-See `CHANGELOG.md <https://github.com/uniwix/casioplot/blob/master/CHANGELOG.md>`_.
+See `Github release page <https://github.com/uniwix/casioplot/releases>`_.
 
 Meta
 ----
