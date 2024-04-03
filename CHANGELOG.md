@@ -42,7 +42,7 @@ For the latest version of the changelog, see the [GitHub release page](https://g
 * Fixed imports by @uniwix in https://github.com/uniwix/casioplot/issues/5
 * Added support for the calculators fx-CG50 and fx-CG50 AU by @miguelTorrinhaPereira
   in https://github.com/uniwix/casioplot/pull/6
-* Changed example `image_3d_test.py`
+* Changed example ``image_3d_test.py``
 
 **Full Changelog**: https://github.com/uniwix/casioplot/compare/v2.1.0...v2.1.1
 

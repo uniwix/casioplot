@@ -21,13 +21,13 @@ You must create the folder ``~/.config/casioplot`` first to use global config fi
 Available presets
 ~~~~~~~~~~~~~~~~~
 
-The package comes with 4 preset files, `default.toml`, `fx-CG50.toml`, `fx-CG50_AU` and `graph_90+e.toml`.
-`fx-CG50.toml`, `fx-CG50_AU` and `graph_90+e.toml` have the exact same settings, the only reasson they are three instead of one is for better user experience.
+The package comes with 4 preset files, ``default.toml``, ``fx-CG50.toml``, ``fx-CG50_AU`` and ``graph_90+e.toml``.
+``fx-CG50.toml``, ``fx-CG50_AU`` and ``graph_90+e.toml`` have the exact same settings, the only reasson they are three instead of one is for better user experience.
 Presets shoudn't be modified by the user.
 
 ``default.toml``:
 
- .. image:: images/default.png
+.. image:: images/default.png
     :alt: A completly white image
 
 Calculator presets:
@@ -43,19 +43,14 @@ Keep in mind this hierarchy that the package uses to search for config files, lo
 Default to file
 ---------------
 
-A config file may have the key `default_to`, this key is used to indicate a default to file.
+A config file may have the key ``default_to``, this key is used to indicate a default to file.
 If a settings is missing from a config file and that same settings is set in the default to file that setting will be set to the value of the default to file.
 A config file must only have as default file a config file less custom then tham. So a local file can have a global or a preset, but a global can only have a preset file as default file.
 
 A local config file may specify a global one that specifies a preset, creating a chain. Image that there are only 4 settings, a chain could work like this:
 
-preset file                global file                     local file                      final settings
-casioplot/presets/         ~/.config/casioplot/            myproject/
-
-setting1                   setting1                        setting1  ------------------->  setting1
-setting2                   setting2  --------------------------------------------------->  setting2
-setting3  ------------------------------------------------------------------------------>  setting3
-setting4                                                   setting4  ------------------->  setting4
+.. image:: images/config_files_example.png
+   :alt: A example of how the config files work
 
 We strongly recommend you to set default_to to a preset file in your config file. 
 This will ensure that all the settings are set, so you don't get any errors when running your programs.
@@ -66,7 +61,7 @@ default_to key
 To specify a default to file you can use the following syntax:
 - global file: "global/<file_name>"
 - preset file: "presets/<file_name>"
-You must include the `.toml` file extencion.
+You must include the ``.toml`` file extencion.
 
 So, for example, to specify your global file named "my_global_config1.toml" do the following:
 
@@ -75,14 +70,14 @@ So, for example, to specify your global file named "my_global_config1.toml" do t
    # myproject/casioplot_config.toml
    default_to = "global/my_global_config1.toml"
 
-Or to specify the preset `fx-CG50.toml` file:
+Or to specify the preset ``fx-CG50.toml`` file:
 
 .. code-block:: toml
 
    # ~/.config/casioplot/my_global_config1.toml
    default_to = "presets/fx-CG50.toml"
 
-If you were to create this two file and run a program in the myproject/ directory it would have the settings of `fx-CG50.toml`.
+If you were to create this two file and run a program in the myproject/ directory it would have the settings of ``fx-CG50.toml``.
 
 
 If default_to is set to "" or isn't set there will be no default to file. If you set default_to to "" on a global file, you need to make sure that all settings are set at least once.
