@@ -78,7 +78,7 @@ Get a pixel value
 Result:
 ~~~~~~~
 
-.. code-block:: txt
+.. code-block:: text
 
     Red:   255
     Green: 0
