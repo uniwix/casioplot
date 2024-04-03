@@ -37,5 +37,6 @@ class Configuration(TypedDict, total=False):
     # every `save_rate` times show_screen is called
 
 
-# color type
 Color = tuple[int, int, int]
+"""A color is represented as a tuple of three integers, each integer is in the range [0, 255] and represents the
+intensity of the color in the red, green and blue channels respectively."""

@@ -2385,7 +2385,10 @@ large = {
         "                  ",
     ),
 }
+"""The large font dictionary. This dictionary contains the large font characters.
 
+:meta hide-value:
+"""
 
 
 medium = {
@@ -4195,7 +4198,10 @@ medium = {
         "            ",
     ),
 }
+"""The medium font dictionary. This dictionary contains the medium font characters.
 
+:meta hide-value:
+"""
 
 
 small = {
@@ -5340,9 +5346,17 @@ small = {
         "        ",
     ),
 }
+"""The small font dictionary. This dictionary contains the small font characters.
+
+:meta hide-value:
+"""
 
 
 _size_to_dict = {"small": small, "medium": medium, "large": large}
+"""A dictionary that maps the size of the font to the font dictionary
+
+:meta hide-value:
+"""
 
 
 def _get_char(char: str, size: str = "medium") -> tuple:

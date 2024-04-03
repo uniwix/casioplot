@@ -299,3 +299,7 @@ def _check_settings(config: Configuration) -> None:
 
 
 _settings: Configuration = _get_settings()
+"""The settings used by the package
+
+:meta hide-value:
+"""

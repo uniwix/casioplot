@@ -21,12 +21,17 @@ from casioplot.settings import _settings
 from casioplot.types import Color
 
 # some frequently used colors
-_WHITE: Color = (255, 255, 255)  # RGB white
-_BLACK: Color = (0, 0, 0)  # RGBA black
+_WHITE: Color = (255, 255, 255)
+"""RGB white"""
+
+_BLACK: Color = (0, 0, 0)
+"""RGB black"""
 
 # these two are only used if the setting save_multiple is set to True
 save_screen_counter = 0
+"""Counter used to save multiple images of the screen"""
 current_image_number = 1
+"""The number of the current image that is being saved"""
 
 
 # functions used by the package
@@ -170,6 +175,11 @@ def draw_string(
 # window
 try:
     _window = tk.Tk()
+    """The tkinter window that shows the virtual screen
+
+    :meta hide-value:
+    """
+
     if _settings["show_screen"] is True:
         _window.geometry("{}x{}".format(*_screen_dimensions()))
 
@@ -183,10 +193,18 @@ try:
     # screen
 
     _canvas = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
+    """The virtual screen that the user can interact with using the functions from this module
+    
+    :meta hide-value:
+    """
     clear_screen()  # ensures the pixels are set to white and not transparent
 
     if _settings["bg_image_is_set"] is True:
         _background = tk.PhotoImage(file=_settings["background_image"])
+        """The background image that is shown behind the virtual screen
+        
+        :meta hide-value:
+        """
     else:
         bg_width, bg_height = _screen_dimensions()
         _background = tk.PhotoImage(width=bg_width, height=bg_height)
@@ -196,8 +214,16 @@ try:
         )
 
     _background_display = tk.Label(master=_window, image=_background, border=0)
+    """The tkinter label that shows the background image
+    
+    :meta hide-value:
+    """
     _background_display.place(x=0, y=0)
     _canvas_display = tk.Label(master=_window, image=_canvas, border=0)
+    """The tkinter label that shows the virtual screen
+    
+    :meta hide-value:
+    """
     _canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
 except tk.TclError:
     print("The tkinter window couldn't be created. The screen won't be shown.")
