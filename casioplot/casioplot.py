@@ -167,34 +167,36 @@ def draw_string(
 
 
 # window
+try:
+    _window = tk.Tk()
+    if _settings["show_screen"] is True:
+        _window.geometry("{}x{}".format(*_screen_dimensions()))
 
-_window = tk.Tk()
-if _settings["show_screen"] is True:
-    _window.geometry("{}x{}".format(*_screen_dimensions()))
+        _window.grab_release()
+        _window.title("casioplot")
+        _window.attributes("-topmost", True)
+        _window.resizable(False, False)
+    else:
+        _window.withdraw()
 
-    _window.grab_release()
-    _window.title("casioplot")
-    _window.attributes("-topmost", True)
-    _window.resizable(False, False)
-else:
-    _window.withdraw()
+    # screen
 
-# screen
+    _canvas = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
+    clear_screen()  # ensures the pixels are set to white and not transparent
 
-_canvas = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
-clear_screen()  # ensures the pixels are set to white and not transparent
+    if _settings["bg_image_is_set"] is True:
+        _background = tk.PhotoImage(file=_settings["background_image"])
+    else:
+        bg_width, bg_height = _screen_dimensions()
+        _background = tk.PhotoImage(width=bg_width, height=bg_height)
+        _background.put(  # same as clear_screen but for the background image
+            "white",
+            to=(0, 0, bg_width, bg_height)
+        )
 
-if _settings["bg_image_is_set"] is True:
-    _background = tk.PhotoImage(file=_settings["background_image"])
-else:
-    bg_width, bg_height = _screen_dimensions()
-    _background = tk.PhotoImage(width=bg_width, height=bg_height)
-    _background.put(  # same as clear_screen but for the background image
-        "white",
-        to=(0, 0, bg_width, bg_height)
-    )
-
-_background_display = tk.Label(master=_window, image=_background, border=0)
-_background_display.place(x=0, y=0)
-_canvas_display = tk.Label(master=_window, image=_canvas, border=0)
-_canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
+    _background_display = tk.Label(master=_window, image=_background, border=0)
+    _background_display.place(x=0, y=0)
+    _canvas_display = tk.Label(master=_window, image=_canvas, border=0)
+    _canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
+except tk.TclError:
+    print("The tkinter window couldn't be created. The screen won't be shown.")

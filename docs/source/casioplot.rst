@@ -7,4 +7,6 @@ Documentation
 .. automodule:: casioplot
    :members:
    :undoc-members:
+   :private-members:
+   :imported-members:
    :show-inheritance:
