@@ -70,6 +70,7 @@ Meta
 ----
 
 Uniwix - `uniwixu@gmail.com <uniwixu@gmail.com>`_
+
 MiguelTorrinhaPereira - `miguel.torrinha.pereira+github@gmail.com <miguel.torrinha.pereira+github@gmail.com>`_
 
 Distributed under the MIT license. See `LICENSE <https://github.com/uniwix/casioplot/blob/master/LICENSE>`_ for more information.
@@ -86,4 +87,4 @@ Contributing
 5. Create a new Pull Request
 
 
-v 3.1.2 - Uniwix
+v 3.1.3 - Uniwix
