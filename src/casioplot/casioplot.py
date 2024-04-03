@@ -15,7 +15,6 @@ import tkinter as tk
 from typing import Literal
 
 from PIL import Image, ImageTk  # used to save the screen
-
 from casioplot.characters import _get_char
 from casioplot.settings import _settings
 from casioplot.types import Color

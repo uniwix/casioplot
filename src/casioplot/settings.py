@@ -12,7 +12,6 @@ import os
 import tomllib
 
 from PIL import Image  # Image.open().size is used to know the dimension of the background image
-
 from casioplot.types import Configuration
 
 PROJECT_DIR = os.getcwd()
