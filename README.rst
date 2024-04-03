@@ -1,7 +1,7 @@
 Casioplot for computers
 =======================
 
-    Module ``casioplot`` from Casio calculator for Computers.
+Module ``casioplot`` from Casio calculator for Computers.
 
 This can help to develop python programs in your computer and run it before you put it in your calculator.
 Due to it's customization ability, this package can also be used as simple way to draw at a pixel level.
