@@ -17,8 +17,8 @@ placing a toml file in the ``~/.config/casioplot/`` directory.
 Available settings
 ------------------
 
-.. literalinclude :: <presets/default.toml>
-:language: toml
+.. literalinclude:: <presets/default.toml>
+   :language: toml
 
 
 Presets
@@ -33,11 +33,11 @@ Here is a example of how to use a preset:
 
 .. code-block:: toml
 
-    config_to = "preset/fx-CG50.toml"
+   config_to = "preset/fx-CG50.toml"
 
-    # enable saving the screen
-    [saving_screen]
-    save_screen = true
+   # enable saving the screen
+   [saving_screen]
+   save_screen = true
 
 This will use the preset for the **CASIO fx-CG50** calculator,
 which mean all the settings will be inherited from this file.
@@ -59,7 +59,7 @@ when running the script.
 
 .. code-block:: toml
 
-    config_to = "preset/default.toml"
+   default_to = "preset/default.toml"
 
 Default settings for the calculator **fx-CG50**, **fx-CG50 AU** and **Graph 90+e**
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,25 +73,25 @@ fx-CG50
 
 .. code-block:: toml
 
-    config_to = "preset/fx-CG50.toml"
+   default_to = "preset/fx-CG50.toml"
 
 fx-CG50 AU
 ^^^^^^^^^^
 
 .. code-block:: toml
 
-    config_to = "preset/fx-CG50_AU.toml"
+   default_to = "preset/fx-CG50_AU.toml"
 
 Graph 90+e
 ^^^^^^^^^^
 
 .. code-block:: toml
 
-    config_to = "preset/graph_90+e.toml"
+   default_to = "preset/graph_90+e.toml"
 
 
 The blank screen will look like, for all of theses presets:
 
 .. image::
-    https://github.com/uniwix/casioplot/blob/master/casioplot/images/calculator.png?raw=true
-    :alt: Empty calculator screen
+   https://github.com/uniwix/casioplot/blob/master/casioplot/images/calculator.png?raw=true
+   :alt: Empty calculator screen
