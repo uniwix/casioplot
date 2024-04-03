@@ -70,6 +70,7 @@ Meta
 ----
 
 Uniwix - `uniwixu@gmail.com <uniwixu@gmail.com>`_
+MiguelTorrinhaPereira - `miguel.torrinha.pereira+github@gmail.com <miguel.torrinha.pereira+github@gmail.com>`_
 
 Miguel Torrinha Pereira - `miguel.torrinha.pereira+pypi@gmail.com <miguel.torrinha.pereira+pypi@gmail.com>`_
 
