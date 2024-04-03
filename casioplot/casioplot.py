@@ -28,9 +28,9 @@ _BLACK: Color = (0, 0, 0)
 """RGB black"""
 
 # these two are only used if the setting save_multiple is set to True
-save_screen_counter = 1
+_save_screen_counter = 1
 """Counter used to save multiple images of the screen"""
-current_image_number = 1
+_current_image_number = 1
 """The number of the current image that is being saved"""
 
 
@@ -74,7 +74,7 @@ def show_screen() -> None:
     This function implement two distinct modes:
 
       - show the virtual screen in real time in a tkinter window, if ``show_screen`` is True
-      - Save the screen to the disk, if ``save_screen`` in True
+      - Save the virtual screen to the disk, if ``save_screen`` in True
 
     These modes are independent and can work at the same time
     """
@@ -85,13 +85,13 @@ def show_screen() -> None:
 
     if _settings["save_screen"] is True:
         if _settings["save_multiple"] is True:
-            global save_screen_counter, current_image_number
-            if save_screen_counter == _settings["save_rate"]:
-                _save_screen(str(current_image_number))
-                current_image_number += 1
-                save_screen_counter = 1
+            global _save_screen_counter, _current_image_number
+            if _save_screen_counter == _settings["save_rate"]:
+                _save_screen(str(_current_image_number))
+                _current_image_number += 1
+                _save_screen_counter = 1
             else:
-                save_screen_counter += 1
+                _save_screen_counter += 1
         else:
             # When the program ends, the saved image will show the screen as it was in the last call of show_screen
             _save_screen()
@@ -145,7 +145,7 @@ def draw_string(
         color: Color = _BLACK,
         size: Literal["small", "medium", "large"] = "medium"
 ) -> None:
-    """Draw a string on the virtual screen with the given RGB color and size.
+    """Draw a string on the canvas with the given RGB color and size.
 
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
@@ -156,7 +156,7 @@ def draw_string(
     :raise ValueError: Raise a :py:exc:`ValueError` if the size isn't correct
     """
 
-    def draw_char() -> None:
+    def _draw_char() -> None:
         """Draws a single character"""
         for y2, row in enumerate(char_map):
             for x2, pixel in enumerate(row):
@@ -168,7 +168,7 @@ def draw_string(
             return
 
         char_map = _get_char(char, size)
-        draw_char()
+        _draw_char()
         x += len(char_map[0])
 
 
@@ -193,7 +193,7 @@ try:
     # screen
 
     _canvas = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
-    """The virtual screen that the user can interact with using the functions from this module
+    """The canvas that the user can interact with using the functions from this module
     
     :meta hide-value:
     """
@@ -201,7 +201,7 @@ try:
 
     if _settings["bg_image_is_set"] is True:
         _background = tk.PhotoImage(file=_settings["background_image"])
-        """The background image that is shown behind the virtual screen
+        """The background image that is shown behind the canvas
         
         :meta hide-value:
         """
@@ -220,7 +220,7 @@ try:
     """
     _background_display.place(x=0, y=0)
     _canvas_display = tk.Label(master=_window, image=_canvas, border=0)
-    """The tkinter label that shows the virtual screen
+    """The tkinter label that shows the canvas
     
     :meta hide-value:
     """

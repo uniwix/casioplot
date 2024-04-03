@@ -6,10 +6,10 @@ Casioplot for computers
 This can help to develop python programs in your computer and run it before you put it in your calculator.
 Due to it's customization ability, this package can also be used as simple way to draw at a pixel level.
 
-.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/colours.png
+.. image:: docs/source/images/colours.png
     :alt: A colorful image
 
-.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/3D_cube.png
+.. image:: docs/source/images/3D_cube.png
     :alt: A 3D cube
 
 Installation
@@ -45,7 +45,7 @@ Draw a single pixel
     print(get_pixel(10, 10))
     show_screen()  # Don't forget to show the screen to see the result.
 
-.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/pixel.png
+.. image:: docs/source/images/pixel.png
     :alt: A single pixel on the screen
 
 .. code-block:: text
