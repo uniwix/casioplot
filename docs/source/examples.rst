@@ -15,7 +15,7 @@ Draw a pixel
 Result:
 ~~~~~~~
 
-.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/pixel.png
+.. image:: images/pixel.png
     :alt: A single pixel on the screen
 
 Draw a rectangle
@@ -41,7 +41,7 @@ Draw a rectangle
 Result:
 ~~~~~~~
 
-.. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/rectangle.png
+.. image:: images/rectangle.png
     :alt: A red rectangle
 
 Get a pixel value
@@ -85,4 +85,4 @@ Note that you don't need to show the screen to get the color of a pixel.
 More
 ----
 
-You can find more examples in the ``example`` directory in the source code.
+You can find more examples in the ``demo`` directory in the source code.

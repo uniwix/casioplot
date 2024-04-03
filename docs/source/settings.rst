@@ -17,7 +17,7 @@ placing a toml file in the ``~/.config/casioplot/`` directory.
 Available settings
 ------------------
 
-.. literalinclude:: <presets/default.toml>
+.. literalinclude:: ../../casioplot/presets/default.toml
    :language: toml
 
 
@@ -93,5 +93,5 @@ Graph 90+e
 The blank screen will look like, for all of theses presets:
 
 .. image::
-   https://github.com/uniwix/casioplot/blob/master/casioplot/images/calculator.png?raw=true
+   ../../casioplot/images/calculator.png?raw=true
    :alt: Empty calculator screen
