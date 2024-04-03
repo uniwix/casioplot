@@ -85,4 +85,4 @@ Contributing
 5. Create a new Pull Request
 
 
-v 3.0.0 - Uniwix
+v 3.1.0 - Uniwix

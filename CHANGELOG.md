@@ -1,3 +1,8 @@
+CHANGELOG
+=========
+
+For the latest version of the changelog, see the [GitHub release page](https://github.com/uniwix/casioplot/releases).
+
 # v3.0.0
 
 ## What's Changed
