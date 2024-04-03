@@ -1,5 +1,5 @@
 Casioplot for computers
-======================
+=======================
 
     Module ``casioplot`` from Casio calculator for Computers.
 
