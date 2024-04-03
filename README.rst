@@ -48,7 +48,7 @@ Draw a single pixel
 .. image:: https://raw.githubusercontent.com/uniwix/casioplot/master/docs/source/images/pixel.png
     :alt: A single pixel on the screen
 
-.. code-block:: txt
+.. code-block:: text
 
     (255, 255, 255)
     (255, 0, 0)
