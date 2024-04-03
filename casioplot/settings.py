@@ -95,7 +95,7 @@ def _get_image_path(bg_image_setting: str) -> str:
     if bg_image_setting.startswith("global/"):
         path = os.path.join(GLOBAL_DIR, bg_image_setting[7:])
     elif bg_image_setting.startswith("bg_images/"):
-        path = os.path.join(GLOBAL_DIR, bg_image_setting[12:])
+        path = os.path.join(GLOBAL_DIR, bg_image_setting[10:])
     else:
         path = os.path.join(PROJECT_DIR, bg_image_setting)
     if not os.path.exists(path):
