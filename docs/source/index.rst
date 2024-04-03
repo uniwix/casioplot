@@ -13,6 +13,7 @@ This can help to develop python programs in your computer and run it before put 
    settings.rst
    examples.rst
    casioplot.rst
+   documentation.rst
 
 
 

@@ -188,7 +188,7 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
 
 
 def _join_configs(config: Configuration, default_config: Configuration):
-    """Adds settings from :py:param:`default_config` to :py:param:`config` if they are missing form :py:param:`config`
+    """Adds settings from :py:data:`default_config` to :py:data:`config` if they are missing form :py:data:`config`
 
     :param config: The current config, the one that will raise an error during the checks
     :param default_config: The configuration from a default file

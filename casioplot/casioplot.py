@@ -44,6 +44,7 @@ def _save_screen(image_suffix: str = "") -> None:
     """Saves the virtual screen as an image
 
     Only used by the function :py:func:`show_screen`
+
     :param image_suffix: The setting ``save_multiple`` is True needs to
                          create images with the name :file:`casioplot2.png` for example
     """
