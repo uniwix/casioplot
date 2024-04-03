@@ -140,6 +140,5 @@ Available settings
 It could also be helpfull to see `fx-CG50.toml <https://github.com/uniwix/casioplot/blob/master/casioplot/presets/fx-CG50.toml>`_.
 It loks like this:
 
-.. image::
-    https://github.com/uniwix/casioplot/blob/master/casioplot/images/calculator.png?raw=true
+.. image:: images/calculator.png
     :alt: Empty casio calculator screen
