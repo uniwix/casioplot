@@ -63,7 +63,7 @@ def _get_file_from_pointer(pointer: str) -> str:
     """Translates a default file pointer into a full path for the config file
 
     :param pointer: The default file pointer, it must be in
-                    the format :file:`{local_file_name}`, :file:`global/{file_name}` or :file:`presets/{file_name}`
+                    the format :file:`global/{file_name}` or :file:`presets/{file_name}`
     :return: The full path of the config file
     """
     if "/" not in pointer:
@@ -92,20 +92,24 @@ def _get_image_path(bg_image_setting: str) -> str:
     :param bg_image_setting: The value of the setting :python:`setting["background_image"]`
     :return: The full path of the image
     """
+    if "/" not in bg_image_setting:
+        path = os.path.join(PROJECT_DIR, bg_image_setting)
+
     if bg_image_setting.startswith("global/"):
         path = os.path.join(GLOBAL_DIR, bg_image_setting[7:])
     elif bg_image_setting.startswith("bg_images/"):
         path = os.path.join(BG_IMAGES_DIR, bg_image_setting[10:])
     else:
-        path = os.path.join(PROJECT_DIR, bg_image_setting)
-    if not os.path.exists(path):
-        raise ValueError(f"The 'background_image' setting can't be '{bg_image_setting}', it must be:\n"
-                         f"- '<image_name>' if it is in the same directory as the 'casioplot_configs.py' file\n"
-                         f"- 'global/<image_name>' if it is the global configs directory\n"
-                         f"- 'bg_images/<image_name>' if it is one of the preset images\n"
-                         f"The current detected path '{path}' does not exists.")
+        raise ValueError(f"The 'background_image' setting can't be '{bg_image_setting}', it must be:\n\
+            - '<image_name>' if it is in the same directory as the 'casioplot_configs.py' file \n\
+            - 'global/<image_name>' if it is the global configs directory \n\
+            - 'bg_images/<image_name>' if it is one of the preset images")
 
-    return path
+
+    if os.path.exists(path):
+        return path
+    else:
+        raise ValueError(f"The image '{path}' doesn't exist")
 
 
 def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:

@@ -1,14 +1,11 @@
-"""This file contains the type :py:class:`Configuration` and the type :py:class:`Color`.
-
-The type :py:class:`Configuration` makes it possible to representing all settings and configs in a dictionary but still
-have type annotations for every setting.
-"""
+"""This file contains the type :py:class:`Configuration` and the type :py:class:`Color`"""
 
 from typing import TypedDict
 
 
-# the option :python:`total=False` makes it possible for a configuration
-# to not have a value for all settings
+"""The type :py:class:`Configuration` makes it possible to representing all settings and configs in a dictionary but still
+have type annotations for every setting.
+The option :python:`total=False` makes it possible for a configuration to not have a value for all settings"""
 class Configuration(TypedDict, total=False):
     # canvas size
     width: int  # canvas width in pixels

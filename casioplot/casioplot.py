@@ -28,7 +28,7 @@ _BLACK: Color = (0, 0, 0)
 """RGB black"""
 
 # these two are only used if the setting save_multiple is set to True
-save_screen_counter = 0
+save_screen_counter = 1
 """Counter used to save multiple images of the screen"""
 current_image_number = 1
 """The number of the current image that is being saved"""
@@ -89,9 +89,9 @@ def show_screen() -> None:
             if save_screen_counter == _settings["save_rate"]:
                 _save_screen(str(current_image_number))
                 current_image_number += 1
-                save_screen_counter = 0
-
-            save_screen_counter += 1
+                save_screen_counter = 1
+            else:
+                save_screen_counter += 1
         else:
             # When the program ends, the saved image will show the screen as it was in the last call of show_screen
             _save_screen()
