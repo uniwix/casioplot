@@ -1,2 +1,2 @@
-include casioplot/images/*.png
-include casioplot/presets/*.toml
+include src/casioplot/images/*.png
+include src/casioplot/presets/*.toml
