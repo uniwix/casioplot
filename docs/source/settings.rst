@@ -120,6 +120,8 @@ Available settings
     # Show the screen with tkinter.
     [showing_screen]
     show_screen = true
+    # Close the window at exit.
+    close_window = true
 
     # Save the screen in the current directory.
     # If `save_multiple` is set to false, the screen will be saved at each

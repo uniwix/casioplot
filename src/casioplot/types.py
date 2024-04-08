@@ -24,7 +24,8 @@ class Configuration(TypedDict, total=False):
     # have a special background image
 
     # showing_screen
-    show_screen: bool  # do not mistake for the function `show_screen` from `casioplot.py`
+    show_screen: bool  # do not mistake for the function `show_screen` from `casioplot.py
+    close_window: bool  # close the window at exit
 
     # saving_screen
     save_screen: bool  # Save the screen as an image

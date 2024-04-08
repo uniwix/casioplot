@@ -137,6 +137,7 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
         ),
         "showing_screen": (
             "show_screen",
+            "close_window"
         ),
         "saving_screen": (
             "save_screen",
