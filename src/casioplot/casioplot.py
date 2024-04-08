@@ -229,7 +229,5 @@ def run_at_exit() -> None:
     if _settings["save_screen"] is True:  # saves the thes screen as it was before the program ended
         _save_screen()
     if _settings["show_screen"] is True:  # keeps the tkinter window open after the program ends
-        if _settings["close_window"] is True:
-            _window.destroy()
-        else:
+        if _settings["close_window"] is False:
             _window.mainloop()
