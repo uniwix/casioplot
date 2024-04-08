@@ -224,10 +224,9 @@ except tk.TclError:
 
 
 @atexit.register
-def run_at_exit() -> None:
+def _run_at_exit() -> None:
     """This function should be called at the end of the program to close the tkinter window"""
     if _settings["save_screen"] is True:  # saves the thes screen as it was before the program ended
         _save_screen()
-    if _settings["show_screen"] is True:  # keeps the tkinter window open after the program ends
-        if _settings["close_window"] is False:
-            _window.mainloop()
+    if _settings["show_screen"] is True and _settings["close_window"] is False:  # keeps the tkinter window open after the program ends
+        _window.mainloop()
