@@ -82,7 +82,7 @@ def show_screen() -> None:
         # the virtual screen is already updated, the tkinter window just needs to update what it is showing
         _window.update()
 
-    if _settings["save_multiple"] is True:
+    if _settings["save_screen"] is True and _settings["save_multiple"] is True:
         global _save_screen_counter, _current_image_number
         if _save_screen_counter == _settings["save_rate"]:
             _save_screen(str(_current_image_number))
@@ -189,7 +189,7 @@ try:
 
     _canvas = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
     """The canvas that the user can interact with using the functions from this module
-    
+
     :meta hide-value:
     """
     clear_screen()  # ensures the pixels are set to white and not transparent
@@ -197,7 +197,7 @@ try:
     if _settings["bg_image_is_set"] is True:
         _background = tk.PhotoImage(file=_settings["background_image"])
         """The background image that is shown behind the canvas
-        
+
         :meta hide-value:
         """
     else:
@@ -210,13 +210,13 @@ try:
 
     _background_display = tk.Label(master=_window, image=_background, border=0)
     """The tkinter label that shows the background image
-    
+
     :meta hide-value:
     """
     _background_display.place(x=0, y=0)
     _canvas_display = tk.Label(master=_window, image=_canvas, border=0)
     """The tkinter label that shows the canvas
-    
+
     :meta hide-value:
     """
     _canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
@@ -227,7 +227,7 @@ except tk.TclError:
 @atexit.register
 def run_at_exit() -> None:
     """This function should be called at the end of the program to close the tkinter window"""
-    if _settings["save_screen"]:
+    if _settings["save_screen"]:  # saves the thes screen as it was before the program ended
         _save_screen()
-    if _settings["show_screen"]:
+    if _settings["show_screen"]:  # keeps the tkinter window open after the program ends
         _window.mainloop()
