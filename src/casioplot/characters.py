@@ -8,6 +8,8 @@ a sort of character map, every string corresponds to a row. An X means that
 the pixel should be set and a space that the pixel should stay as it is.
 """
 
+from casioplot.types import Text_size
+
 # TODO: change how characters are drawn to be more efficient and faster
 
 
@@ -5359,7 +5361,7 @@ _size_to_dict = {"small": small, "medium": medium, "large": large}
 """
 
 
-def _get_char(char: str, size: str = "medium") -> tuple:
+def _get_char(char: str, size: Text_size = "medium") -> tuple:
     """Gets the char_map of a character in a given size
 
     Gets the character from the dictionaries,

@@ -10,14 +10,13 @@ Available functions for the user:
 Contains the original functions from the :py:mod:`casioplot` calculator module
 and the code needed to emulate the screen.
 """
-
+import atexit
 import tkinter as tk
-from typing import Literal
 
 from PIL import Image, ImageTk  # used to save the screen
 from casioplot.characters import _get_char
 from casioplot.settings import _settings
-from casioplot.types import Color
+from casioplot.types import Color, Text_size
 
 # some frequently used colors
 _WHITE: Color = (255, 255, 255)
@@ -82,18 +81,14 @@ def show_screen() -> None:
         # the virtual screen is already updated, the tkinter window just needs to update what it is showing
         _window.update()
 
-    if _settings["save_screen"] is True:
-        if _settings["save_multiple"] is True:
-            global _save_screen_counter, _current_image_number
-            if _save_screen_counter == _settings["save_rate"]:
-                _save_screen(str(_current_image_number))
-                _current_image_number += 1
-                _save_screen_counter = 1
-            else:
-                _save_screen_counter += 1
+    if _settings["save_screen"] is True and _settings["save_multiple"] is True:
+        global _save_screen_counter, _current_image_number
+        if _save_screen_counter == _settings["save_rate"]:
+            _save_screen(str(_current_image_number))
+            _current_image_number += 1
+            _save_screen_counter = 1
         else:
-            # When the program ends, the saved image will show the screen as it was in the last call of show_screen
-            _save_screen()
+            _save_screen_counter += 1
 
 
 def clear_screen() -> None:
@@ -142,7 +137,7 @@ def draw_string(
         y: int,
         text: str,
         color: Color = _BLACK,
-        size: Literal["small", "medium", "large"] = "medium"
+        size: Text_size = "medium"
 ) -> None:
     """Draw a string on the canvas with the given RGB color and size.
 
@@ -193,7 +188,7 @@ try:
 
     _canvas = tk.PhotoImage(width=_settings["width"], height=_settings["height"])
     """The canvas that the user can interact with using the functions from this module
-    
+
     :meta hide-value:
     """
     clear_screen()  # ensures the pixels are set to white and not transparent
@@ -201,7 +196,7 @@ try:
     if _settings["bg_image_is_set"] is True:
         _background = tk.PhotoImage(file=_settings["background_image"])
         """The background image that is shown behind the canvas
-        
+
         :meta hide-value:
         """
     else:
@@ -214,15 +209,27 @@ try:
 
     _background_display = tk.Label(master=_window, image=_background, border=0)
     """The tkinter label that shows the background image
-    
+
     :meta hide-value:
     """
     _background_display.place(x=0, y=0)
     _canvas_display = tk.Label(master=_window, image=_canvas, border=0)
     """The tkinter label that shows the canvas
-    
+
     :meta hide-value:
     """
     _canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
 except tk.TclError:
     print("The tkinter window couldn't be created. The screen won't be shown.")
+
+
+@atexit.register
+def run_at_exit() -> None:
+    """This function should be called at the end of the program to close the tkinter window"""
+    if _settings["save_screen"] is True:  # saves the thes screen as it was before the program ended
+        _save_screen()
+    if _settings["show_screen"] is True:  # keeps the tkinter window open after the program ends
+        if _settings["close_window"] is True:
+            _window.destroy()
+        else:
+            _window.mainloop()
