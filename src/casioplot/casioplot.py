@@ -10,7 +10,7 @@ Available functions for the user:
 Contains the original functions from the :py:mod:`casioplot` calculator module
 and the code needed to emulate the screen.
 """
-
+import atexit
 import tkinter as tk
 from typing import Literal
 
@@ -82,18 +82,14 @@ def show_screen() -> None:
         # the virtual screen is already updated, the tkinter window just needs to update what it is showing
         _window.update()
 
-    if _settings["save_screen"] is True:
-        if _settings["save_multiple"] is True:
-            global _save_screen_counter, _current_image_number
-            if _save_screen_counter == _settings["save_rate"]:
-                _save_screen(str(_current_image_number))
-                _current_image_number += 1
-                _save_screen_counter = 1
-            else:
-                _save_screen_counter += 1
+    if _settings["save_multiple"] is True:
+        global _save_screen_counter, _current_image_number
+        if _save_screen_counter == _settings["save_rate"]:
+            _save_screen(str(_current_image_number))
+            _current_image_number += 1
+            _save_screen_counter = 1
         else:
-            # When the program ends, the saved image will show the screen as it was in the last call of show_screen
-            _save_screen()
+            _save_screen_counter += 1
 
 
 def clear_screen() -> None:
@@ -226,3 +222,12 @@ try:
     _canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
 except tk.TclError:
     print("The tkinter window couldn't be created. The screen won't be shown.")
+
+
+@atexit.register
+def run_at_exit() -> None:
+    """This function should be called at the end of the program to close the tkinter window"""
+    if _settings["save_screen"]:
+        _save_screen()
+    if _settings["show_screen"]:
+        _window.mainloop()
