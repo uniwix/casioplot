@@ -12,12 +12,11 @@ and the code needed to emulate the screen.
 """
 import atexit
 import tkinter as tk
-from typing import Literal
 
 from PIL import Image, ImageTk  # used to save the screen
 from casioplot.characters import _get_char
 from casioplot.settings import _settings
-from casioplot.types import Color
+from casioplot.types import Color, Text_size
 
 # some frequently used colors
 _WHITE: Color = (255, 255, 255)
@@ -138,7 +137,7 @@ def draw_string(
         y: int,
         text: str,
         color: Color = _BLACK,
-        size: Literal["small", "medium", "large"] = "medium"
+        size: Text_size = "medium"
 ) -> None:
     """Draw a string on the canvas with the given RGB color and size.
 
