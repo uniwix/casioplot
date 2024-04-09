@@ -124,6 +124,13 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255
     """
     try:
+        if _settings["correct_colors"] is True:  # corrects the colors to match the behavior of the casio calculators
+            color = (  # there may be a faster way
+                color[0] - color[0] % 8,
+                color[1] - color[1] % 4,
+                color[2] - color[2] % 8
+            )
+
         _canvas.put(
             "#%02x%02x%02x" % color,  # convert the color (RGB tuple) to a hexadecimal string '#RRGGBB'
             to=(x, y)
@@ -219,6 +226,7 @@ try:
     :meta hide-value:
     """
     _canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
+
 except tk.TclError:
     print("The tkinter window couldn't be created. The screen won't be shown.")
 
