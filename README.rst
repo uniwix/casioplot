@@ -1,6 +1,14 @@
 Casioplot for computers
 =======================
 
+.. image:: https://readthedocs.org/projects/casioplot/badge/?version=latest
+    :target: https://casioplot.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+.. image:: https://badge.fury.io/py/casioplot.svg
+    :target: https://badge.fury.io/py/casioplot
+    :alt: PyPI Status
+
 Module ``casioplot`` from Casio calculator for Computers.
 
 This can help to develop python programs in your computer and run it before you put it in your calculator.
