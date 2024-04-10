@@ -4,8 +4,8 @@ from typing import TypedDict, Literal
 
 
 class Configuration(TypedDict, total=False):
-    """The type :py:class:`Configuration` makes it possible to representing all settings and configs in a dictionary but still
-    have type annotations for every setting.
+    """The type :py:class:`Configuration` makes it possible to representing all settings and configs in a dictionary
+    but still have type annotations for every setting.
     The option :python:`total=False` makes it possible for a configuration to not have a value for all settings"""
 
     # canvas size
@@ -35,6 +35,8 @@ class Configuration(TypedDict, total=False):
     save_rate: int  # if `save_multiple is True a new image will be saved`
     # every `save_rate` times show_screen is called
 
+    correct_colors: bool  # the casio calculators don't have the same precission for colors as the computer
+    # this options makes the set_pixel function correct the colors to match what would happen in the calculators
 
 Color = tuple[int, int, int]
 """A color is represented as a tuple of three integers, each integer is in the range [0, 255] and represents the

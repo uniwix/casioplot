@@ -14,7 +14,7 @@ background_image = "bg_images/calculator.png"
 
 [showing_screen]
 show_screen = true
-close_window = true
+close_window = false
 
 [saving_screen]
 save_screen = false
@@ -22,3 +22,6 @@ image_name = "casioplot"
 image_format = "png"
 save_multiple = false
 save_rate = 1
+
+[colors]
+correct_colors = true

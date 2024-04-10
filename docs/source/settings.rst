@@ -154,11 +154,20 @@ where ``number`` is the number of the save.
     image_name = "casioplot"
     image_format = "png"
     save_multiple = false
-    # be careful, with save_rate = 1 you can easly generate tens of thousand of images in a few seconds
-    save_rate = 1  
+    # be careful, with save_rate = 1 you can easily generate tens of thousand of images in a few seconds
+    save_rate = 1
 
-It could also be helpfull to see `fx-CG50.toml <https://github.com/uniwix/casioplot/blob/master/casioplot/presets/fx-CG50.toml>`_.
-It loks like this:
+The Casio calculators don't have the same precision for colors as the computer
+the option :toml:`correct_colors` makes the :py:func:`set_pixel` function correct the colors
+to match what would happen in the calculators
+
+.. code-block:: toml
+
+    [colors]
+    correct_colors = false
+
+It could also be helpful to see `fx-CG50.toml <https://github.com/uniwix/casioplot/blob/master/casioplot/presets/fx-CG50.toml>`_.
+It looks like this:
 
 .. image:: images/calculator.png
     :alt: Empty casio calculator screen

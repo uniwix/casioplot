@@ -145,7 +145,10 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
             "image_format",
             "save_multiple",
             "save_rate"
-        )
+        ),
+        "colors": (
+            "correct_colors",
+        ),
     }
 
     def _check_toml(toml: dict) -> None:

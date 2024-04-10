@@ -63,3 +63,8 @@ image_name = "casioplot"
 image_format = "png"
 save_multiple = false
 save_rate = 1
+
+# the casio calculators don't have the same precission for colors as the computer
+# the option `correct_colors` makes the set_pixel function correct the colors to match what would happen in the calculators
+[colors]
+correct_colors = false
