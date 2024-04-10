@@ -48,11 +48,14 @@ Keep in mind this hierarchy that the package uses to search for config files, :m
 Default to file
 ---------------
 
-A config file may have the key :toml:`default_to`, this key is used to indicate a default to file.
-If a settings is missing from a config file and that same settings is set in the default to file that setting will be set to the value of the default to file.
-A config file must only have as default file a config file less custom then tham. So a local file can have a global or a preset, but a global can only have a preset file as default file.
+A config file may have the key :toml:`default_to`, this key is used to indicate
+a default to file. If a settings is missing from a config file and that same settings
+is set in the default to file that setting will be set to the value of the default to file.
+A config file must only have as default file a config file less custom then tham. So a local
+file can have a global or a preset, but a global can only have a preset file as default file.
 
-A local config file may specify a global one that specifies a preset, creating a chain. Image that there are only 4 settings, a chain could work like this:
+A local config file may specify a global one that specifies a preset, creating a chain.
+Image that there are only 4 settings, a chain could work like this:
 
 .. image:: images/config_files_example.png
    :alt: A example of how the config files work
@@ -66,7 +69,7 @@ default_to key
 To specify a default to file you can use the following syntax:
 - global file: :file:`global/{file_name}`
 - preset file: :file:`presets/{file_name}`
-You must include the :file:`.toml` file extencion.
+You must include the :file:`.toml` file extension.
 
 So, for example, to specify your global file named :file:`my_global_config1.toml` do the following:
 
@@ -82,10 +85,13 @@ Or to specify the preset :file:`fx-CG50.toml` file:
    # ~/.config/casioplot/my_global_config1.toml
    default_to = "presets/fx-CG50.toml"
 
-If you were to create this two file and run a program in the :file:`myproject/` directory it would have the settings of :file:`fx-CG50.toml`.
+If you were to create this two file and run a program in the :file:`myproject/` directory
+it would have the settings of :file:`fx-CG50.toml`.
 
 
-If :toml:`default_to` is set to :toml:`""` or isn't set there will be no default to file. If you set :toml:`default_to` to :toml:`""` on a global file, you need to make sure that all settings are set at least once.
+If :toml:`default_to` is set to :toml:`""` or isn't set there will be no default to file.
+If you set :toml:`default_to` to :toml:`""` on a global file, you need to make sure that
+all settings are set at least once.
 
 Available settings
 ------------------
