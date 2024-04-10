@@ -22,3 +22,6 @@ image_name = "casioplot"
 image_format = "png"
 save_multiple = false
 save_rate = 1
+
+[colors]
+correct_colors = true

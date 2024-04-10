@@ -35,7 +35,7 @@ class Configuration(TypedDict, total=False):
     save_rate: int  # if `save_multiple is True a new image will be saved`
     # every `save_rate` times show_screen is called
 
-    correct_colors: bool  # the colors on the casio calculators don't have the same precission as the computer
+    correct_colors: bool  # the casio calculators don't have the same precission for colors as the computer
     # this options makes the set_pixel function correct the colors to match what would happen in the calculators
 
 Color = tuple[int, int, int]

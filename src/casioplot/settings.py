@@ -147,7 +147,7 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
             "save_rate"
         ),
         "colors": (
-            "correct_colors"
+            "correct_colors",
         ),
     }
 
