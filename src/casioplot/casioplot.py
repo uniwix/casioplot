@@ -161,11 +161,15 @@ def draw_string(
         """Draws a single character"""
         for y2, row in enumerate(char_map):
             for x2, pixel in enumerate(row):
-                if pixel == 'X':
+                if pixel is True:
                     set_pixel(x + x2, y + y2, color)
 
+
+    if y < 0 or y >= _settings["height"]:  # checks if the y coordinate is in bounds of the canvas
+        return
+
     for char in text:
-        if not (0 <= x < _settings["width"] and 0 <= y < _settings["height"]):  # if coordinates aren't in bounds stop
+        if x < 0 or x >= _settings["width"]:  # if the x coordinates isn't in bounds stop
             return
 
         char_map = _get_char(char, size)
