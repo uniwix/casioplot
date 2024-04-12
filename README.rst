@@ -5,8 +5,8 @@ Casioplot for computers
     :target: https://casioplot.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. image:: https://badge.fury.io/py/casioplot.svg
-    :target: https://badge.fury.io/py/casioplot
+.. image:: https://badge.fury.io/py/casioplot.svg?
+    :target: https://pypi.org/project/casioplot/
     :alt: PyPI Status
 
 Module ``casioplot`` from Casio calculator for Computers.
