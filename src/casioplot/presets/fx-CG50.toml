@@ -14,7 +14,7 @@ background_image = "bg_images/calculator.png"
 
 [showing_screen]
 show_screen = true
-close_window = false
+close_window = true
 
 [saving_screen]
 save_screen = false
@@ -25,3 +25,6 @@ save_rate = 1
 
 [colors]
 correct_colors = true
+
+[debuging]
+debuging_messages = false

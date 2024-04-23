@@ -63,6 +63,55 @@ def _save_screen(image_suffix: str = "") -> None:
     )
 
 
+def _debuging_coordinates(x: int, y: int, function: str) -> None:
+    """Prints a message telling if the coordinates are out of bounds
+
+    Used by the functions set_pixel, get_pixel or draw_string
+    It is only called if the setting ``debuging_messages`` is true
+
+    :param x: x coordinate (from the left)
+    :param y: y coordinate (from the top)
+    :param function: the function that called this function
+    """
+    print(f"Debuging message: you used {function} with coordinates out of bounds")
+    if x < 0:
+        print(f"    - x must be greater or equal to 0, x = {x}")
+    elif x >= _settings["width"]:
+        print(f"    - x must be smaller than width, x = {x} and width = {_settings["width"]}")
+    if y < 0:
+        print(f"    - y must be greater or equal to 0, y = {x}")
+    elif y >= _settings["height"]:
+        print(f"    - y must be smaller than height, y = {y} and height = {_settings["height"]}")
+
+
+def _debuging_color(color: Color, function: str) -> None:
+    """Prints a message telling if the color is valid
+
+    Used by the functions set_pixel or draw_string
+    It is only called if the setting ``debuging_messages`` is true
+
+    :param color: The pixel color. A tuple that contain 3 integers from 0 to 255
+    :param function: the function that called this function
+    """
+    # checks if the color is right
+    if 0 <= color[0] <= 255 and 0 <= color[1] <= 255 and 0 <= color[2] <= 255:
+        return
+
+    print(f"Debuging message: you used {function} with an invalid color:")
+    if color[0] < 0:
+        print(f"    - the red channel must be greater or equal to 0, red = {color[0]}")
+    elif color[0] > 255:
+        print(f"    - the red channel must be smaller or equal to 255, red = {color[0]}")
+    if color[1] < 0:
+        print(f"    - the green channel must be greater or equal to 0, green = {color[1]}")
+    elif color[1] > 255:
+        print(f"    - the green channel must be smaller or equal to 255, green = {color[1]}")
+    if color[2] < 0:
+        print(f"    - the blue channel must be greater or equal to 0, blue = {color[2]}")
+    elif color[2] > 255:
+        print(f"    - the blue channel must be smaller or equal to 255, blue = {color[2]}")
+
+
 # functions for the user
 
 
@@ -111,6 +160,8 @@ def get_pixel(x: int, y: int) -> Color | None:
     try:
         return _canvas.get(x, y)
     except tk.TclError:  # the pixel is out of the canvas
+        if _settings["debuging_messages"]:
+            _debuging_coordinates(x, y, "get_pixel")
         return None
 
 
@@ -123,6 +174,9 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     :param y: y coordinate (from the top)
     :param color: The pixel color. A tuple that contain 3 integers from 0 to 255
     """
+    if _settings["debuging_messages"]:
+        _debuging_color(color, "set_pixel")
+
     try:
         if _settings["correct_colors"] is True:  # corrects the colors to match the behavior of the casio calculators
             color = (  # there may be a faster way
@@ -136,7 +190,9 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
             to=(x, y)
         )
     except tk.TclError:  # the pixel is out of the canvas
-        pass
+        if _settings["debuging_messages"]:
+            _debuging_coordinates(x, y, "set_pixel")
+
 
 
 def draw_string(
@@ -165,11 +221,18 @@ def draw_string(
                     set_pixel(x + x2, y + y2, color)
 
 
+    if _settings["debuging_messages"]:
+        _debuging_color(color, "draw_string")
+
     if y < 0 or y >= _settings["height"]:  # checks if the y coordinate is in bounds of the canvas
+        if _settings["debuging_messages"]:
+            _debuging_coordinates(x, y, "draw_string")
         return
 
     for char in text:
         if x < 0 or x >= _settings["width"]:  # if the x coordinates isn't in bounds stop
+            if _settings["debuging_messages"]:
+                _debuging_coordinates(x, y, "draw_string")
             return
 
         char_map = _get_char(char, size)

@@ -149,6 +149,9 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
         "colors": (
             "correct_colors",
         ),
+        "debuging": (
+            "debuging_messages",
+        ),
     }
 
     def _check_toml(toml: dict) -> None:
