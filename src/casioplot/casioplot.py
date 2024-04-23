@@ -177,8 +177,10 @@ def draw_string(
         x += len(char_map[0])
 
 
-# window
+
 try:
+    # window
+
     _window = tk.Tk()
     """The tkinter window that shows the virtual screen
 
@@ -187,9 +189,8 @@ try:
 
     if _settings["show_screen"] is True:
         _window.geometry("{}x{}".format(*_screen_dimensions()))
-
-        _window.grab_release()
         _window.title("casioplot")
+        _window.grab_release()
         _window.attributes("-topmost", True)
         _window.resizable(False, False)
     else:
@@ -223,12 +224,12 @@ try:
 
     :meta hide-value:
     """
-    _background_display.place(x=0, y=0)
     _canvas_display = tk.Label(master=_window, image=_canvas, border=0)
     """The tkinter label that shows the canvas
 
     :meta hide-value:
     """
+    _background_display.place(x=0, y=0)
     _canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
 
 except tk.TclError:
