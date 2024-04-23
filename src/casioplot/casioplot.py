@@ -90,7 +90,7 @@ def _debuging_color(color: Color, function: str) -> None:
     Used by the functions set_pixel or draw_string
     It is only called if the setting ``debuging_messages`` is true
 
-    :param color: The pixel color. A tuple that contain 3 integers from 0 to 255
+    :param color: The color of a pixel
     :param function: the function that called this function
     """
     # checks if the color is right
@@ -172,7 +172,7 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
 
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
-    :param color: The pixel color. A tuple that contain 3 integers from 0 to 255
+    :param color: The color of a pixel
     """
     if _settings["debuging_messages"]:
         _debuging_color(color, "set_pixel")
@@ -207,7 +207,7 @@ def draw_string(
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
     :param text: text that will be drawn
-    :param color: The color of the text. A tuple that contain 3 integers from 0 to 255
+    :param color: The color of a pixel
     :param size: Size of the text.
                  String from the following values: :python:`"small"`, :python:`"medium"` or :python:`"large"`
     :raise ValueError: Raise a :py:exc:`ValueError` if the size isn't correct
