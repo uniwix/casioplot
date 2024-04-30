@@ -151,11 +151,53 @@ for section in _toml_sections:
         _toml_settings_to_sections[setting] = section
 
 
+def closest_strings(original: str, options: tuple[str, ...]) -> tuple[str, ...]:
+    """Return all string of the tuple :param options: that have an edit distance from :param original:
+    less than 5. It uses the Damerau-Levenshtein edit distance algorithm"""
+    valid_options = []
+
+    for option in options:
+        width, height = len(original) + 1, len(option) + 1
+        dp = [[0] * width] * height
+        for y in range(height):
+            dp[0][y] = y
+        for x in range(width):
+            dp[x][0] = x
+
+        for y in range(height):
+            for x in range(width):
+                dp[x][y] = min(
+                    dp[x-1][y] + 1,
+                    dp[x][y-1] + 1,
+                    dp[x-1][y-1] + 1 * (original[x] != option[y])
+                )
+                if x > 1 and y > 1 and original[x-1] == option[y] and original[x] == option[y-1]:
+                    dp[x][y] = min(dp[x][y], dp[x-2][y-2] + 1)
+
+        if dp[-1][-1] < 5:
+            valid_options.append(option)
+
+    return tuple(valid_options)
+
+
 def _check_setting(section: str, setting: str) -> None:
     """Checks individual settings"""
     # does the setting exist?
     if setting not in _toml_settings:
-        raise ValueError(f"The setting '{setting}' doesn't exist")
+        error_message = f"The setting '{setting}' doesn't exist"
+        valid_settings = closest_strings(setting, _toml_settings)
+
+        if len(valid_settings) == 0:
+            error_message += ", no suggestions found"
+            raise ValueError(error_message)
+
+        error_message += ", did you mean any of the following suggestions:"
+        for valid_setting in valid_settings:
+            error_message += f"\n   - '{valid_setting}'"
+            if section != _toml_settings_to_sections[setting]:
+                error_message += f", from the sectino '[{_toml_settings_to_sections[valid_setting]}]'"
+
+        raise ValueError(error_message)
 
     # is the setting in the correct section?
     if section != _toml_settings_to_sections[setting]:
@@ -175,7 +217,19 @@ def _check_toml(toml: dict) -> None:
 
         # does the section exist?
         if section not in _toml_sections:
-            raise ValueError(f"The section '[{section}]' doesn't exist")
+            error_message = f"The section '[{section}]' doesn't exist"
+            valid_sections = closest_strings(section, _toml_sections)
+
+            if len(valid_sections) == 0:
+                error_message += ", no suggestions found"
+                raise ValueError(error_message)
+
+
+            error_message += ", did you mean any of the following suggestions:"
+            for valid_section in valid_sections:
+                error_message += f"\n   - '[{valid_section}]'"
+
+            raise ValueError(error_message)
 
         for setting in toml[section]:
             _check_setting(section, setting)
