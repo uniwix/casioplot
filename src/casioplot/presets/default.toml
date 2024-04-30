@@ -26,22 +26,22 @@ height = 200
 # Set the size of the margin around the canvas.
 # Useful if your background image has a border.
 [margins]
-left_margin = 0
-right_margin = 0
-top_margin = 0
-bottom_margin = 0
+left = 0
+right = 0
+top = 0
+bottom = 0
 
 # Set the background image.
-# If `bg_image_is_set` is set to false, the background image is ignored
+# If `bg_is_set` is set to false, the background image is ignored
 # You can select where you image is in the following way:
 # Use `<image_name>` to select local images.
 # Use `global/<image_name>` to select global images.
 # Use `bg_images/<image_name>` to select preset images.
 # Include the extension in the name.
 [background]
-bg_image_is_set = false
+bg_is_set = false
 # use this image if you don't want to have a background image and not use a default file
-background_image = "bg_images/blanck.png"
+background = "bg_images/blanck.png"
 
 # Show the screen with tkinter.
 [showing_screen]

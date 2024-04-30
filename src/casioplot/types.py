@@ -13,14 +13,14 @@ class Configuration(TypedDict, total=False):
     height: int  # canvas height in pixels
 
     # margins
-    left_margin: int
-    right_margin: int
-    top_margin: int
-    bottom_margin: int
+    left: int
+    right: int
+    top: int
+    bottom: int
 
     # background
-    bg_image_is_set: bool  # if it is False the background_image will be ignored
-    background_image: str  # some config files like `graph_90+e.toml`
+    bg_is_set: bool  # if it is False the background image will be ignored
+    background: str  # some config files like `graph_90+e.toml`
     # have a special background image
 
     # showing_screen

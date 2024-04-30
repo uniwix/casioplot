@@ -38,8 +38,8 @@ _current_image_number = 1
 def _screen_dimensions() -> tuple[int, int]:
     """Calculates the dimensions of the screen in pixels"""
     return (
-        _settings["left_margin"] + _settings["width"] + _settings["right_margin"],
-        _settings["top_margin"] + _settings["height"] + _settings["bottom_margin"]
+        _settings["left"] + _settings["width"] + _settings["right"],
+        _settings["top"] + _settings["height"] + _settings["bottom"]
     )
 
 
@@ -55,7 +55,7 @@ def _save_screen(image_suffix: str = "") -> None:
     canvas_image: Image.Image = ImageTk.getimage(_canvas)
     background_image: Image.Image = ImageTk.getimage(_background)
 
-    background_image.paste(canvas_image, (_settings["left_margin"], _settings["top_margin"]))
+    background_image.paste(canvas_image, (_settings["left"], _settings["top"]))
 
     background_image.save(
         _settings["image_name"] + image_suffix + '.' + _settings["image_format"],
@@ -268,8 +268,8 @@ try:
     """
     clear_screen()  # ensures the pixels are set to white and not transparent
 
-    if _settings["bg_image_is_set"] is True:
-        _background = tk.PhotoImage(file=_settings["background_image"])
+    if _settings["bg_is_set"] is True:
+        _background = tk.PhotoImage(file=_settings["background"])
         """The background image that is shown behind the canvas
 
         :meta hide-value:
@@ -293,7 +293,7 @@ try:
     :meta hide-value:
     """
     _background_display.place(x=0, y=0)
-    _canvas_display.place(x=_settings["left_margin"], y=_settings["top_margin"])
+    _canvas_display.place(x=_settings["left"], y=_settings["top"])
 
 except tk.TclError:
     print("The tkinter window couldn't be created. The screen won't be shown.")
@@ -304,5 +304,6 @@ def _run_at_exit() -> None:
     """This function should be called at the end of the program to close the tkinter window"""
     if _settings["save_screen"] is True:  # saves the thes screen as it was before the program ended
         _save_screen()
+
     if _settings["show_screen"] is True and _settings["close_window"] is False:  # keeps the tkinter window open after the program ends
         _window.mainloop()

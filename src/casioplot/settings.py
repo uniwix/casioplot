@@ -86,9 +86,9 @@ def _get_file_from_pointer(pointer: str) -> str:
 
 
 def _get_image_path(bg_image_setting: str) -> str:
-    """Translates the :python:`setting["background_image"]` to the full path for the image
+    """Translates the :python:`setting["background"]` to the full path for the image
 
-    :param bg_image_setting: The value of the setting :python:`setting["background_image"]`
+    :param bg_image_setting: The value of the setting :python:`setting["background"]`
     :return: The full path of the image
     """
     if "/" not in bg_image_setting:
@@ -99,7 +99,7 @@ def _get_image_path(bg_image_setting: str) -> str:
     elif bg_image_setting.startswith("bg_images/"):
         path = os.path.join(BG_IMAGES_DIR, bg_image_setting[10:])
     else:
-        raise ValueError(f"The 'background_image' setting can't be '{bg_image_setting}', it must be:\n\
+        raise ValueError(f"The 'background' setting can't be '{bg_image_setting}', it must be:\n\
             - '<image_name>' if it is in the same directory as the 'casioplot_configs.py' file \n\
             - 'global/<image_name>' if it is the global configs directory \n\
             - 'bg_images/<image_name>' if it is one of the preset images")
@@ -126,14 +126,14 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
             "height"
         ),
         "margins": (
-            "left_margin",
-            "right_margin",
-            "top_margin",
-            "bottom_margin"
+            "left",
+            "right",
+            "top",
+            "bottom"
         ),
         "background": (
-            "bg_image_is_set",
-            "background_image"
+            "bg_is_set",
+            "background"
         ),
         "showing_screen": (
             "show_screen",
@@ -231,16 +231,16 @@ def _get_settings() -> Configuration:
             raise ValueError("A global config file must not have as default file another global config file \
             , only preset files like 'presets/default' or 'presets/fx-CG50'")
 
-    settings["background_image"] = _get_image_path(settings["background_image"])
+    settings["background"] = _get_image_path(settings["background"])
 
     _check_settings(settings)  # avoids running the package with wrong settings
 
     # Set the settings `width` and `height` to the correct values if a background image is set
-    if settings["bg_image_is_set"] is True:
-        bg_size_x, bg_size_y = Image.open(settings["background_image"]).size
+    if settings["bg_is_set"] is True:
+        bg_size_x, bg_size_y = Image.open(settings["background"]).size
 
-        settings["width"] = bg_size_x - (settings["left_margin"] + settings["right_margin"])
-        settings["height"] = bg_size_y - (settings["top_margin"] + settings["bottom_margin"])
+        settings["width"] = bg_size_x - (settings["left"] + settings["right"])
+        settings["height"] = bg_size_y - (settings["top"] + settings["bottom"])
 
     return settings
 
@@ -256,10 +256,10 @@ def _check_settings(config: Configuration) -> None:
     _settings_value_checks = {
         "width": lambda width: width > 0,
         "height": lambda height: height > 0,
-        "left_margin": lambda left_margin: left_margin >= 0,
-        "right_margin": lambda right_margin: right_margin >= 0,
-        "top_margin": lambda top_margin: top_margin >= 0,
-        "bottom_margin": lambda bottom_margin: bottom_margin >= 0,
+        "left": lambda left: left >= 0,
+        "right": lambda right: right >= 0,
+        "top": lambda top: top >= 0,
+        "bottom": lambda bottom: bottom >= 0,
         "image_format": lambda image_format: image_format in ("jpeg", "jpg", "png", "gif", "bmp", "tiff", "tif"),
         "save_rate": lambda save_rate: save_rate > 0
     }
@@ -268,10 +268,10 @@ def _check_settings(config: Configuration) -> None:
     _settings_errors = {
         "width": "be greater than zero",
         "height": "be greater than zero",
-        "left_margin": "be greater or equal to zero",
-        "right_margin": "be greater or equal to zero",
-        "top_margin": "be greater or equal to zero",
-        "bottom_margin": "be greater or equal to zero",
+        "left": "be greater or equal to zero",
+        "right": "be greater or equal to zero",
+        "top": "be greater or equal to zero",
+        "bottom": "be greater or equal to zero",
         "image_format": "be one of the following values, jpeg, jpg, png, gif, bmp, tiff or tif",
         "save_rate": "be greater than zero"
     }
@@ -294,17 +294,17 @@ def _check_settings(config: Configuration) -> None:
             raise ValueError(f"The settings '{setting}' must '{_settings_errors[setting]}'")
 
     # some additional checks in case there is a background image
-    if config["bg_image_is_set"] is True:
-        bg_width, bg_height = Image.open(config["background_image"]).size
+    if config["bg_is_set"] is True:
+        bg_width, bg_height = Image.open(config["background"]).size
 
-        if config["left_margin"] + config["right_margin"] >= bg_width:
+        if config["left"] + config["right"] >= bg_width:
             raise ValueError("Invalid settings, the combined values of \
-            'left_margin' and 'right_margin' must be smaller than the \
+            'left' and 'right' must be smaller than the \
             width of the background image")
 
-        if config["top_margin"] + config["bottom_margin"] >= bg_height:
+        if config["top"] + config["bottom"] >= bg_height:
             raise ValueError("Invalid settings, the combined values of \
-            'top_margin' and 'bottom_margin' must be smaller than the \
+            'top' and 'bottom' must be smaller than the \
             height of the background image")
 
 

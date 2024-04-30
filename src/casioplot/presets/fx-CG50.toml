@@ -3,14 +3,14 @@ width = 384
 height = 192
 
 [margins]
-left_margin = 8
-right_margin = 8
-top_margin = 26
-bottom_margin = 10
+left = 8
+right = 8
+top = 26
+bottom = 10
 
 [background]
-bg_image_is_set = true
-background_image = "bg_images/calculator.png"
+bg_is_set = true
+background = "bg_images/calculator.png"
 
 [showing_screen]
 show_screen = true
