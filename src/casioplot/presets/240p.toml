@@ -1,0 +1,5 @@
+default_to = "presets/default.toml"
+
+[canvas]
+width = 426
+height = 240
