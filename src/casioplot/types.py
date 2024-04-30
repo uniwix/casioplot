@@ -18,7 +18,7 @@ class Configuration(TypedDict):
     bottom: int
 
     # background
-    bg_is_set: bool  # if it is False the background image will be ignored
+    bg_in_use: bool  # if it is False the background image will be ignored
     background: str  # some config files like `graph_90+e.toml`
     # have a special background image
 

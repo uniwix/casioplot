@@ -268,7 +268,7 @@ try:
     """
     clear_screen()  # ensures the pixels are set to white and not transparent
 
-    if _settings["bg_is_set"] is True:
+    if _settings["bg_in_use"] is True:
         _background = tk.PhotoImage(file=_settings["background"])
         """The background image that is shown behind the canvas
 

@@ -122,7 +122,7 @@ _toml_structure = {
         "bottom"
     ),
     "background": (
-        "bg_is_set",
+        "bg_in_use",
         "background"
     ),
     "showing_screen": (
@@ -351,7 +351,7 @@ def _check_settings(config: Configuration) -> None:
             raise ValueError(f"The settings '{setting}' must '{_settings_errors[setting]}'")
 
     # some additional checks in case there is a background image
-    if config["bg_is_set"] is True:
+    if config["bg_in_use"] is True:
         bg_width, bg_height = Image.open(config["background"]).size
 
         if config["left"] + config["right"] >= bg_width:
@@ -376,7 +376,7 @@ _settings["background"] = _get_image_path(_settings["background"])
 _check_settings(_settings)  # avoids running the package with wrong settings
 
 # Set the _settings `width` and `height` to the correct values if a background image is set
-if _settings["bg_is_set"] is True:
+if _settings["bg_in_use"] is True:
     bg_size_x, bg_size_y = Image.open(_settings["background"]).size
 
     _settings["width"] = bg_size_x - (_settings["left"] + _settings["right"])

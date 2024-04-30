@@ -39,7 +39,7 @@ bottom = 0
 # Use `bg_images/<image_name>` to select preset images.
 # Include the extension in the name.
 [background]
-bg_is_set = false
+bg_in_use = false
 # use this image if you don't want to have a background image and not use a default file
 background = "bg_images/blanck.png"
 

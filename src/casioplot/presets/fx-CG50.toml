@@ -9,7 +9,7 @@ top = 26
 bottom = 10
 
 [background]
-bg_is_set = true
+bg_in_use = true
 background = "bg_images/calculator.png"
 
 [showing_screen]
