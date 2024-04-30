@@ -104,11 +104,81 @@ def _get_image_path(bg_image_setting: str) -> str:
             - 'global/<image_name>' if it is the global configs directory \n\
             - 'bg_images/<image_name>' if it is one of the preset images")
 
-
     if os.path.exists(path):
         return path
     else:
         raise ValueError(f"The image '{path}' doesn't exist")
+
+
+_toml_structure = {
+    "canvas": (
+        "width",
+        "height"
+    ),
+    "margins": (
+        "left",
+        "right",
+        "top",
+        "bottom"
+    ),
+    "background": (
+        "bg_is_set",
+        "background"
+    ),
+    "showing_screen": (
+        "show_screen",
+        "close_window"
+    ),
+    "saving_screen": (
+        "save_screen",
+        "image_name",
+        "image_format",
+        "save_multiple",
+        "save_rate"
+    ),
+    "colors": (
+        "correct_colors",
+    ),
+    "debuging": (
+        "debuging_messages",
+    ),
+}
+_toml_sections = tuple(_toml_structure.keys())
+_toml_settings = tuple(Configuration.__annotations__.keys())
+
+
+def _check_setting(section: str, setting: str) -> None:
+    """Checks individual settings"""
+    # does the setting exist?
+    if setting not in _toml_settings:
+        raise ValueError(f"The setting '{setting}' doesn't exist")
+
+    # is the setting in the correct section?
+    if setting not in _toml_structure[section]:
+        for section2 in _toml_sections:
+            if setting not in _toml_structure[section2]:
+                pass
+
+            raise ValueError(f"The setting '{setting}' doesn't belong to the section '[{section}]', \
+            it belongs to the section '[{section2}]'")
+
+
+def _check_toml(toml: dict) -> None:
+    """Checks for wrong settings and section in the toml
+
+    :py:func:`_check_settings` doesn't notice this type of error because:py:func:`_get_configuration_from_file`
+    doesn't read them, so they aren't part of the config return by :py:func:`_get_configuration_from_file`
+    """
+    for section in toml:
+        if section == "default_to":  # `default_to` isn't a section
+            continue
+
+        # does the section exist?
+        if section not in _toml_sections:
+            raise ValueError(f"The section '[{section}]' doesn't exist")
+
+        for setting in toml[section]:
+            _check_setting(section, setting)
 
 
 def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
@@ -119,63 +189,6 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
     :param file_path: The full path of the config file
     :return: A tuple with the configuration and the default file pointer
     """
-
-    _toml_settings = {
-        "canvas": (
-            "width",
-            "height"
-        ),
-        "margins": (
-            "left",
-            "right",
-            "top",
-            "bottom"
-        ),
-        "background": (
-            "bg_is_set",
-            "background"
-        ),
-        "showing_screen": (
-            "show_screen",
-            "close_window"
-        ),
-        "saving_screen": (
-            "save_screen",
-            "image_name",
-            "image_format",
-            "save_multiple",
-            "save_rate"
-        ),
-        "colors": (
-            "correct_colors",
-        ),
-        "debuging": (
-            "debuging_messages",
-        ),
-    }
-
-    def _check_toml(toml: dict) -> None:
-        """Checks for wrong settings and section in the toml
-
-        :py:func:`_check_settings` doesn't notice this type of error because:py:func:`_get_configuration_from_file`
-        doesn't read them, so they aren't part of the config return by :py:func:`_get_configuration_from_file`
-        """
-        for section in toml:
-            if section == "default_to":  # `default_to` isn't a section
-                continue
-
-            # does the section exist?
-            if section not in _toml_settings:
-                raise ValueError(f"The section '[{section}]' doesn't exist")
-
-            for setting in toml[section]:
-                # does the setting exist?
-                if setting not in Configuration.__annotations__:
-                    raise ValueError(f"The setting '{setting}' doesn't exist")
-                # is the setting in the correct section?
-                if setting not in _toml_settings[section]:
-                    raise ValueError(f"The setting '{setting}' doesn't belong to the section '[{section}]', \
-                    it belongs to another section")
 
     config = Configuration()
 
@@ -189,7 +202,7 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
     else:
         pointer = ""
 
-    for section, settings in _toml_settings.items():
+    for section, settings in _toml_structure.items():
         if section in toml:
             for setting in settings:
                 if setting in toml[section]:
