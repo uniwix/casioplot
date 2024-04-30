@@ -3,10 +3,9 @@
 from typing import TypedDict, Literal
 
 
-class Configuration(TypedDict, total=False):
+class Configuration(TypedDict):
     """The type :py:class:`Configuration` makes it possible to representing all settings and configs in a dictionary
-    but still have type annotations for every setting.
-    The option :python:`total=False` makes it possible for a configuration to not have a value for all settings"""
+    but still have type annotations for every setting."""
 
     # canvas size
     width: int  # canvas width in pixels
