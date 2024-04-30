@@ -299,17 +299,6 @@ def _get_settings() -> Configuration:
             raise ValueError("A global config file must not have as default file another global config file \
             , only preset files like 'presets/default' or 'presets/fx-CG50'")
 
-    settings["background"] = _get_image_path(settings["background"])
-
-    _check_settings(settings)  # avoids running the package with wrong settings
-
-    # Set the settings `width` and `height` to the correct values if a background image is set
-    if settings["bg_is_set"] is True:
-        bg_size_x, bg_size_y = Image.open(settings["background"]).size
-
-        settings["width"] = bg_size_x - (settings["left"] + settings["right"])
-        settings["height"] = bg_size_y - (settings["top"] + settings["bottom"])
-
     return settings
 
 
@@ -381,3 +370,14 @@ _settings: Configuration = _get_settings()
 
 :meta hide-value:
 """
+
+_settings["background"] = _get_image_path(_settings["background"])
+
+_check_settings(_settings)  # avoids running the package with wrong settings
+
+# Set the _settings `width` and `height` to the correct values if a background image is set
+if _settings["bg_is_set"] is True:
+    bg_size_x, bg_size_y = Image.open(_settings["background"]).size
+
+    _settings["width"] = bg_size_x - (_settings["left"] + _settings["right"])
+    _settings["height"] = bg_size_y - (_settings["top"] + _settings["bottom"])
