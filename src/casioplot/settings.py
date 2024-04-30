@@ -145,6 +145,10 @@ _toml_structure = {
 }
 _toml_sections = tuple(_toml_structure.keys())
 _toml_settings = tuple(Configuration.__annotations__.keys())
+_toml_settings_to_sections = {}
+for section in _toml_sections:
+    for setting in _toml_structure[section]:
+        _toml_settings_to_sections[setting] = section
 
 
 def _check_setting(section: str, setting: str) -> None:
@@ -154,13 +158,9 @@ def _check_setting(section: str, setting: str) -> None:
         raise ValueError(f"The setting '{setting}' doesn't exist")
 
     # is the setting in the correct section?
-    if setting not in _toml_structure[section]:
-        for section2 in _toml_sections:
-            if setting not in _toml_structure[section2]:
-                pass
-
-            raise ValueError(f"The setting '{setting}' doesn't belong to the section '[{section}]', \
-            it belongs to the section '[{section2}]'")
+    if section != _toml_settings_to_sections[setting]:
+        raise ValueError(f"The setting '{setting}' doesn't belong to the section '[{section}]', \
+        it belongs to the section '[{_toml_settings_to_sections[setting]}]'")
 
 
 def _check_toml(toml: dict) -> None:
@@ -207,6 +207,7 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
             for setting in settings:
                 if setting in toml[section]:
                     config[setting] = toml[section][setting]
+
     return config, pointer
 
 
