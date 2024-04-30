@@ -136,10 +136,8 @@ _toml_structure = {
         "save_multiple",
         "save_rate"
     ),
-    "colors": (
+    "others": (
         "correct_colors",
-    ),
-    "debuging": (
         "debuging_messages",
     ),
 }
