@@ -152,6 +152,8 @@ for section in _toml_sections:
 def closest_strings(original: str, options: tuple[str, ...]) -> tuple[str, ...]:
     """Return all string of the tuple :param options: that have an edit distance from :param original:
     less than 5. It uses the Damerau-Levenshtein edit distance algorithm"""
+    max_edit_distance = 5
+
     valid_options = []
 
     for option in options:
@@ -172,7 +174,7 @@ def closest_strings(original: str, options: tuple[str, ...]) -> tuple[str, ...]:
                 if x > 1 and y > 1 and original[x-1] == option[y] and original[x] == option[y-1]:
                     dp[x][y] = min(dp[x][y], dp[x-2][y-2] + 1)
 
-        if dp[-1][-1] < 5:
+        if dp[-1][-1] < max_edit_distance:
             valid_options.append(option)
 
     return tuple(valid_options)
@@ -191,9 +193,7 @@ def _check_setting(section: str, setting: str) -> None:
 
         error_message += ", did you mean any of the following suggestions:"
         for valid_setting in valid_settings:
-            error_message += f"\n   - '{valid_setting}'"
-            if section != _toml_settings_to_sections[setting]:
-                error_message += f", from the sectino '[{_toml_settings_to_sections[valid_setting]}]'"
+            error_message += f"\n   - '{valid_setting}' from the section '[{_toml_settings_to_sections[valid_setting]}]'"
 
         raise ValueError(error_message)
 
@@ -206,7 +206,7 @@ def _check_setting(section: str, setting: str) -> None:
 def _check_toml(toml: dict) -> None:
     """Checks for wrong settings and section in the toml
 
-    :py:func:`_check_settings` doesn't notice this type of error because:py:func:`_get_configuration_from_file`
+    :py:func:`_check_settings` doesn't notice this type of error because :py:func:`_get_configuration_from_file`
     doesn't read them, so they aren't part of the config return by :py:func:`_get_configuration_from_file`
     """
     for section in toml:
