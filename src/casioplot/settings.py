@@ -86,9 +86,9 @@ def _get_file_from_pointer(pointer: str) -> str:
 
 
 def _get_image_path(bg_image_setting: str) -> str:
-    """Translates the :python:`setting["background_image"]` to the full path for the image
+    """Translates the :python:`setting["background"]` to the full path for the image
 
-    :param bg_image_setting: The value of the setting :python:`setting["background_image"]`
+    :param bg_image_setting: The value of the setting :python:`setting["background"]`
     :return: The full path of the image
     """
     if "/" not in bg_image_setting:
@@ -99,16 +99,138 @@ def _get_image_path(bg_image_setting: str) -> str:
     elif bg_image_setting.startswith("bg_images/"):
         path = os.path.join(BG_IMAGES_DIR, bg_image_setting[10:])
     else:
-        raise ValueError(f"The 'background_image' setting can't be '{bg_image_setting}', it must be:\n\
+        raise ValueError(f"The 'background' setting can't be '{bg_image_setting}', it must be:\n\
             - '<image_name>' if it is in the same directory as the 'casioplot_configs.py' file \n\
             - 'global/<image_name>' if it is the global configs directory \n\
             - 'bg_images/<image_name>' if it is one of the preset images")
-
 
     if os.path.exists(path):
         return path
     else:
         raise ValueError(f"The image '{path}' doesn't exist")
+
+
+_toml_structure = {
+    "canvas": (
+        "width",
+        "height"
+    ),
+    "margins": (
+        "left",
+        "right",
+        "top",
+        "bottom"
+    ),
+    "background": (
+        "bg_in_use",
+        "background"
+    ),
+    "showing_screen": (
+        "show_screen",
+        "close_window"
+    ),
+    "saving_screen": (
+        "save_screen",
+        "image_name",
+        "image_format",
+        "save_multiple",
+        "save_rate"
+    ),
+    "others": (
+        "correct_colors",
+        "debuging_messages",
+    ),
+}
+_toml_sections = tuple(_toml_structure.keys())
+_toml_settings = tuple(Configuration.__annotations__.keys())
+_toml_settings_to_sections = {}
+for section in _toml_sections:
+    for setting in _toml_structure[section]:
+        _toml_settings_to_sections[setting] = section
+
+
+def closest_strings(original: str, options: tuple[str, ...]) -> tuple[str, ...]:
+    """Return all string of the tuple :param options: that have an edit distance from :param original:
+    less than 5. It uses the Damerau-Levenshtein edit distance algorithm"""
+    max_edit_distance = 5
+
+    valid_options = []
+
+    for option in options:
+        width, height = len(original) + 1, len(option) + 1
+        dp = [[0] * width] * height
+        for y in range(height):
+            dp[0][y] = y
+        for x in range(width):
+            dp[x][0] = x
+
+        for y in range(height):
+            for x in range(width):
+                dp[x][y] = min(
+                    dp[x-1][y] + 1,
+                    dp[x][y-1] + 1,
+                    dp[x-1][y-1] + 1 * (original[x] != option[y])
+                )
+                if x > 1 and y > 1 and original[x-1] == option[y] and original[x] == option[y-1]:
+                    dp[x][y] = min(dp[x][y], dp[x-2][y-2] + 1)
+
+        if dp[-1][-1] < max_edit_distance:
+            valid_options.append(option)
+
+    return tuple(valid_options)
+
+
+def _check_setting(section: str, setting: str) -> None:
+    """Checks individual settings"""
+    # does the setting exist?
+    if setting not in _toml_settings:
+        error_message = f"The setting '{setting}' doesn't exist"
+        valid_settings = closest_strings(setting, _toml_settings)
+
+        if len(valid_settings) == 0:
+            error_message += ", no suggestions found"
+            raise ValueError(error_message)
+
+        error_message += ", did you mean any of the following suggestions:"
+        for valid_setting in valid_settings:
+            error_message += f"\n   - '{valid_setting}' from the section '[{_toml_settings_to_sections[valid_setting]}]'"
+
+        raise ValueError(error_message)
+
+    # is the setting in the correct section?
+    if section != _toml_settings_to_sections[setting]:
+        raise ValueError(f"The setting '{setting}' doesn't belong to the section '[{section}]', \
+        it belongs to the section '[{_toml_settings_to_sections[setting]}]'")
+
+
+def _check_toml(toml: dict) -> None:
+    """Checks for wrong settings and section in the toml
+
+    :py:func:`_check_settings` doesn't notice this type of error because :py:func:`_get_configuration_from_file`
+    doesn't read them, so they aren't part of the config return by :py:func:`_get_configuration_from_file`
+    """
+    for section in toml:
+        if section == "default_to":  # `default_to` isn't a section
+            continue
+
+        # does the section exist?
+        if section not in _toml_sections:
+            error_message = f"The section '[{section}]' doesn't exist"
+            valid_sections = closest_strings(section, _toml_sections)
+
+            if len(valid_sections) == 0:
+                error_message += ", no suggestions found"
+                raise ValueError(error_message)
+
+
+            error_message += ", did you mean any of the following suggestions:"
+            for valid_section in valid_sections:
+                error_message += f"\n   - '[{valid_section}]'"
+
+            raise ValueError(error_message)
+
+        for setting in toml[section]:
+            _check_setting(section, setting)
 
 
 def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
@@ -119,63 +241,6 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
     :param file_path: The full path of the config file
     :return: A tuple with the configuration and the default file pointer
     """
-
-    _toml_settings = {
-        "canvas": (
-            "width",
-            "height"
-        ),
-        "margins": (
-            "left_margin",
-            "right_margin",
-            "top_margin",
-            "bottom_margin"
-        ),
-        "background": (
-            "bg_image_is_set",
-            "background_image"
-        ),
-        "showing_screen": (
-            "show_screen",
-            "close_window"
-        ),
-        "saving_screen": (
-            "save_screen",
-            "image_name",
-            "image_format",
-            "save_multiple",
-            "save_rate"
-        ),
-        "colors": (
-            "correct_colors",
-        ),
-        "debuging": (
-            "debuging_messages",
-        ),
-    }
-
-    def _check_toml(toml: dict) -> None:
-        """Checks for wrong settings and section in the toml
-
-        :py:func:`_check_settings` doesn't notice this type of error because:py:func:`_get_configuration_from_file`
-        doesn't read them, so they aren't part of the config return by :py:func:`_get_configuration_from_file`
-        """
-        for section in toml:
-            if section == "default_to":  # `default_to` isn't a section
-                continue
-
-            # does the section exist?
-            if section not in _toml_settings:
-                raise ValueError(f"The section '[{section}]' doesn't exist")
-
-            for setting in toml[section]:
-                # does the setting exist?
-                if setting not in Configuration.__annotations__:
-                    raise ValueError(f"The setting '{setting}' doesn't exist")
-                # is the setting in the correct section?
-                if setting not in _toml_settings[section]:
-                    raise ValueError(f"The setting '{setting}' doesn't belong to the section '[{section}]', \
-                    it belongs to another section")
 
     config = Configuration()
 
@@ -189,11 +254,12 @@ def _get_configuration_from_file(file_path: str) -> tuple[Configuration, str]:
     else:
         pointer = ""
 
-    for section, settings in _toml_settings.items():
+    for section, settings in _toml_structure.items():
         if section in toml:
             for setting in settings:
                 if setting in toml[section]:
                     config[setting] = toml[section][setting]
+
     return config, pointer
 
 
@@ -231,17 +297,6 @@ def _get_settings() -> Configuration:
             raise ValueError("A global config file must not have as default file another global config file \
             , only preset files like 'presets/default' or 'presets/fx-CG50'")
 
-    settings["background_image"] = _get_image_path(settings["background_image"])
-
-    _check_settings(settings)  # avoids running the package with wrong settings
-
-    # Set the settings `width` and `height` to the correct values if a background image is set
-    if settings["bg_image_is_set"] is True:
-        bg_size_x, bg_size_y = Image.open(settings["background_image"]).size
-
-        settings["width"] = bg_size_x - (settings["left_margin"] + settings["right_margin"])
-        settings["height"] = bg_size_y - (settings["top_margin"] + settings["bottom_margin"])
-
     return settings
 
 
@@ -256,10 +311,10 @@ def _check_settings(config: Configuration) -> None:
     _settings_value_checks = {
         "width": lambda width: width > 0,
         "height": lambda height: height > 0,
-        "left_margin": lambda left_margin: left_margin >= 0,
-        "right_margin": lambda right_margin: right_margin >= 0,
-        "top_margin": lambda top_margin: top_margin >= 0,
-        "bottom_margin": lambda bottom_margin: bottom_margin >= 0,
+        "left": lambda left: left >= 0,
+        "right": lambda right: right >= 0,
+        "top": lambda top: top >= 0,
+        "bottom": lambda bottom: bottom >= 0,
         "image_format": lambda image_format: image_format in ("jpeg", "jpg", "png", "gif", "bmp", "tiff", "tif"),
         "save_rate": lambda save_rate: save_rate > 0
     }
@@ -268,10 +323,10 @@ def _check_settings(config: Configuration) -> None:
     _settings_errors = {
         "width": "be greater than zero",
         "height": "be greater than zero",
-        "left_margin": "be greater or equal to zero",
-        "right_margin": "be greater or equal to zero",
-        "top_margin": "be greater or equal to zero",
-        "bottom_margin": "be greater or equal to zero",
+        "left": "be greater or equal to zero",
+        "right": "be greater or equal to zero",
+        "top": "be greater or equal to zero",
+        "bottom": "be greater or equal to zero",
         "image_format": "be one of the following values, jpeg, jpg, png, gif, bmp, tiff or tif",
         "save_rate": "be greater than zero"
     }
@@ -294,17 +349,17 @@ def _check_settings(config: Configuration) -> None:
             raise ValueError(f"The settings '{setting}' must '{_settings_errors[setting]}'")
 
     # some additional checks in case there is a background image
-    if config["bg_image_is_set"] is True:
-        bg_width, bg_height = Image.open(config["background_image"]).size
+    if config["bg_in_use"] is True:
+        bg_width, bg_height = Image.open(config["background"]).size
 
-        if config["left_margin"] + config["right_margin"] >= bg_width:
+        if config["left"] + config["right"] >= bg_width:
             raise ValueError("Invalid settings, the combined values of \
-            'left_margin' and 'right_margin' must be smaller than the \
+            'left' and 'right' must be smaller than the \
             width of the background image")
 
-        if config["top_margin"] + config["bottom_margin"] >= bg_height:
+        if config["top"] + config["bottom"] >= bg_height:
             raise ValueError("Invalid settings, the combined values of \
-            'top_margin' and 'bottom_margin' must be smaller than the \
+            'top' and 'bottom' must be smaller than the \
             height of the background image")
 
 
@@ -313,3 +368,14 @@ _settings: Configuration = _get_settings()
 
 :meta hide-value:
 """
+
+_settings["background"] = _get_image_path(_settings["background"])
+
+_check_settings(_settings)  # avoids running the package with wrong settings
+
+# Set the _settings `width` and `height` to the correct values if a background image is set
+if _settings["bg_in_use"] is True:
+    bg_size_x, bg_size_y = Image.open(_settings["background"]).size
+
+    _settings["width"] = bg_size_x - (_settings["left"] + _settings["right"])
+    _settings["height"] = bg_size_y - (_settings["top"] + _settings["bottom"])

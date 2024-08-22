@@ -3,24 +3,23 @@
 from typing import TypedDict, Literal
 
 
-class Configuration(TypedDict, total=False):
+class Configuration(TypedDict):
     """The type :py:class:`Configuration` makes it possible to representing all settings and configs in a dictionary
-    but still have type annotations for every setting.
-    The option :python:`total=False` makes it possible for a configuration to not have a value for all settings"""
+    but still have type annotations for every setting."""
 
     # canvas size
     width: int  # canvas width in pixels
     height: int  # canvas height in pixels
 
     # margins
-    left_margin: int
-    right_margin: int
-    top_margin: int
-    bottom_margin: int
+    left: int
+    right: int
+    top: int
+    bottom: int
 
     # background
-    bg_image_is_set: bool  # if it is False the background_image will be ignored
-    background_image: str  # some config files like `graph_90+e.toml`
+    bg_in_use: bool  # if it is False the background image will be ignored
+    background: str  # some config files like `graph_90+e.toml`
     # have a special background image
 
     # showing_screen
