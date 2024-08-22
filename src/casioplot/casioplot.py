@@ -217,7 +217,7 @@ def draw_string(
         """Draws a single character"""
         for y2, row in enumerate(char_map):
             for x2, pixel in enumerate(row):
-                if pixel is True:
+                if pixel == 'X':
                     set_pixel(x + x2, y + y2, color)
 
 
