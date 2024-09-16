@@ -149,34 +149,37 @@ for section in _toml_sections:
         _toml_settings_to_sections[setting] = section
 
 
-def closest_strings(original: str, options: tuple[str, ...]) -> tuple[str, ...]:
+def _closest_strings(original: str, options: tuple[str, ...]) -> tuple[str, ...]:
     """Return all string of the tuple :param options: that have an edit distance from :param original:
-    less than 5. It uses the Damerau-Levenshtein edit distance algorithm"""
-    max_edit_distance = 5
+    less than max_edit_distance. It uses the Damerau-Levenshtein edit distance algorithm"""
+    max_edit_distance = 3
 
     valid_options = []
 
     for option in options:
         width, height = len(original) + 1, len(option) + 1
-        dp = [[0] * width] * height
+        dp = [[0 for y in range(height)] for x in range(width)]
         for y in range(height):
             dp[0][y] = y
         for x in range(width):
             dp[x][0] = x
 
-        for y in range(height):
-            for x in range(width):
+        for y in range(1, height):
+            for x in range(1, width):
                 dp[x][y] = min(
                     dp[x-1][y] + 1,
                     dp[x][y-1] + 1,
-                    dp[x-1][y-1] + 1 * (original[x] != option[y])
+                    dp[x-1][y-1] + 1 * (original[x-1] != option[y-1])
                 )
-                if x > 1 and y > 1 and original[x-1] == option[y] and original[x] == option[y-1]:
+                if x > 1 and y > 1 and original[x-2] == option[y-1] and original[x-1] == option[y-2]:
                     dp[x][y] = min(dp[x][y], dp[x-2][y-2] + 1)
 
-        if dp[-1][-1] < max_edit_distance:
-            valid_options.append(option)
+        edit_distance = dp[-1][-1]
+        if edit_distance < max_edit_distance:
+            valid_options.append((edit_distance, option))
 
+    valid_options = sorted(valid_options)
+    valid_options = [option[1] for option in valid_options]
     return tuple(valid_options)
 
 
@@ -185,7 +188,7 @@ def _check_setting(section: str, setting: str) -> None:
     # does the setting exist?
     if setting not in _toml_settings:
         error_message = f"The setting '{setting}' doesn't exist"
-        valid_settings = closest_strings(setting, _toml_settings)
+        valid_settings = _closest_strings(setting, _toml_settings)
 
         if len(valid_settings) == 0:
             error_message += ", no suggestions found"
@@ -216,7 +219,7 @@ def _check_toml(toml: dict) -> None:
         # does the section exist?
         if section not in _toml_sections:
             error_message = f"The section '[{section}]' doesn't exist"
-            valid_sections = closest_strings(section, _toml_sections)
+            valid_sections = _closest_strings(section, _toml_sections)
 
             if len(valid_sections) == 0:
                 error_message += ", no suggestions found"
