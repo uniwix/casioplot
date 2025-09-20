@@ -1,4 +1,5 @@
 dist
 *.pyc
 __pycache__
-/casioplot.egg-info/
+/src/casioplot.egg-info/
+/docs/build

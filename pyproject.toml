@@ -1,10 +1,6 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel",
-    "Pillow"
-]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.8.19,<0.9.0"]
+build-backend = "uv_build"
 
 [project]
 name = "casioplot"
@@ -33,3 +29,9 @@ Documentation = "https://casioplot.readthedocs.io/en/latest/"
 Issues = "https://github.com/uniwix/casioplot/issues"
 Repository = "https://github.com/uniwix/casioplot.git"
 Changelog = "https://github.com/uniwix/casioplot/releases/latest"
+
+[dependency-groups]
+docs = [
+    "furo>=2025.7.19",
+    "sphinx>=8.2.3",
+]
