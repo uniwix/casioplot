@@ -77,11 +77,11 @@ def _debuging_coordinates(x: int, y: int, function: str) -> None:
     if x < 0:
         print(f"    - x must be greater or equal to 0, x = {x}")
     elif x >= _settings["width"]:
-        print(f"    - x must be smaller than width, x = {x} and width = {_settings["width"]}")
+        print(f'    - x must be smaller than width, x = {x} and width = {_settings["width"]}')
     if y < 0:
         print(f"    - y must be greater or equal to 0, y = {x}")
     elif y >= _settings["height"]:
-        print(f"    - y must be smaller than height, y = {y} and height = {_settings["height"]}")
+        print(f'    - y must be smaller than height, y = {y} and height = {_settings["height"]}')
 
 
 def _debuging_color(color: Color, function: str) -> None:
