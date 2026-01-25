@@ -95,4 +95,4 @@ Contributing
 5. Create a new Pull Request
 
 
-v 3.5.0 - Uniwix - MiguelTorrinhaPereira
+v 3.5.1 - Uniwix - MiguelTorrinhaPereira
