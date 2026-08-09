@@ -25,4 +25,4 @@ save_rate = 1
 
 [others]
 correct_colors = true
-debuging_messages = false
+debugging_messages = false

@@ -11,19 +11,15 @@ If any of the checks fails the program is terminated.
 import os
 import tomllib
 
-from PIL import Image  # Image.open().size is used to know the dimension of the background image
+from PIL import (
+    Image,
+)  # Image.open().size is used to know the dimension of the background image
 from casioplot.types import Configuration
 
 PROJECT_DIR = os.getcwd()
 GLOBAL_DIR = os.path.expanduser("~/.config/casioplot")
-PRESETS_DIR = os.path.join(
-    os.path.abspath(os.path.dirname(__file__)),
-    "presets"
-)
-BG_IMAGES_DIR = os.path.join(
-    os.path.abspath(os.path.dirname(__file__)),
-    "bg_images"
-)
+PRESETS_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "presets")
+BG_IMAGES_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "bg_images")
 
 
 def _get_first_config_file() -> str:
@@ -66,18 +62,22 @@ def _get_file_from_pointer(pointer: str) -> str:
     :return: The full path of the config file
     """
     if "/" not in pointer:
-        raise ValueError("Default file pointer must be 'global/<file_name>' or 'presets/<file_name>' \
-        not '<file_name>'")
+        raise ValueError(
+            "Default file pointer must be 'global/<file_name>' or 'presets/<file_name>' \
+        not '<file_name>'"
+        )
 
-    dir, file_name = pointer.split('/')
+    dir, file_name = pointer.split("/")
 
     if dir == "global":
         path = os.path.join(GLOBAL_DIR, file_name)
     elif dir == "presets":
         path = os.path.join(PRESETS_DIR, file_name)
     else:
-        raise ValueError(f"Default file pointer must be 'global/<file_name>' or 'presets/<file_name>' \
-        not '{dir}/<file_name>'")
+        raise ValueError(
+            f"Default file pointer must be 'global/<file_name>' or 'presets/<file_name>' \
+        not '{dir}/<file_name>'"
+        )
 
     if os.path.exists(path):
         return path
@@ -99,10 +99,12 @@ def _get_image_path(bg_image_setting: str) -> str:
     elif bg_image_setting.startswith("bg_images/"):
         path = os.path.join(BG_IMAGES_DIR, bg_image_setting[10:])
     else:
-        raise ValueError(f"The 'background' setting can't be '{bg_image_setting}', it must be:\n\
+        raise ValueError(
+            f"The 'background' setting can't be '{bg_image_setting}', it must be:\n\
             - '<image_name>' if it is in the same directory as the 'casioplot_configs.py' file \n\
             - 'global/<image_name>' if it is the global configs directory \n\
-            - 'bg_images/<image_name>' if it is one of the preset images")
+            - 'bg_images/<image_name>' if it is one of the preset images"
+        )
 
     if os.path.exists(path):
         return path
@@ -111,34 +113,20 @@ def _get_image_path(bg_image_setting: str) -> str:
 
 
 _toml_structure = {
-    "canvas": (
-        "width",
-        "height"
-    ),
-    "margins": (
-        "left",
-        "right",
-        "top",
-        "bottom"
-    ),
-    "background": (
-        "bg_in_use",
-        "background"
-    ),
-    "showing_screen": (
-        "show_screen",
-        "close_window"
-    ),
+    "canvas": ("width", "height"),
+    "margins": ("left", "right", "top", "bottom"),
+    "background": ("bg_in_use", "background"),
+    "showing_screen": ("show_screen", "close_window"),
     "saving_screen": (
         "save_screen",
         "image_name",
         "image_format",
         "save_multiple",
-        "save_rate"
+        "save_rate",
     ),
     "others": (
         "correct_colors",
-        "debuging_messages",
+        "debugging_messages",
     ),
 }
 _toml_sections = tuple(_toml_structure.keys())
@@ -151,7 +139,8 @@ for section in _toml_sections:
 
 def _closest_strings(original: str, options: tuple[str, ...]) -> tuple[str, ...]:
     """Return all string of the tuple :param options: that have an edit distance from :param original:
-    less than max_edit_distance. It uses the Damerau-Levenshtein edit distance algorithm"""
+    less than max_edit_distance. It uses the Damerau-Levenshtein edit distance algorithm
+    """
     max_edit_distance = 3
 
     valid_options = []
@@ -167,12 +156,17 @@ def _closest_strings(original: str, options: tuple[str, ...]) -> tuple[str, ...]
         for y in range(1, height):
             for x in range(1, width):
                 dp[x][y] = min(
-                    dp[x-1][y] + 1,
-                    dp[x][y-1] + 1,
-                    dp[x-1][y-1] + 1 * (original[x-1] != option[y-1])
+                    dp[x - 1][y] + 1,
+                    dp[x][y - 1] + 1,
+                    dp[x - 1][y - 1] + 1 * (original[x - 1] != option[y - 1]),
                 )
-                if x > 1 and y > 1 and original[x-2] == option[y-1] and original[x-1] == option[y-2]:
-                    dp[x][y] = min(dp[x][y], dp[x-2][y-2] + 1)
+                if (
+                    x > 1
+                    and y > 1
+                    and original[x - 2] == option[y - 1]
+                    and original[x - 1] == option[y - 2]
+                ):
+                    dp[x][y] = min(dp[x][y], dp[x - 2][y - 2] + 1)
 
         edit_distance = dp[-1][-1]
         if edit_distance < max_edit_distance:
@@ -202,8 +196,10 @@ def _check_setting(section: str, setting: str) -> None:
 
     # is the setting in the correct section?
     if section != _toml_settings_to_sections[setting]:
-        raise ValueError(f"The setting '{setting}' doesn't belong to the section '[{section}]', \
-        it belongs to the section '[{_toml_settings_to_sections[setting]}]'")
+        raise ValueError(
+            f"The setting '{setting}' doesn't belong to the section '[{section}]', \
+        it belongs to the section '[{_toml_settings_to_sections[setting]}]'"
+        )
 
 
 def _check_toml(toml: dict) -> None:
@@ -224,7 +220,6 @@ def _check_toml(toml: dict) -> None:
             if len(valid_sections) == 0:
                 error_message += ", no suggestions found"
                 raise ValueError(error_message)
-
 
             error_message += ", did you mean any of the following suggestions:"
             for valid_section in valid_sections:
@@ -292,13 +287,17 @@ def _get_settings() -> Configuration:
         pointer_is_global: bool = current_pointer.startswith("global/")
 
         current_config_file = _get_file_from_pointer(current_pointer)
-        default_config, current_pointer = _get_configuration_from_file(current_config_file)
+        default_config, current_pointer = _get_configuration_from_file(
+            current_config_file
+        )
         _join_configs(settings, default_config)
 
         # avoids loops
         if pointer_is_global and not current_pointer.startswith("presets/"):
-            raise ValueError("A global config file must not have as default file another global config file \
-            , only preset files like 'presets/default' or 'presets/fx-CG50'")
+            raise ValueError(
+                "A global config file must not have as default file another global config file \
+            , only preset files like 'presets/default' or 'presets/fx-CG50'"
+            )
 
     return settings
 
@@ -318,8 +317,9 @@ def _check_settings(config: Configuration) -> None:
         "right": lambda right: right >= 0,
         "top": lambda top: top >= 0,
         "bottom": lambda bottom: bottom >= 0,
-        "image_format": lambda image_format: image_format in ("jpeg", "jpg", "png", "gif", "bmp", "tiff", "tif"),
-        "save_rate": lambda save_rate: save_rate > 0
+        "image_format": lambda image_format: image_format
+        in ("jpeg", "jpg", "png", "gif", "bmp", "tiff", "tif"),
+        "save_rate": lambda save_rate: save_rate > 0,
     }
     """Stores checks for specific settings"""
 
@@ -331,7 +331,7 @@ def _check_settings(config: Configuration) -> None:
         "top": "be greater or equal to zero",
         "bottom": "be greater or equal to zero",
         "image_format": "be one of the following values, jpeg, jpg, png, gif, bmp, tiff or tif",
-        "save_rate": "be greater than zero"
+        "save_rate": "be greater than zero",
     }
     """Stores the error messages if a check of :py:data:`_settings_value_checks` fails"""
 
@@ -344,12 +344,18 @@ def _check_settings(config: Configuration) -> None:
 
         # does it have the correct type?
         if not isinstance(value, correct_type):
-            raise ValueError(f"The setting '{setting}' must be of type '{correct_type}' \
-            but the value given is of the type '{type(value)}'")
+            raise ValueError(
+                f"The setting '{setting}' must be of type '{correct_type}' \
+            but the value given is of the type '{type(value)}'"
+            )
 
         # does it have a proper value?
-        if setting in _settings_value_checks and not _settings_value_checks[setting](value):
-            raise ValueError(f"The settings '{setting}' must '{_settings_errors[setting]}'")
+        if setting in _settings_value_checks and not _settings_value_checks[setting](
+            value
+        ):
+            raise ValueError(
+                f"The settings '{setting}' must '{_settings_errors[setting]}'"
+            )
 
     # some additional checks in case there is a background image
     if config["bg_in_use"] is True:
