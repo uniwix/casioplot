@@ -10,6 +10,7 @@ Available functions for the user:
 Contains the original functions from the :py:mod:`casioplot` calculator module
 and the code needed to emulate the screen.
 """
+
 import atexit
 import tkinter as tk
 
@@ -39,7 +40,7 @@ def _screen_dimensions() -> tuple[int, int]:
     """Calculates the dimensions of the screen in pixels"""
     return (
         _settings["left"] + _settings["width"] + _settings["right"],
-        _settings["top"] + _settings["height"] + _settings["bottom"]
+        _settings["top"] + _settings["height"] + _settings["bottom"],
     )
 
 
@@ -58,37 +59,41 @@ def _save_screen(image_suffix: str = "") -> None:
     background_image.paste(canvas_image, (_settings["left"], _settings["top"]))
 
     background_image.save(
-        _settings["image_name"] + image_suffix + '.' + _settings["image_format"],
+        _settings["image_name"] + image_suffix + "." + _settings["image_format"],
         format=_settings["image_format"],
     )
 
 
-def _debuging_coordinates(x: int, y: int, function: str) -> None:
+def _debugging_coordinates(x: int, y: int, function: str) -> None:
     """Prints a message telling if the coordinates are out of bounds
 
     Used by the functions set_pixel, get_pixel or draw_string
-    It is only called if the setting ``debuging_messages`` is true
+    It is only called if the setting ``debugging_messages`` is true
 
     :param x: x coordinate (from the left)
     :param y: y coordinate (from the top)
     :param function: the function that called this function
     """
-    print(f"Debuging message: you used {function} with coordinates out of bounds")
+    print(f"Debugging message: you used {function} with coordinates out of bounds")
     if x < 0:
         print(f"    - x must be greater or equal to 0, x = {x}")
     elif x >= _settings["width"]:
-        print(f'    - x must be smaller than width, x = {x} and width = {_settings["width"]}')
+        print(
+            f'    - x must be smaller than width, x = {x} and width = {_settings["width"]}'
+        )
     if y < 0:
         print(f"    - y must be greater or equal to 0, y = {x}")
     elif y >= _settings["height"]:
-        print(f'    - y must be smaller than height, y = {y} and height = {_settings["height"]}')
+        print(
+            f'    - y must be smaller than height, y = {y} and height = {_settings["height"]}'
+        )
 
 
-def _debuging_color(color: Color, function: str) -> None:
+def _debugging_color(color: Color, function: str) -> None:
     """Prints a message telling if the color is valid
 
     Used by the functions set_pixel or draw_string
-    It is only called if the setting ``debuging_messages`` is true
+    It is only called if the setting ``debugging_messages`` is true
 
     :param color: The color of a pixel
     :param function: the function that called this function
@@ -97,19 +102,29 @@ def _debuging_color(color: Color, function: str) -> None:
     if 0 <= color[0] <= 255 and 0 <= color[1] <= 255 and 0 <= color[2] <= 255:
         return
 
-    print(f"Debuging message: you used {function} with an invalid color:")
+    print(f"Debugging message: you used {function} with an invalid color:")
     if color[0] < 0:
         print(f"    - the red channel must be greater or equal to 0, red = {color[0]}")
     elif color[0] > 255:
-        print(f"    - the red channel must be smaller or equal to 255, red = {color[0]}")
+        print(
+            f"    - the red channel must be smaller or equal to 255, red = {color[0]}"
+        )
     if color[1] < 0:
-        print(f"    - the green channel must be greater or equal to 0, green = {color[1]}")
+        print(
+            f"    - the green channel must be greater or equal to 0, green = {color[1]}"
+        )
     elif color[1] > 255:
-        print(f"    - the green channel must be smaller or equal to 255, green = {color[1]}")
+        print(
+            f"    - the green channel must be smaller or equal to 255, green = {color[1]}"
+        )
     if color[2] < 0:
-        print(f"    - the blue channel must be greater or equal to 0, blue = {color[2]}")
+        print(
+            f"    - the blue channel must be greater or equal to 0, blue = {color[2]}"
+        )
     elif color[2] > 255:
-        print(f"    - the blue channel must be smaller or equal to 255, blue = {color[2]}")
+        print(
+            f"    - the blue channel must be smaller or equal to 255, blue = {color[2]}"
+        )
 
 
 # functions for the user
@@ -142,10 +157,7 @@ def show_screen() -> None:
 
 def clear_screen() -> None:
     """Clear the canvas, sets every pixel to white"""
-    _canvas.put(
-        "white",
-        to=(0, 0, _settings["width"], _settings["height"])
-    )
+    _canvas.put("white", to=(0, 0, _settings["width"], _settings["height"]))
 
 
 def get_pixel(x: int, y: int) -> Color | None:
@@ -160,8 +172,8 @@ def get_pixel(x: int, y: int) -> Color | None:
     try:
         return _canvas.get(x, y)
     except tk.TclError:  # the pixel is out of the canvas
-        if _settings["debuging_messages"]:
-            _debuging_coordinates(x, y, "get_pixel")
+        if _settings["debugging_messages"]:
+            _debugging_coordinates(x, y, "get_pixel")
         return None
 
 
@@ -174,33 +186,31 @@ def set_pixel(x: int, y: int, color: Color = _BLACK) -> None:
     :param y: y coordinate (from the top)
     :param color: The color of a pixel
     """
-    if _settings["debuging_messages"]:
-        _debuging_color(color, "set_pixel")
+    if _settings["debugging_messages"]:
+        _debugging_color(color, "set_pixel")
 
     try:
-        if _settings["correct_colors"] is True:  # corrects the colors to match the behavior of the casio calculators
+        if (
+            _settings["correct_colors"] is True
+        ):  # corrects the colors to match the behavior of the casio calculators
             color = (  # there may be a faster way
                 color[0] - color[0] % 8,
                 color[1] - color[1] % 4,
-                color[2] - color[2] % 8
+                color[2] - color[2] % 8,
             )
 
         _canvas.put(
-            "#%02x%02x%02x" % color,  # convert the color (RGB tuple) to a hexadecimal string '#RRGGBB'
-            to=(x, y)
+            "#%02x%02x%02x"
+            % color,  # convert the color (RGB tuple) to a hexadecimal string '#RRGGBB'
+            to=(x, y),
         )
     except tk.TclError:  # the pixel is out of the canvas
-        if _settings["debuging_messages"]:
-            _debuging_coordinates(x, y, "set_pixel")
-
+        if _settings["debugging_messages"]:
+            _debugging_coordinates(x, y, "set_pixel")
 
 
 def draw_string(
-        x: int,
-        y: int,
-        text: str,
-        color: Color = _BLACK,
-        size: Text_size = "medium"
+    x: int, y: int, text: str, color: Color = _BLACK, size: Text_size = "medium"
 ) -> None:
     """Draw a string on the canvas with the given RGB color and size.
 
@@ -217,28 +227,30 @@ def draw_string(
         """Draws a single character"""
         for y2, row in enumerate(char_map):
             for x2, pixel in enumerate(row):
-                if pixel == 'X':
+                if pixel == "X":
                     set_pixel(x + x2, y + y2, color)
 
+    if _settings["debugging_messages"]:
+        _debugging_color(color, "draw_string")
 
-    if _settings["debuging_messages"]:
-        _debuging_color(color, "draw_string")
-
-    if y < 0 or y >= _settings["height"]:  # checks if the y coordinate is in bounds of the canvas
-        if _settings["debuging_messages"]:
-            _debuging_coordinates(x, y, "draw_string")
+    if (
+        y < 0 or y >= _settings["height"]
+    ):  # checks if the y coordinate is in bounds of the canvas
+        if _settings["debugging_messages"]:
+            _debugging_coordinates(x, y, "draw_string")
         return
 
     for char in text:
-        if x < 0 or x >= _settings["width"]:  # if the x coordinates isn't in bounds stop
-            if _settings["debuging_messages"]:
-                _debuging_coordinates(x, y, "draw_string")
+        if (
+            x < 0 or x >= _settings["width"]
+        ):  # if the x coordinates isn't in bounds stop
+            if _settings["debugging_messages"]:
+                _debugging_coordinates(x, y, "draw_string")
             return
 
         char_map = _get_char(char, size)
         _draw_char()
         x += len(char_map[0])
-
 
 
 try:
@@ -278,8 +290,7 @@ try:
         bg_width, bg_height = _screen_dimensions()
         _background = tk.PhotoImage(width=bg_width, height=bg_height)
         _background.put(  # same as clear_screen but for the background image
-            "white",
-            to=(0, 0, bg_width, bg_height)
+            "white", to=(0, 0, bg_width, bg_height)
         )
 
     _background_display = tk.Label(master=_window, image=_background, border=0)
@@ -302,8 +313,12 @@ except tk.TclError:
 @atexit.register
 def _run_at_exit() -> None:
     """This function should be called at the end of the program to close the tkinter window"""
-    if _settings["save_screen"] is True:  # saves the thes screen as it was before the program ended
+    if (
+        _settings["save_screen"] is True
+    ):  # saves the screen as it was before the program ended
         _save_screen()
 
-    if _settings["show_screen"] is True and _settings["close_window"] is False:  # keeps the tkinter window open after the program ends
+    if (
+        _settings["show_screen"] is True and _settings["close_window"] is False
+    ):  # keeps the tkinter window open after the program ends
         _window.mainloop()

@@ -1,14 +1,13 @@
-"""Contains every character in the three sizes, 
+"""Contains every character in the three sizes.
 
-It's main function is to store all the character maps.
+Its main function is to store all the character maps.
 
-Every size has it's one dictionary there is a key for every character
+Every size has its own dictionary; there is a key for every character,
 and the values are tuples of strings that represent the character in
-a sort of character map, every string corresonds to a row.
+a sort of character map, every string corresponds to a row.
 """
 
 from casioplot.types import Text_size
-
 
 large = {
     " ": (

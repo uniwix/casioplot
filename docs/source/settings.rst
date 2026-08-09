@@ -10,7 +10,7 @@ Settings can be used to control the size of the screen, margins, background imag
 How to control the settings
 ---------------------------
 
-The settings can be controled by a toml config file. 
+The settings can be controlled by a toml config file. 
 
 Selection of the config file
 ----------------------------
@@ -27,13 +27,13 @@ Available presets
 ~~~~~~~~~~~~~~~~~
 
 The package comes with 4 preset files, :file:`default.toml`, :file:`fx-CG50.toml`, :file:`fx-CG50_AU.toml` and :file:`graph_90+e.toml`.
-**fx-CG50**, **fx-CG50_AU** and **graph_90+e** have the exact same settings, the only reasson they are three instead of one is for better user experience.
-Presets shoudn't be modified by the user.
+**fx-CG50**, **fx-CG50_AU** and **graph_90+e** have the exact same settings, the only reason they are three instead of one is for better user experience.
+Presets shouldn't be modified by the user.
 
 :file:`default.toml`:
 
 .. image:: images/default.png
-    :alt: A completly white image
+    :alt: A completely white image
 
 Calculator presets:
 
@@ -43,15 +43,15 @@ Calculator presets:
 Config file hierarchy
 ---------------------
 
-Keep in mind this hierarchy that the package uses to search for config files, :menuselection:`local --> global --> presets`. This can be tought as the order of most custom config file to the lest custom.
+Keep in mind this hierarchy that the package uses to search for config files, :menuselection:`local --> global --> presets`. This can be thought of as the order of most custom config file to the least custom.
 
 Default to file
 ---------------
 
 A config file may have the key :toml:`default_to`, this key is used to indicate
-a default to file. If a settings is missing from a config file and that same settings
+a default to file. If a setting is missing from a config file and that same setting
 is set in the default to file that setting will be set to the value of the default to file.
-A config file must only have as default file a config file less custom then tham. So a local
+A config file must only have as default file a config file less custom than that. So a local
 file can have a global or a preset, but a global can only have a preset file as default file.
 
 A local config file may specify a global one that specifies a preset, creating a chain.
@@ -126,14 +126,14 @@ You can select where you image is in the following way:
 Use :file:`{image_name}` to select local images.
 Use :file:`global/{image_name}` to select global images.
 Use :file:`bg_images/{image_name}` to select preset images.
-Include the extencion in the name.
+Include the extension in the name.
 
 .. code-block:: toml
 
     [background]
     bg_image_is_set = false
     # use this image if you don't want to have a background image and not use a default file
-    background_image = "bg_images/blanck.png"
+    background_image = "bg_images/blank.png"
 
 Show the screen with tkinter.
 
